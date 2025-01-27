@@ -1,6 +1,6 @@
 import { fetch as bunFetch } from "bun"
 import EventEmitter from "node:events";
-import {readdirSync,statSync} from "node:fs"
+import { readdirSync, statSync } from "node:fs"
 
 export class Cache {
 
@@ -11,26 +11,25 @@ export class Cache {
     constructor() {
         this.init()
     }
-    
+
     private async init() {
-        const loadFiles = async(files: string[]) => {
+        const loadFiles = async (files: string[]) => {
             for await (const filePath of files) {
-                console.log(filePath)
                 const stat = statSync(filePath)
-    
+
                 if (stat.isDirectory()) {
-                    await loadFiles(readdirSync(filePath).map(f=>filePath+"/"+f))
+                    await loadFiles(readdirSync(filePath).map(f => filePath + "/" + f))
                     return
                 }
-    
+
                 if (stat.isFile()) {
                     const ending = filePath.split(".").at(-1)
-    
+
                     if (ending) {
                         let data;
                         const file = Bun.file(filePath)
                         switch (ending) {
-                            case "json": 
+                            case "json":
                                 data = await file.json()
                                 break;
                             case "svg":
@@ -39,27 +38,27 @@ export class Cache {
                             default:
                                 data = await file.arrayBuffer()
                         }
-    
-                        this.cache.set(filePath, data)
+
+                        const key = filePath.split("/").at(-1) ?? filePath
+                        this.cache.set(key, data)
                     }
-                    return
                 }
             }
         }
-        const files = readdirSync(".cache").map(f=>".cache/"+f);
-        
+        const files = readdirSync(".cache").map(f => ".cache/" + f);
+
         await loadFiles(files)
-        
-        
+
+
 
         this.isReady = true;
         this.emitter.emit("ready")
     }
 
     private async waitUntilReady() {
-        return new Promise((res)=>{
+        return new Promise((res) => {
             if (this.isReady === true) return res(true)
-            this.emitter.once("ready", ()=>res(true))
+            this.emitter.once("ready", () => res(true))
         })
     }
 
@@ -67,7 +66,7 @@ export class Cache {
         const type = key.split(".").at(-1)
 
         switch (type) {
-            case "json": 
+            case "json":
                 Bun.write(`.cache/json/${key}`, JSON.stringify(data))
                 break
             case "svg":
@@ -80,6 +79,12 @@ export class Cache {
 
         this.cache.set(key, data);
     }
+
+    public async get(key: string) {
+        await this.waitUntilReady()
+        return this.cache.get(key)
+    }
+
 
     public async fetch(input: string, init?: RequestInit) {
         await this.waitUntilReady()
@@ -101,7 +106,7 @@ export class Cache {
         }
 
         return data;
-    
+
     }
 
     private async fetchDefault(input: string, init?: RequestInit) {
