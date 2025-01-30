@@ -1,0 +1,162 @@
+---
+import "@/styles/globals.css";
+import Input from "@/components/ui/input/Input.vue";
+import { getImage, Image } from "astro:assets";
+import { Tld } from "astro:db";
+import { asc } from "astro:db";
+import { db, Country } from "astro:db";
+import Layout from "@/layouts/Layout.astro";
+
+// const flagImports: Record<string, {default: any}> = import.meta.glob("src/assets/flags/*", { eager: true });
+// const flags = Object.values(flagImports).map(file => file.default);
+
+const flagMap = new Map();
+const flags = import.meta.glob<{ default: ImageMetadata }>(
+  `/src/assets/flags/*.svg`,
+);
+
+const countries = await db.select().from(Country).orderBy(asc(Country.cca3));
+
+Object.keys(flags).forEach((key: keyof typeof flags) => {
+  const match = key.match(/flags\/(.{3})\.svg/);
+  if (!match) return;
+  const aac3 = match[1];
+  flagMap.set(aac3, flags[key]);
+});
+---
+
+<Layout>
+  <Input class="flagSearch max-w-96 mx-auto my-8"></Input>
+
+  <div class="grid grid-cols-2 w-max gap-4 lg:grid-cols-4 mx-auto">
+    {
+      countries.map((country) => (
+        <div class="card-container" data-cca3={country.cca3} data-name={country.name} data-capital={country.capital}>
+          <div id={`card-${country.cca3}`} class="card">
+            <div class="card-face card-front">
+              <Image
+                src={flagMap.get(country.cca3)()}
+                loading={"lazy"}
+                alt={`${country.name} Flag`}
+                class="flag-img w-full h-full rounded-2xl"
+              />
+            </div>
+            <div class="card-face card-back">
+              <div class="flag-info w-full h-full flex items-center">
+                <Image
+                  src={flagMap.get(country.cca3)()}
+                  loading={"lazy"}
+                  alt={`${country.name} Flag`}
+                  class="flag-small"
+                />
+                <div class="mx-auto my-auto">
+                  <h3>{country.name}</h3>
+                  <p>{country.capital}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      ))
+    }
+  </div>
+</Layout>
+
+<script>
+  const cards = document.querySelectorAll<HTMLDivElement>(".card-container");
+
+  cards.forEach((card) => {
+    card.addEventListener("click", () => {
+      const cca3 = card.dataset.cca3;
+      document.getElementById(`card-${cca3}`)?.classList.toggle("is-flipped");
+    });
+  });
+
+  const searchInput = document.querySelector<HTMLInputElement>(".flagSearch")
+    console.log(searchInput)
+  searchInput?.addEventListener("input",(e)=>{
+    if (!(e instanceof InputEvent)) return
+    const target = e.target
+    if (!(target instanceof HTMLInputElement)) return
+
+    cards.forEach((card)=>{
+      if ([card.dataset.name,
+      card.dataset.aac3,
+      card.dataset.capital].some((v)=>v?.toLowerCase().includes(target.value.toLowerCase()))) {
+        card.classList.remove("!hidden")
+      } else {
+        card.classList.add("!hidden")
+      }
+    })
+  })
+</script>
+
+<style>
+  .card-container {
+    perspective: 1000px;
+    display: inline-block;
+    width: 240px;
+    height: 160px;
+    cursor: pointer;
+  }
+
+  .card {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 0.6s;
+  }
+
+  .card.is-flipped {
+    transform: rotateX(180deg);
+
+    & > .cardFront {
+      display: hidden;
+    }
+  }
+
+  .card-face {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+
+  .card-front {
+    background-color: #ffffff;
+  }
+
+  .card-back {
+    background-color: #1a202c;
+    color: white;
+    text-align: center;
+    transform: rotateX(180deg);
+    position: relative;
+  }
+
+  .flag-img {
+    object-fit: cover;
+  }
+
+  .flag-info {
+    font-size: 16px;
+    position: relative;
+  }
+
+  .flag-small {
+    width: 40px;
+    height: 30px;
+    object-fit: contain;
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    border: 1px solid white;
+    border-radius: 4px;
+  }
+</style>

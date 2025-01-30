@@ -1,0 +1,16 @@
+---
+import "../styles/globals.css"
+
+import { Button } from "@/components/ui/button";
+import Layout from "@/layouts/Layout.astro";
+
+
+---
+
+<Layout>
+    <span>Land 1</span>
+
+    <div class="grid grid-rows-2 grid-cols-2">
+        {[1,2,3,4].map((number)=> <Button>Flagge {number}</Button>)}
+    </div>
+</Layout>
