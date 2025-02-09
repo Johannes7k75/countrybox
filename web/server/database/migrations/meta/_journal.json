@@ -1,0 +1,55 @@
+{
+  "version": "7",
+  "dialect": "sqlite",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "6",
+      "when": 1739022916478,
+      "tag": "0000_short_ares",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1739024498950,
+      "tag": "0001_lyrical_human_torch",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1739030139464,
+      "tag": "0002_outstanding_makkari",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "6",
+      "when": 1739030228488,
+      "tag": "0003_dusty_vindicator",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "6",
+      "when": 1739030233690,
+      "tag": "0004_strange_gravity",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "6",
+      "when": 1739058210767,
+      "tag": "0005_mushy_jack_murdock",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "6",
+      "when": 1739060980026,
+      "tag": "0006_chubby_tusk",
+      "breakpoints": true
+    }
+  ]
+}

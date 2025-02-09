@@ -1,5 +1,4 @@
 class FlagBox {
-
     public boxes: Box<typeof this.phases[number]>[];
     public boxMap: Map<number, Box<typeof this.phases[number]>> = new Map();
     public phases = [1, 3, 7, 14, 28, 56] as const
@@ -62,6 +61,10 @@ class FlagBox {
         this.boxMap.get(this.phases[0])?.addFlagId(flagId)
     }
 
+    public toString() {
+       return this.boxes.toString() 
+    }
+
 }
 
 class Box<T extends number> {
@@ -90,9 +93,3 @@ class Box<T extends number> {
         return `Box(${this.getPhase()}) [${Array.from(this.flagIds.values())}]`
     }
 }
-
-function log() {
-    console.log(flagBox.boxes.toString())
-}
-
-const flagBox = new FlagBox()
