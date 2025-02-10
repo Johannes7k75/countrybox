@@ -8,6 +8,7 @@ export const Countries = sqliteTable("countries",{
     region: text("region").notNull(),
     subregion: text("subregion").notNull(),
     cca3: text("cca3").notNull(),
+    cca2: text("cca2"),
 })
 
 export const CallingCodes = sqliteTable("callingCodes",{

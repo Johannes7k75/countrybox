@@ -50,6 +50,20 @@
       "when": 1739060980026,
       "tag": "0006_chubby_tusk",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "6",
+      "when": 1739192763499,
+      "tag": "0009_public_mach_iv",
+      "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "6",
+      "when": 1739192991096,
+      "tag": "0010_green_hitman",
+      "breakpoints": true
     }
   ]
 }

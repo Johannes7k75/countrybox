@@ -19,11 +19,12 @@ export class Cache {
 
                 if (stat.isDirectory()) {
                     await loadFiles(readdirSync(filePath).map(f => filePath + "/" + f))
-                    return
+                    continue
                 }
 
                 if (stat.isFile()) {
                     const ending = filePath.split(".").at(-1)
+
 
                     if (ending) {
                         let data;
@@ -46,16 +47,13 @@ export class Cache {
             }
         }
         const files = readdirSync(".cache").map(f => ".cache/" + f);
-
         await loadFiles(files)
-
-
 
         this.isReady = true;
         this.emitter.emit("ready")
     }
 
-    private async waitUntilReady() {
+    public async waitUntilReady() {
         return new Promise((res) => {
             if (this.isReady === true) return res(true)
             this.emitter.once("ready", () => res(true))

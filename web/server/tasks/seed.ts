@@ -56,6 +56,7 @@ export default defineTask({
               capital: contry.capital[0] ?? "",
               independent: contry.independent ?? true,
               cca3: contry.cca3.toLowerCase(),
+              cca2: contry.cca2.toLowerCase(),
               region: contry.region,
               subregion: contry.subregion,
             },

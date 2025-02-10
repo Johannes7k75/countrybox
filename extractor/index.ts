@@ -5,7 +5,7 @@ const url = "https://raw.githubusercontent.com/mledoze/countries/refs/heads/mast
 
 const cache = new Cache()
 
-cache.fetch("https://raw.githubusercontent.com/mledoze/countries/refs/heads/master/data/hnd.svg")
+// cache.fetch("https://raw.githubusercontent.com/mledoze/countries/refs/heads/master/data/hnd.svg")
 
 const data = await cache.fetch(url) as Schema[]
 
@@ -31,6 +31,10 @@ const extract: Country[] = []
 data.forEach((v)=>{
     const flagUrl = `https://raw.githubusercontent.com/mledoze/countries/refs/heads/master/data/${v.cca3.toLowerCase()}.svg`
     cache.fetch(flagUrl)
+
+    const flagUrl2 = `https://raw.githubusercontent.com/lipis/flag-icons/refs/heads/main/flags/4x3/${v.cca2.toLowerCase()}.svg`
+    cache.fetch(flagUrl2)
+
     // const country: Country = {
     //     name: {
     //         common:v.name.common,
@@ -53,6 +57,7 @@ data.forEach((v)=>{
       const country: Country = {
         name: v.translations.deu.common,
         cca3: v.cca3,
+        cca2: v.cca2,
         capital: v.capital,
         independent:v.independent,
         region: v.region,
@@ -67,4 +72,4 @@ data.forEach((v)=>{
 
 cache.put("countries.json", extract)
 
-console.log(extract)
+console.log("Extracted all data")

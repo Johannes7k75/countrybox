@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { cn } from '~/lib/utils'
-
+import "flag-icons/css/flag-icons.min.css"
 
 const maxRounds = 20
 
@@ -31,7 +31,7 @@ function isGuessed(countryId: number) {
 
 function nextRound() {
     if (isFinished.value) return
-    if (rounds.length > currentRound.value+1) currentRound.value += 1
+    if (rounds.length > currentRound.value + 1) currentRound.value += 1
     alreadyGuessed.value = []
     correctGuessed.value = false
 }
@@ -68,26 +68,30 @@ window.addEventListener("keydown", (e) => {
 
 <template>
 
-    <button :disabled="isFinished" @click="!isFinished && currentRound++" class="bg-gray-600 rounded-md p-2 m-8">
+    <!-- <button :disabled="isFinished" @click="!isFinished && currentRound++" class="bg-gray-600 rounded-md p-2 m-8">
         +1
-    </button>
+    </button> -->
 
-    {{ isFinished }} {{ currentRound + 1 }}
+    <div class="flex flex-col">
+        <span>{{ currentRound + 1 }}/{{ maxRounds }}</span>
+        <span>Leben: {{ 3 - fails }}</span>
+    </div>
+    <div class="w-full h-full flex items-center flex-col ">
+        <span :class="cn(isGuessed(correct!.id) && 'text-green-500 large', 'my-10 text-4xl font-bold')">{{ correct?.name }}</span>
 
-    {{ failed }} {{ fails }}
-
-    <div class="w-full h-full flex items-center flex-col">
-        <span :class="isGuessed(correct!.id) && 'text-green-500'">{{ correct?.name }}</span>
-
-        <div class="grid grid-cols-2 grid-rows-2 w-max gap-4">
+        <div class="grid grid-cols-2 grid-rows-2 w-max gap-8">
             <div v-for="round of rounds[currentRound]" :key="round.id">
                 <div @click="guess(round)" class="relative inline-block bg-white">
 
-                    <img :src="`/flags/${round.cca3}.svg`" class="w-48 h-24 object-cover"
-                        :class="cn(showFlagOverlay(round) && 'opacity-20')">
+                    <!-- <img :src="`/flags/${round.cca3}.svg`" class="w-48 h-24 object-cover" -->
+                    <!-- <img :src="`https://flagicons.lipis.dev/flags/4x3/${round.cca3.slice(0,2)}.svg`" class="h-24 [aspect-ratio:4/3]"
+                        :class="cn(showFlagOverlay(round) && 'opacity-20')"> -->
+                    <!-- {{ round }} -->
+                    <span :class="cn('fi', `fi-${round.cca2}`, showFlagOverlay(round) && 'opacity-20')"
+                        class="!w-full h-48 rounded-md [aspect-ratio:4/3]"></span>
 
                     <div v-show="isGuessed(round.id) && round.id !== correct!.id && !correctGuessed"
-                        class="absolute right-0 top-0">
+                        class="absolute right-2 top-2">
                         {{ round.name }}
                     </div>
 
