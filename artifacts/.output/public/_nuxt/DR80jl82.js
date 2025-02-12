@@ -1,1 +1,0 @@
-import{_ as s,c as t,o as c,a8 as o}from"./uQ7uB3Fa.js";const r={},n={class:"w-screen max-h-full flex flex-col h-screen justify-center items-center overflow-y-hidden"};function l(e,a){return c(),t("div",n,[o(e.$slots,"default")])}const _=s(r,[["render",l]]);export{_ as default};
