@@ -40,9 +40,12 @@ jobs:
       - name: Build project
         run: pnpm build
 
+      - name: Prepare Artifact
+        run: |
+          cd ${{ gitea.workspace }} mkdir artifacts && cp web/.output/ artifacts
+
       - uses: actions/upload-artifact@v4
         with:
           path: |
-            ${{ gitea.workspace }}/web/.output/
             package.json
 
