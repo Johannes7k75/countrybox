@@ -35,7 +35,7 @@ jobs:
         run: pnpm build
 
       - run: |
-          ls ${{ gitea.workspace }}/web
+          ls ${{ gitea.workspace }}/web -a
 
       - uses: actions/upload-artifact@v4
         with:
