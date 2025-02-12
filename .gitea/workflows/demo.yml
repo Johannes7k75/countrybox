@@ -42,7 +42,7 @@ jobs:
 
       - name: Prepare Artifact
         run: |
-          cd ${{ gitea.workspace }} && mkdir artifacts && cp -r web/.output/ artifacts
+          cd ${{ gitea.workspace }} && mkdir -p artifacts && cp -r web/.output/ artifacts
 
       - uses: actions/upload-artifact@v4
         with:
