@@ -1,8 +1,11 @@
 name: Gitea Actions Demo
 run-name: ${{ gitea.actor }} is testing out Gitea Actions 🚀
-on: [push]
+on:
+  push:
+    paths:
+      - web/**
 
-jobs:
+jobs: 
   Explore-Gitea-Actions:
     runs-on: ubuntu-latest
     steps:
