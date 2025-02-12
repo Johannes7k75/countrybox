@@ -17,8 +17,8 @@ const flagCodes = await $fetch<typeof mapping[]>("/api/flags", {
 })
 
 const flags = computed(() => flagCodes
-    .map(({ code, name, capital, cca2 }) => ({ code,cca2, name, capital, path: `/flags/${code}.svg` }))
-    .filter(flag => query.value != "" ?  flag.capital.includes(query.value) || flag.name.includes(query.value):true)
+    .map(({ code, name, capital, cca2 }) => ({ code, cca2, name, capital, path: `/flags/${code}.svg` }))
+    .filter(flag => query.value != "" ? flag.capital.toLowerCase().includes(query.value.toLowerCase()) || flag.name.toLowerCase().includes(query.value.toLowerCase()) : true)
 )
 
 const isFlipped = ref<string>()
@@ -29,44 +29,59 @@ const query = ref("")
 
 <template>
 
-    <div class="flex items-center flex-col">
-        <label for="search">Land oder Stadt</label>
-        <input type="text" name="search" class="mb-8" v-model="query"/>
+    <div class="max-h-full overflow-y-scroll w-full pb-16 mt-0 mb-auto">
+        <NuxtLink to="/"
+            class="flex flex-row mt-4 ml-4 border border-solid border-gray-400 w-max pl-1 px-2 py-1 hover:bg-gray-200">
+            <Icon name="mdi:home" size="24px" />Home
+        </NuxtLink>
 
-        <div class="grid grid-cols-2 lg:grid-cols-4 gap-8 mx-auto w-max">
-            <div v-for="flag in flags" :key="flag.code"
-                class="[perspective:1000px] inline-block w-[240px] [aspect-ratio:4/3] cursor-pointer"
-                @click="isFlipped === flag.code ? isFlipped = undefined : isFlipped = flag.code">
+        <div class="flex items-center flex-col">
+            <div class="w-max flex flex-col">
+                <div class="w-full flex justify-between">
+                    <label for="search">Land oder Stadt</label>
+                    <span class="text-black/50">({{flags.length }})</span>
+                </div>
+                <input type="text" name="search" placeholder="Deutschland"
+                    class="mb-8 border-solid border-gray-400 border border-[2px] rounded-sm after:content-['Test'] "
+                    v-model="query" />
+            </div>
 
-                <div class="group w-full h-full relative [transform-style:preserve-3d]">
-                    <!-- Front -->
-                    <div class="card-face bg-white transition-transform duration-[700ms]"
-                        :class="isFlipped === flag.code && '[transform:rotateX(180deg)]'">
-                        <!-- <img :src="flag.path" class="w-full h-full rounded-2xl object-cover" /> -->
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-8 mx-auto w-max">
+                <div v-for="flag in flags" :key="flag.code"
+                    class="[perspective:1000px] inline-block w-[240px] [aspect-ratio:4/3] cursor-pointer"
+                    @click="isFlipped === flag.code ? isFlipped = undefined : isFlipped = flag.code">
 
-                        <span :class="cn('!w-full h-full rounded-md fi', `fi-${flag.cca2}`)"></span>
+                    <div class="group w-full h-full relative [transform-style:preserve-3d]">
+                        <!-- Front -->
+                        <div class="card-face bg-white transition-transform duration-[700ms]"
+                            :class="isFlipped === flag.code && '[transform:rotateX(180deg)]'">
+                            <!-- <img :src="flag.path" class="w-full h-full rounded-2xl object-cover" /> -->
 
-                    </div>
+                            <span :class="cn('!w-full h-full rounded-md fi', `fi-${flag.cca2}`)"></span>
 
-                    <!-- Back -->
-                    <div class="card-face bg-[#1a202c] text-white text-center transition-transform duration-[700ms] [transform:rotateX(180deg)] relative"
-                        :class="isFlipped === flag.code && '[transform:rotateX(360deg)]'">
-                        <div class="w-full h-full flex items-center [font-size:16px] relative">
-                            <!-- <img :src="flag.path"
-                                class="w-10 h-[30px] object-contain absolute top-2 left-2 border border-solid border-white rounded-sm" /> -->
-                            <span :class="cn('!w-10 [aspect-ratio:4/3] !absolute top-2 left-2 border border-solid border-white rounded-sm fi', `fi-${flag.cca2}`)"></span>
-
-                            <div class="mx-auto my-auto">
-                                <h3>{{ flag.name }}</h3>
-                                <p>{{ flag.capital }}</p>
-                            </div>
                         </div>
 
+                        <!-- Back -->
+                        <div class="card-face bg-[#1a202c] text-white text-center transition-transform duration-[700ms] [transform:rotateX(180deg)] relative"
+                            :class="isFlipped === flag.code && '[transform:rotateX(360deg)]'">
+                            <div class="w-full h-full flex items-center [font-size:16px] relative">
+                                <!-- <img :src="flag.path"
+                                class="w-10 h-[30px] object-contain absolute top-2 left-2 border border-solid border-white rounded-sm" /> -->
+                                <span
+                                    :class="cn('!w-10 [aspect-ratio:4/3] !absolute top-2 left-2 border border-solid border-white rounded-sm fi', `fi-${flag.cca2}`)"></span>
 
+                                <div class="mx-auto my-auto">
+                                    <h3>{{ flag.name }}</h3>
+                                    <p>{{ flag.capital }}</p>
+                                </div>
+                            </div>
+
+
+                        </div>
                     </div>
-                </div>
 
-                <!-- <img :src="path" /> -->
+                    <!-- <img :src="path" /> -->
+                </div>
             </div>
         </div>
     </div>

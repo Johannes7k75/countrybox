@@ -1,8 +1,8 @@
 import { tables } from "../utils/drizzle";
 
-import countries from "../../../.cache/json/countries.json";
+import countries from "./countries.json";
 
-const seedCountries = false;
+const seedCountries = true;
 
 export default defineTask({
   meta: {
@@ -47,7 +47,9 @@ export default defineTask({
         sql`UPDATE sqlite_sequence SET seq = 0 WHERE name = 'countries'`
       );
 
+      let i=0;
       for (const contry of countries) {
+        console.log(i)
         const { lastInsertRowid: countryId } = await useDrizzle()
           .insert(tables.Countries)
           .values([
@@ -79,8 +81,9 @@ export default defineTask({
               code: code,
             });
         });
+        i++;
       }
-      console.log("Seeded countries...");
+      console.log(`Seeded ${i} countries...`);
     }
 
     const boxes = []

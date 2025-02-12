@@ -11,9 +11,23 @@ export default defineNuxtConfig({
     }
   },
 
+  css: ["@/assets/css/main.css"],
+
   modules: [
     "nuxt-auth-utils",
     "@nuxtjs/tailwindcss",
     "@nuxt/image",
+    "@nuxt/icon"
   ],
+
+  tailwindcss: {
+    exposeConfig: true,
+    viewer: true
+  },
+
+  icon: {
+    serverBundle: {
+      collections: ["uil", "mdi"]
+    }
+  }
 })
