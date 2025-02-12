@@ -35,8 +35,11 @@ jobs:
       - name: Build project
         run: pnpm build
 
+      - run: |
+          ls ${{ gitea.workspace }}
+
       - uses: actions/upload-artifact@v4
         with:
           path: |
-            web/.output/
+            .
 
