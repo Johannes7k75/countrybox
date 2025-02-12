@@ -5,6 +5,7 @@ on:
   push:
     paths:
       - web/**
+      - .gitea/workflows/**
 
 defaults:
   run:
@@ -36,6 +37,5 @@ jobs:
 
       - uses: actions/upload-artifact@v4
         with:
-          path: |
-            ${{ gitea.workspace }}/web/.output/
+          path: ${{ gitea.workspace }}/web/.output/
 
