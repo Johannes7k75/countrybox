@@ -63,11 +63,10 @@ jobs:
           USER: deploy
           HOST: jospace.de
           DIR: /home/deploy/countrie-box/releases
-          FILE: countryBox-${{ github.sha }}
         run: |
           ssh -i ~/.ssh/id_rsa $USER@$HOST "mkdir -p $DIR"
-          scp -i ~/.ssh/id_rsa $FILE.zip $USER@$HOST:$DIR
-          ssh -i ~/.ssh/id_rsa $USER@$HOST "unzip -o $FIlE.zip -d $FILE && rm $FILE.zip"
+          scp -i ~/.ssh/id_rsa countryBox-${GITHUB_SHA}.zip $USER@$HOST:$DIR
+          ssh -i ~/.ssh/id_rsa $USER@$HOST "unzip -o countryBox-${GITHUB_SHA}.zip -d countryBox-${GITHUB_SHA} && rm countryBox-${GITHUB_SHA}.zip"
           
           # ssh -i ~/.ssh/id_rsa $USER@$HOST 'bash -s' < ./scripts/deploy.sh $GITHUB_SHA
 
