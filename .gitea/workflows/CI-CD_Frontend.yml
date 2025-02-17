@@ -16,6 +16,9 @@ jobs:
       - name: 📥 Check out repository
         uses: actions/checkout@v4
 
+      - name: Navigate to frontend directory
+        run: cd frontend
+
       - name: 🚀 Install PNPM
         uses: pnpm/action-setup@v4
         with:
