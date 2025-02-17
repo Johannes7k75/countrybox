@@ -5,22 +5,12 @@ definePageMeta({
   middleware: ['authenticated'],
 })
 
-const { user, clear: clearSession } = useUserSession()
-
-async function logout() {
-  await clearSession()
-  await navigateTo('/login')
-}
-
 </script>
 
 <template>
-  <div>
-    <h1>Welcome {{ user.name }}</h1>
-    <button @click="logout">Logout</button>
-  </div>
+  <Header />
 
-  <div class="flex items-center flex-col">
+  <div class="flex items-center flex-col mt-10">
     <ul class="flex items-center flex-col gap-4 w-max">
       <GameLink to="/game" name="Flaggen" sub-name="Spiel" />
       

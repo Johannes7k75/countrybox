@@ -7,7 +7,7 @@ export default defineNuxtConfig({
 
   nitro: {
     experimental: {
-      tasks: true
+      tasks: true,
     }
   },
 
@@ -17,7 +17,8 @@ export default defineNuxtConfig({
     "nuxt-auth-utils",
     "@nuxtjs/tailwindcss",
     "@nuxt/image",
-    "@nuxt/icon"
+    "@nuxt/icon",
+    "@nuxt/ui"
   ],
 
   tailwindcss: {

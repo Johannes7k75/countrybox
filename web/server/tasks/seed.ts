@@ -37,10 +37,10 @@ export default defineTask({
         sql`UPDATE sqlite_sequence SET seq = 0 WHERE name = 'tld'`
       );
 
-      await useDrizzle().delete(tables.CallingCodes);
-      useDrizzle().run(
-        sql`UPDATE sqlite_sequence SET seq = 0 WHERE name = 'callingCodes'`
-      );
+      // await useDrizzle().delete(tables.callingCodes);
+      // useDrizzle().run(
+      //   sql`UPDATE sqlite_sequence SET seq = 0 WHERE name = 'callingCodes'`
+      // );
 
       await useDrizzle().delete(tables.Countries);
       useDrizzle().run(
@@ -55,12 +55,13 @@ export default defineTask({
           .values([
             {
               name: contry.name,
-              capital: contry.capital[0] ?? "",
+              capital: contry.capital ?? "",
               independent: contry.independent ?? true,
               cca3: contry.cca3.toLowerCase(),
               cca2: contry.cca2.toLowerCase(),
               region: contry.region,
               subregion: contry.subregion,
+              callingCode: contry.callingCode
             },
           ]);
 
@@ -73,14 +74,6 @@ export default defineTask({
             });
         });
 
-        contry.callingCodes.forEach(async (code) => {
-          await useDrizzle()
-            .insert(tables.CallingCodes)
-            .values({
-              countryId: countryId as number,
-              code: code,
-            });
-        });
         i++;
       }
       console.log(`Seeded ${i} countries...`);

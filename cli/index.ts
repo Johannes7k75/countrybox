@@ -1,5 +1,5 @@
 import * as readline from 'readline';
-import { Cache } from '../extractor/Cache';
+import { Cache } from './extractor/Cache';
 
 import colors from 'colors';
 import { randomBytes } from 'node:crypto';

@@ -9,13 +9,14 @@ export const Countries = sqliteTable("countries",{
     subregion: text("subregion").notNull(),
     cca3: text("cca3").notNull(),
     cca2: text("cca2"),
+    callingCode: text("callingCode")
 })
 
-export const CallingCodes = sqliteTable("callingCodes",{
-    id: integer("id").primaryKey({autoIncrement:true}).unique().notNull(),
-    code: text("code").notNull(),
-    countryId: integer("countryId").references(()=>Countries.id).notNull()
-})
+// export const CallingCodes = sqliteTable("callingCodes",{
+//     id: integer("id").primaryKey({autoIncrement:true}).unique().notNull(),
+//     code: text("code").notNull(),
+//     countryId: integer("countryId").references(()=>Countries.id).notNull()
+// })
 
 export const Tld = sqliteTable("tld", {
     id: integer("id").primaryKey({autoIncrement:true}).unique().notNull(),

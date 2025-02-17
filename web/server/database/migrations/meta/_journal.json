@@ -64,6 +64,20 @@
       "when": 1739192991096,
       "tag": "0010_green_hitman",
       "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "6",
+      "when": 1739390470959,
+      "tag": "0011_melted_supreme_intelligence",
+      "breakpoints": true
+    },
+    {
+      "idx": 12,
+      "version": "6",
+      "when": 1739390509126,
+      "tag": "0012_oval_captain_cross",
+      "breakpoints": true
     }
   ]
 }

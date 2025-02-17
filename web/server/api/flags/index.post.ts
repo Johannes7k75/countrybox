@@ -1,5 +1,5 @@
 import { SelectedFields } from "drizzle-orm/sqlite-core";
-import {  z } from "zod";
+import { z } from "zod";
 
 const keys = tables.Countries;
 
@@ -28,5 +28,5 @@ export default defineEventHandler(async (event) => {
     select = useDrizzle().select(selectedFields);
   }
 
-  return await select.from(tables.Countries)
+  return await select.from(tables.Countries);
 });

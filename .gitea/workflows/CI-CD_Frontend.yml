@@ -1,0 +1,71 @@
+name: CI/CD Pipeline for the Frontend
+run-name: 🚀 Deploying Frontend - Triggered by ${{ gitea.actor }}
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - frontend/**
+      - .gitea/workflows/**
+
+jobs:
+  deploy-web-app:
+    name: 🚀 Build & Deploy Frontend
+    runs-on: ubuntu-latest
+    steps:
+      - name: 📥 Check out repository
+        uses: actions/checkout@v4
+
+      - name: 🚀 Install PNPM
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+          run_install: false
+
+      - name: ⚡ Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'pnpm'
+
+      # - name: 💾 Setup PNPM Cache
+        # run: |
+          # pnpm store path
+          # pnpm store prune
+
+      - name: 📦 Install dependencies
+        run: pnpm install
+
+      - name: 🏗 Build project
+        run: pnpm build
+
+      - name: 🗜 Create ZIP Archive
+        run: |
+          zip -r country-box-${GITHUB_SHA}.zip frontend/.output/
+
+      - name: ☁️ Upload artifact
+        uses: christopherhx/gitea-upload-artifact@v4
+        with:
+          path: frontend/.output/
+
+      - name: 🔑 Configure SSH for Deployment
+        env:
+          DEPLOY_SSH_PRIVATE_KEY: ${{ secrets.DEPLOY_SSH_PRIVATE_KEY }}
+        run: |
+          mkdir -p ~/.ssh
+          echo "$DEPLOY_SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+
+          echo "Host *" > ~/.ssh/config
+          echo "  StrictHostKeyChecking no" >> ~/.ssh/config
+          echo "  UserKnownHostsFile /dev/null" >> ~/.ssh/config
+
+      - name: 📤 Deploy via SCP
+        env:
+          USER: deploy
+          HOST: jospace.de
+          DIR: /home/deploy/countrie-box/releases
+        run: |
+          ssh -i ~/.ssh/id_rsa $USER@$HOST "mkdir -p $DIR"
+          scp -i ~/.ssh/id_rsa country-box-${GITHUB_SHA}.zip $USER@$HOST:$DIR
+          ssh -i ~/.ssh/id_rsa $USER@$HOST 'bash -s' < ./deploy/deploy.sh $GITHUB_SHA

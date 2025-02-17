@@ -13,7 +13,7 @@ export default defineEventHandler(async (event) => {
   if (countries && countries.length > 0) {
     // Query all country IDs in one efficient call
     const countryIdsQuery = await useDrizzle()
-      .select({ id: tables.Countries.id })
+      .select({ id: tables.Countries.id,  })
       .from(tables.Countries)
       .where(inArray(tables.Countries.cca3, countries));
 
