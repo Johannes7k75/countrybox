@@ -62,7 +62,7 @@ jobs:
         env:
           USER: deploy
           HOST: jospace.de
-          DIR: /home/deploy/countrie-box/releases
+          DIR: /home/deploy/releases
         run: |
           ssh -i ~/.ssh/id_rsa $USER@$HOST "mkdir -p $DIR"
           scp -i ~/.ssh/id_rsa countryBox-${GITHUB_SHA}.zip $USER@$HOST:$DIR
