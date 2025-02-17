@@ -3,7 +3,7 @@ Description=CountryBox Service
 After=network.target
 
 [Service]
-ExecStart=/home/deploy/production/countrie-box
+ExecStart=/usr/bin/node /home/deploy/countrie-box/production/countryBox/server/index.mjs
 WorkingDirectory=/home/deploy/production
 User=deploy
 Group=deploy

@@ -10,14 +10,19 @@ if [ -z "$1" ]; then
 fi
 
 COMMIT_HASH=$1
-RELEASES_DIR="/home/deploy/releases"
-DEPLOY_BIN="/home/deploy/production/countrie-box"
+RELEASES_DIR="/home/deploy/countrie-box/releases"
+DEPLOY_BIN="/home/deploy/countrie-box/production/countryBox"
 SERVICE_NAME="countryBox"
 BINARY_NAME="countryBox-${COMMIT_HASH}"
-declare -a PORTS=("3000" "3001" "3002")
+declare -a PORTS=("3280") # PORTS=("3000" "3001" "3002")
+
+if [ ! -d "$DEPLOY_BIN" ]; then
+    echo "Deploy dir ${DEPLOY_BIN} doesnt exists, it gets created."
+    mkdir -p "${DEPLOY_BIN}"
+fi
 
 # Check if the binary exists
-if [ ! -f "${RELEASES_DIR}/${BINARY_NAME}" ]; then
+if [ ! -d "${RELEASES_DIR}/${BINARY_NAME}" ]; then
   echo "Binary ${BINARY_NAME} not found in ${RELEASES_DIR}"
   exit 1
 fi
