@@ -66,6 +66,6 @@ jobs:
         run: |
           ssh -i ~/.ssh/id_rsa $USER@$HOST "mkdir -p $DIR"
           scp -i ~/.ssh/id_rsa countryBox-${GITHUB_SHA}.zip $USER@$HOST:$DIR
-          ssh -i ~/.ssh/id_rsa $USER@$HOST "unzip -o $DIR/countryBox-${GITHUB_SHA}.zip -d $DIR/countryBox-${GITHUB_SHA} && rm $DIR/countryBox-${GITHUB_SHA}.zip"
+          ssh -i ~/.ssh/id_rsa $USER@$HOST "unzip -q -o $DIR/countryBox-${GITHUB_SHA}.zip -d $DIR/countryBox-${GITHUB_SHA} && rm $DIR/countryBox-${GITHUB_SHA}.zip"
           ssh -i ~/.ssh/id_rsa $USER@$HOST 'bash -s' < ./scripts/deploy.sh $GITHUB_SHA
 
