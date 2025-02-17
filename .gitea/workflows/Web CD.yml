@@ -18,7 +18,7 @@ jobs:
       - name: Check out repository code
         uses: actions/checkout@v4
 
-      - name: Install Pnpm
+      - name: Install PNPM
         uses: pnpm/action-setup@v4
         with:
           version: 9
@@ -40,9 +40,33 @@ jobs:
       - name: Build project
         run: pnpm build
 
+      - name: Create ZIP Archive
+        run: |
+          zip -r country-box-${GITHUB_SHA}.zip web/.output/
+
       - name: Upload artifact
         uses: christopherhx/gitea-upload-artifact@v4
         with:
           path: |
             web/.output/
 
+      - name: Deploy Website using SCP
+        env:
+          USER: deploy
+          HOST: jospace.de
+          DIR: /home/deploy/countrie-box/realeses
+          DEPLOY_SSH_PRIVATE_KEY: ${{ secrets.DEPLOY_SSH_PRIVATE_KEY }}
+        run: |
+          mkdir -p ~/.ssh
+          echo "$DEPLOY_SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+
+          echo "Host *" > ~/.ssh/config
+          echo "  StrictHostKeyChecking no" >> ~/.ssh/config
+          echo "  UserKnownHostsFile /dev/null" >> ~/.ssh/config
+
+          # Deploy dir if not exists
+          ssh -i ~/.ssh/id_rsa $USER@$HOST mkdir -p $DIR
+
+          # Copy the build to realeases
+          scp -i ~/.ssh/id_rsa country-box-${GITHUB_SHA}.zip $USER@$HOST:$DIR
