@@ -71,3 +71,4 @@ jobs:
         run: |
           ssh -i ~/.ssh/id_rsa $USER@$HOST "mkdir -p $DIR"
           scp -i ~/.ssh/id_rsa country-box-${GITHUB_SHA}.zip $USER@$HOST:$DIR
+          ssh -i ~/.ssh/id_rsa $USER@$HOST 'bash -s' < ./deploy/deploy.sh $GITHUB_SHA
