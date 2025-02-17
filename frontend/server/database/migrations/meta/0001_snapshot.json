@@ -1,47 +1,67 @@
 {
-  "version": "6",
-  "dialect": "sqlite",
-  "id": "fb4f1158-e1db-4881-ad79-71ab629b5c73",
-  "prevId": "b016b37c-c592-4971-a6af-eca77ac88c7f",
+  "version": "5",
+  "dialect": "mysql",
+  "id": "647aa2b2-e9fd-40d1-b79e-086da635d49e",
+  "prevId": "9bdc7e44-acf4-435b-8fc2-f9d1340c0f57",
   "tables": {
-    "callingCodes": {
-      "name": "callingCodes",
+    "boxes": {
+      "name": "boxes",
       "columns": {
         "id": {
           "name": "id",
-          "type": "integer",
-          "primaryKey": true,
+          "type": "int",
+          "primaryKey": false,
           "notNull": true,
           "autoincrement": true
         },
-        "code": {
-          "name": "code",
-          "type": "text",
+        "userId": {
+          "name": "userId",
+          "type": "int",
           "primaryKey": false,
-          "notNull": true,
+          "notNull": false,
           "autoincrement": false
         },
         "countryId": {
           "name": "countryId",
-          "type": "integer",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "trainedAt": {
+          "name": "trainedAt",
+          "type": "datetime",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "phase": {
+          "name": "phase",
+          "type": "int",
           "primaryKey": false,
           "notNull": true,
-          "autoincrement": false
+          "autoincrement": false,
+          "default": 0
         }
       },
-      "indexes": {
-        "callingCodes_id_unique": {
-          "name": "callingCodes_id_unique",
-          "columns": [
+      "indexes": {},
+      "foreignKeys": {
+        "boxes_userId_users_id_fk": {
+          "name": "boxes_userId_users_id_fk",
+          "tableFrom": "boxes",
+          "tableTo": "users",
+          "columnsFrom": [
+            "userId"
+          ],
+          "columnsTo": [
             "id"
           ],
-          "isUnique": true
-        }
-      },
-      "foreignKeys": {
-        "callingCodes_countryId_countries_id_fk": {
-          "name": "callingCodes_countryId_countries_id_fk",
-          "tableFrom": "callingCodes",
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "boxes_countryId_countries_id_fk": {
+          "name": "boxes_countryId_countries_id_fk",
+          "tableFrom": "boxes",
           "tableTo": "countries",
           "columnsFrom": [
             "countryId"
@@ -53,97 +73,117 @@
           "onUpdate": "no action"
         }
       },
-      "compositePrimaryKeys": {},
+      "compositePrimaryKeys": {
+        "boxes_id": {
+          "name": "boxes_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
       "uniqueConstraints": {},
-      "checkConstraints": {}
+      "checkConstraint": {}
     },
     "countries": {
       "name": "countries",
       "columns": {
         "id": {
           "name": "id",
-          "type": "integer",
-          "primaryKey": true,
+          "type": "int",
+          "primaryKey": false,
           "notNull": true,
           "autoincrement": true
         },
         "name": {
           "name": "name",
-          "type": "text",
+          "type": "varchar(255)",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false
         },
         "capital": {
           "name": "capital",
-          "type": "text",
+          "type": "varchar(255)",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false
         },
         "independent": {
           "name": "independent",
-          "type": "integer",
+          "type": "boolean",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false
         },
         "region": {
           "name": "region",
-          "type": "text",
+          "type": "varchar(255)",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false
         },
         "subregion": {
           "name": "subregion",
-          "type": "text",
+          "type": "varchar(255)",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false
         },
         "cca3": {
           "name": "cca3",
-          "type": "text",
+          "type": "varchar(3)",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false
+        },
+        "cca2": {
+          "name": "cca2",
+          "type": "varchar(2)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "callingCode": {
+          "name": "callingCode",
+          "type": "varchar(10)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
         }
       },
-      "indexes": {
-        "countries_id_unique": {
-          "name": "countries_id_unique",
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {
+        "countries_id": {
+          "name": "countries_id",
           "columns": [
             "id"
-          ],
-          "isUnique": true
+          ]
         }
       },
-      "foreignKeys": {},
-      "compositePrimaryKeys": {},
       "uniqueConstraints": {},
-      "checkConstraints": {}
+      "checkConstraint": {}
     },
     "gameRounds": {
       "name": "gameRounds",
       "columns": {
         "id": {
           "name": "id",
-          "type": "integer",
-          "primaryKey": true,
+          "type": "int",
+          "primaryKey": false,
           "notNull": true,
           "autoincrement": true
         },
         "gameId": {
           "name": "gameId",
-          "type": "integer",
+          "type": "int",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false
         },
         "round": {
           "name": "round",
-          "type": "integer",
+          "type": "int",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false,
@@ -151,21 +191,13 @@
         },
         "answers": {
           "name": "answers",
-          "type": "blob",
+          "type": "json",
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false
         }
       },
-      "indexes": {
-        "gameRounds_id_unique": {
-          "name": "gameRounds_id_unique",
-          "columns": [
-            "id"
-          ],
-          "isUnique": true
-        }
-      },
+      "indexes": {},
       "foreignKeys": {
         "gameRounds_gameId_games_id_fk": {
           "name": "gameRounds_gameId_games_id_fk",
@@ -181,69 +213,75 @@
           "onUpdate": "no action"
         }
       },
-      "compositePrimaryKeys": {},
+      "compositePrimaryKeys": {
+        "gameRounds_id": {
+          "name": "gameRounds_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
       "uniqueConstraints": {},
-      "checkConstraints": {}
+      "checkConstraint": {}
     },
     "gameTypes": {
       "name": "gameTypes",
       "columns": {
         "id": {
           "name": "id",
-          "type": "integer",
-          "primaryKey": true,
+          "type": "int",
+          "primaryKey": false,
           "notNull": true,
           "autoincrement": true
         },
         "name": {
           "name": "name",
-          "type": "text",
+          "type": "varchar(255)",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false
         }
       },
-      "indexes": {
-        "gameTypes_id_unique": {
-          "name": "gameTypes_id_unique",
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {
+        "gameTypes_id": {
+          "name": "gameTypes_id",
           "columns": [
             "id"
-          ],
-          "isUnique": true
+          ]
         }
       },
-      "foreignKeys": {},
-      "compositePrimaryKeys": {},
       "uniqueConstraints": {},
-      "checkConstraints": {}
+      "checkConstraint": {}
     },
     "games": {
       "name": "games",
       "columns": {
         "id": {
           "name": "id",
-          "type": "integer",
-          "primaryKey": true,
+          "type": "int",
+          "primaryKey": false,
           "notNull": true,
           "autoincrement": true
         },
         "userId": {
           "name": "userId",
-          "type": "integer",
+          "type": "int",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false
         },
         "gameType": {
           "name": "gameType",
-          "type": "integer",
+          "type": "int",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false
         },
         "round": {
           "name": "round",
-          "type": "integer",
+          "type": "int",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false,
@@ -251,7 +289,7 @@
         },
         "rounds": {
           "name": "rounds",
-          "type": "integer",
+          "type": "int",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false,
@@ -259,29 +297,21 @@
         },
         "startedAt": {
           "name": "startedAt",
-          "type": "integer",
+          "type": "datetime",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false,
-          "default": "'\"2025-02-08T14:21:38.942Z\"'"
+          "default": "'2025-02-17 19:17:26.516'"
         },
         "finishedAt": {
           "name": "finishedAt",
-          "type": "integer",
+          "type": "datetime",
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false
         }
       },
-      "indexes": {
-        "games_id_unique": {
-          "name": "games_id_unique",
-          "columns": [
-            "id"
-          ],
-          "isUnique": true
-        }
-      },
+      "indexes": {},
       "foreignKeys": {
         "games_userId_users_id_fk": {
           "name": "games_userId_users_id_fk",
@@ -310,44 +340,43 @@
           "onUpdate": "no action"
         }
       },
-      "compositePrimaryKeys": {},
+      "compositePrimaryKeys": {
+        "games_id": {
+          "name": "games_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
       "uniqueConstraints": {},
-      "checkConstraints": {}
+      "checkConstraint": {}
     },
     "tld": {
       "name": "tld",
       "columns": {
         "id": {
           "name": "id",
-          "type": "integer",
-          "primaryKey": true,
+          "type": "int",
+          "primaryKey": false,
           "notNull": true,
           "autoincrement": true
         },
         "tld": {
           "name": "tld",
-          "type": "text",
+          "type": "varchar(10)",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false
         },
         "countryId": {
           "name": "countryId",
-          "type": "integer",
+          "type": "int",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false
         }
       },
-      "indexes": {
-        "tld_id_unique": {
-          "name": "tld_id_unique",
-          "columns": [
-            "id"
-          ],
-          "isUnique": true
-        }
-      },
+      "indexes": {},
       "foreignKeys": {
         "tld_countryId_countries_id_fk": {
           "name": "tld_countryId_countries_id_fk",
@@ -363,65 +392,64 @@
           "onUpdate": "no action"
         }
       },
-      "compositePrimaryKeys": {},
+      "compositePrimaryKeys": {
+        "tld_id": {
+          "name": "tld_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
       "uniqueConstraints": {},
-      "checkConstraints": {}
+      "checkConstraint": {}
     },
     "users": {
       "name": "users",
       "columns": {
         "id": {
           "name": "id",
-          "type": "integer",
-          "primaryKey": true,
+          "type": "int",
+          "primaryKey": false,
           "notNull": true,
           "autoincrement": true
         },
         "email": {
           "name": "email",
-          "type": "text",
+          "type": "varchar(255)",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false
         },
-        "salt": {
-          "name": "salt",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "pwHash": {
-          "name": "pwHash",
-          "type": "text",
+        "hash": {
+          "name": "hash",
+          "type": "varchar(255)",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false
         }
       },
-      "indexes": {
-        "users_id_unique": {
-          "name": "users_id_unique",
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {
+        "users_id": {
+          "name": "users_id",
           "columns": [
             "id"
-          ],
-          "isUnique": true
+          ]
         }
       },
-      "foreignKeys": {},
-      "compositePrimaryKeys": {},
       "uniqueConstraints": {},
-      "checkConstraints": {}
+      "checkConstraint": {}
     }
   },
   "views": {},
-  "enums": {},
   "_meta": {
     "schemas": {},
     "tables": {},
     "columns": {}
   },
   "internal": {
+    "tables": {},
     "indexes": {}
   }
 }

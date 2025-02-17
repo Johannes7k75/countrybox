@@ -1,82 +1,19 @@
 {
   "version": "7",
-  "dialect": "sqlite",
+  "dialect": "mysql",
   "entries": [
     {
       "idx": 0,
-      "version": "6",
-      "when": 1739022916478,
-      "tag": "0000_short_ares",
+      "version": "5",
+      "when": 1739819827640,
+      "tag": "0000_productive_sleeper",
       "breakpoints": true
     },
     {
       "idx": 1,
-      "version": "6",
-      "when": 1739024498950,
-      "tag": "0001_lyrical_human_torch",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "6",
-      "when": 1739030139464,
-      "tag": "0002_outstanding_makkari",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "6",
-      "when": 1739030228488,
-      "tag": "0003_dusty_vindicator",
-      "breakpoints": true
-    },
-    {
-      "idx": 4,
-      "version": "6",
-      "when": 1739030233690,
-      "tag": "0004_strange_gravity",
-      "breakpoints": true
-    },
-    {
-      "idx": 5,
-      "version": "6",
-      "when": 1739058210767,
-      "tag": "0005_mushy_jack_murdock",
-      "breakpoints": true
-    },
-    {
-      "idx": 6,
-      "version": "6",
-      "when": 1739060980026,
-      "tag": "0006_chubby_tusk",
-      "breakpoints": true
-    },
-    {
-      "idx": 9,
-      "version": "6",
-      "when": 1739192763499,
-      "tag": "0009_public_mach_iv",
-      "breakpoints": true
-    },
-    {
-      "idx": 10,
-      "version": "6",
-      "when": 1739192991096,
-      "tag": "0010_green_hitman",
-      "breakpoints": true
-    },
-    {
-      "idx": 11,
-      "version": "6",
-      "when": 1739390470959,
-      "tag": "0011_melted_supreme_intelligence",
-      "breakpoints": true
-    },
-    {
-      "idx": 12,
-      "version": "6",
-      "when": 1739390509126,
-      "tag": "0012_oval_captain_cross",
+      "version": "5",
+      "when": 1739819846524,
+      "tag": "0001_yielding_killraven",
       "breakpoints": true
     }
   ]

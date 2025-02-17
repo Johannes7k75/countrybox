@@ -15,8 +15,8 @@ export default defineEventHandler(async (event) => {
             )
           : undefined
       )
-      .orderBy(sql`random()`)
-      .limit(1);
+      .orderBy(sql`RAND()`)
+      .limit(1).execute();
     answers.push(answer[0]);
   }
 

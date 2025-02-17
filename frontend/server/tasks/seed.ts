@@ -13,12 +13,12 @@ export default defineTask({
     console.log("Running DB seed task...");
 
     await useDrizzle().delete(tables.Boxes);
-    useDrizzle().run(
+    useDrizzle().execute(
       sql`UPDATE sqlite_sequence SET seq = 0 WHERE name = 'boxes'`
     );
 
     await useDrizzle().delete(tables.Users);
-    useDrizzle().run(
+    useDrizzle().execute(
       sql`UPDATE sqlite_sequence SET seq = 0 WHERE name = 'users'`
     );
     await useDrizzle()
@@ -33,24 +33,24 @@ export default defineTask({
 
     if (seedCountries) {
       await useDrizzle().delete(tables.Tld);
-      useDrizzle().run(
+      useDrizzle().execute(
         sql`UPDATE sqlite_sequence SET seq = 0 WHERE name = 'tld'`
       );
 
       // await useDrizzle().delete(tables.callingCodes);
-      // useDrizzle().run(
+      // useDrizzle().execute(
       //   sql`UPDATE sqlite_sequence SET seq = 0 WHERE name = 'callingCodes'`
       // );
 
       await useDrizzle().delete(tables.Countries);
-      useDrizzle().run(
+      useDrizzle().execute(
         sql`UPDATE sqlite_sequence SET seq = 0 WHERE name = 'countries'`
       );
 
-      let i=0;
+      let i = 0;
       for (const contry of countries) {
-        console.log(i)
-        const { lastInsertRowid: countryId } = await useDrizzle()
+        console.log(i);
+        const [{ id: countryId }] = await useDrizzle()
           .insert(tables.Countries)
           .values([
             {
@@ -61,9 +61,10 @@ export default defineTask({
               cca2: contry.cca2.toLowerCase(),
               region: contry.region,
               subregion: contry.subregion,
-              callingCode: contry.callingCode
+              callingCode: contry.callingCode,
             },
-          ]);
+          ])
+          .$returningId();
 
         contry.tlds.forEach(async (tld) => {
           await useDrizzle()
@@ -79,18 +80,19 @@ export default defineTask({
       console.log(`Seeded ${i} countries...`);
     }
 
-    const boxes = []
-    for (let i=0;i<6;i++) {
-        boxes.push({
-            userId: 1,
-            countryId: Math.floor(Math.random()*countries.length),
-            phase: i
-        })
+    const boxes: typeof tables.Boxes.$inferInsert[] = [];
+    for (let i = 0; i < 6; i++) {
+      const [{id: countryId}] = await useDrizzle().select({id: tables.Countries.id}).from(tables.Countries).orderBy(sql`RAND()`).limit(1).execute()
+      const [{id: userId}] = await useDrizzle().select().from(tables.Users).limit(1).execute()
+
+      boxes.push({
+        userId: userId,
+        countryId: countryId,
+        phase: i,
+      });
     }
 
-    await useDrizzle()
-      .insert(tables.Boxes)
-      .values(boxes);
+    await useDrizzle().insert(tables.Boxes).values(boxes);
     console.log("Seeded boxes...");
 
     return { result: "success" };
