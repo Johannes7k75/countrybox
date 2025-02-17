@@ -13,7 +13,6 @@
     "db:studio": "drizzle-kit studio"
   },
   "dependencies": {
-    "better-sqlite3": "^11.8.1",
     "clsx": "^2.1.1",
     "drizzle-orm": "^0.39.2",
     "flag-icons": "^7.3.2",
@@ -32,7 +31,6 @@
     "@nuxt/image": "^1.9.0",
     "@nuxt/ui": "^2.21.0",
     "@nuxtjs/tailwindcss": "^6.13.1",
-    "@types/better-sqlite3": "^7.6.12",
     "drizzle-kit": "^0.30.4",
     "wrangler": "^3.107.3"
   },
