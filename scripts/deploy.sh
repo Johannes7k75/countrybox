@@ -59,7 +59,7 @@ rollback_deployment() {
 
 # Copy the binary to the deployment directory
 echo "Promoting ${BINARY_NAME} to ${DEPLOY_BIN}..."
-ln -sf "${RELEASES_DIR}/${BINARY_NAME}" "${DEPLOY_BIN}"
+ln -sfn "${RELEASES_DIR}/${BINARY_NAME}" "${DEPLOY_BIN}"
 
 WAIT_TIME=5
 restart_service() {
