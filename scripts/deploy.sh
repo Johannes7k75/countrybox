@@ -10,8 +10,8 @@ if [ -z "$1" ]; then
 fi
 
 COMMIT_HASH=$1
-RELEASES_DIR="/home/deploy/countrie-box/releases"
-DEPLOY_BIN="/home/deploy/countrie-box/production/countryBox"
+RELEASES_DIR="/home/deploy/releases"
+DEPLOY_BIN="/home/deploy/production/countryBox"
 SERVICE_NAME="countryBox"
 BINARY_NAME="countryBox-${COMMIT_HASH}"
 declare -a PORTS=("3280") # PORTS=("3000" "3001" "3002")
