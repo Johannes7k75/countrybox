@@ -44,7 +44,7 @@ jobs:
 
       - name: 🗜 Create ZIP Archive
         run: |
-          zip -r country-box-${GITHUB_SHA}.zip web/.output/
+          zip -r country-box-${GITHUB_SHA}.zip .output/
 
       - name: ☁️ Upload artifact
         uses: christopherhx/gitea-upload-artifact@v4
