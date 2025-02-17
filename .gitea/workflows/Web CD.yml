@@ -13,8 +13,8 @@ defaults:
     working-directory: ./web
 
 jobs:
-  setup-environment:
-    name: 🛠 Setup Node.js & PNPM
+  deploy-web-app:
+    name: 🚀 Build & Deploy Web Project
     runs-on: ubuntu-latest
     steps:
       - name: 📥 Check out repository
@@ -39,49 +39,17 @@ jobs:
       - name: 📦 Install dependencies
         run: pnpm install
 
-  build-project:
-    name: 🏗 Build Web Project
-    runs-on: ubuntu-latest
-    needs: setup-environment
-    steps:
-      - name: 📥 Check out repository
-        uses: actions/checkout@v4
-
       - name: 🏗 Build project
         run: pnpm build
-
-  package-artifact:
-    name: 📦 Package Build Artifacts
-    runs-on: ubuntu-latest
-    needs: build-project
-    steps:
-      - name: 📥 Check out repository
-        uses: actions/checkout@v4
 
       - name: 🗜 Create ZIP Archive
         run: |
           zip -r country-box-${GITHUB_SHA}.zip web/.output/
 
-  upload-artifact:
-    name: ☁️ Upload Build Artifacts
-    runs-on: ubuntu-latest
-    needs: package-artifact
-    steps:
-      - name: 📥 Check out repository
-        uses: actions/checkout@v4
-
       - name: ☁️ Upload artifact
         uses: christopherhx/gitea-upload-artifact@v4
         with:
           path: web/.output/
-
-  deploy-to-server:
-    name: 🚀 Deploy to Production Server
-    runs-on: ubuntu-latest
-    needs: package-artifact
-    steps:
-      - name: 📥 Check out repository
-        uses: actions/checkout@v4
 
       - name: 🔑 Configure SSH for Deployment
         env:
