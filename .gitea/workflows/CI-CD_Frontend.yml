@@ -39,7 +39,7 @@ jobs:
 
       - name: 🗜 Create ZIP Archive
         run: |
-          zip -r country-box-${GITHUB_SHA}.zip frontend/.output/
+          (cd frontend/.output && zip -r - .) > countryBox-${GITHUB_SHA}.zip
 
       - name: ☁️ Upload artifact
         uses: christopherhx/gitea-upload-artifact@v4
@@ -65,5 +65,7 @@ jobs:
           DIR: /home/deploy/countrie-box/releases
         run: |
           ssh -i ~/.ssh/id_rsa $USER@$HOST "mkdir -p $DIR"
-          scp -i ~/.ssh/id_rsa country-box-${GITHUB_SHA}.zip $USER@$HOST:$DIR
-          ssh -i ~/.ssh/id_rsa $USER@$HOST 'bash -s' < ./scripts/deploy.sh $GITHUB_SHA
+          scp -i ~/.ssh/id_rsa countryBox-${GITHUB_SHA}.zip $USER@$HOST:$DIR
+          # ssh -i ~/.ssh/id_rsa $USER@$HOST 'bash -s' < ./scripts/deploy.sh $GITHUB_SHA
+
+          # unzip -o countryBox-${GITHUB_SHA}.zip -d countryBox-${GITHUB_SHA}
