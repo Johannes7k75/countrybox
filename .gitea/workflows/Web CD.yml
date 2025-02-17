@@ -1,5 +1,6 @@
-name: Gitea Actions Demo
-run-name: ${{ gitea.actor }} is testing out Gitea Actions 🚀
+name: CI/CD Pipeline for Web Deployment
+run-name: 🚀 Deploying Web Project - Triggered by ${{ gitea.actor }}
+
 on:
   workflow_dispatch:
   push:
@@ -11,50 +12,79 @@ defaults:
   run:
     working-directory: ./web
 
-jobs: 
-  Explore-Gitea-Actions:
+jobs:
+  setup-environment:
+    name: 🛠 Setup Node.js & PNPM
     runs-on: ubuntu-latest
     steps:
-      - name: Check out repository code
+      - name: 📥 Check out repository
         uses: actions/checkout@v4
 
-      - name: Install PNPM
+      - name: 🚀 Install PNPM
         uses: pnpm/action-setup@v4
         with:
           version: 9
           run_install: false
 
-      - name: Install Node.js
+      - name: ⚡ Install Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
-    
-      - name: Setup PNPM Cache
+
+      - name: 💾 Setup PNPM Cache
         run: |
           pnpm store path
           pnpm store prune
 
-      - name: Install dependencies
+      - name: 📦 Install dependencies
         run: pnpm install
 
-      - name: Build project
+  build-project:
+    name: 🏗 Build Web Project
+    runs-on: ubuntu-latest
+    needs: setup-environment
+    steps:
+      - name: 📥 Check out repository
+        uses: actions/checkout@v4
+
+      - name: 🏗 Build project
         run: pnpm build
 
-      - name: Create ZIP Archive
+  package-artifact:
+    name: 📦 Package Build Artifacts
+    runs-on: ubuntu-latest
+    needs: build-project
+    steps:
+      - name: 📥 Check out repository
+        uses: actions/checkout@v4
+
+      - name: 🗜 Create ZIP Archive
         run: |
           zip -r country-box-${GITHUB_SHA}.zip web/.output/
 
-      - name: Upload artifact
+  upload-artifact:
+    name: ☁️ Upload Build Artifacts
+    runs-on: ubuntu-latest
+    needs: package-artifact
+    steps:
+      - name: 📥 Check out repository
+        uses: actions/checkout@v4
+
+      - name: ☁️ Upload artifact
         uses: christopherhx/gitea-upload-artifact@v4
         with:
-          path: |
-            web/.output/
+          path: web/.output/
 
-      - name: Deploy Website using SCP
+  deploy-to-server:
+    name: 🚀 Deploy to Production Server
+    runs-on: ubuntu-latest
+    needs: package-artifact
+    steps:
+      - name: 📥 Check out repository
+        uses: actions/checkout@v4
+
+      - name: 🔑 Configure SSH for Deployment
         env:
-          USER: deploy
-          HOST: jospace.de
-          DIR: /home/deploy/countrie-box/realeses
           DEPLOY_SSH_PRIVATE_KEY: ${{ secrets.DEPLOY_SSH_PRIVATE_KEY }}
         run: |
           mkdir -p ~/.ssh
@@ -65,8 +95,11 @@ jobs:
           echo "  StrictHostKeyChecking no" >> ~/.ssh/config
           echo "  UserKnownHostsFile /dev/null" >> ~/.ssh/config
 
-          # Deploy dir if not exists
-          ssh -i ~/.ssh/id_rsa $USER@$HOST mkdir -p $DIR
-
-          # Copy the build to realeases
+      - name: 📤 Deploy via SCP
+        env:
+          USER: deploy
+          HOST: jospace.de
+          DIR: /home/deploy/countrie-box/releases
+        run: |
+          ssh -i ~/.ssh/id_rsa $USER@$HOST "mkdir -p $DIR"
           scp -i ~/.ssh/id_rsa country-box-${GITHUB_SHA}.zip $USER@$HOST:$DIR
