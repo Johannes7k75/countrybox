@@ -1,4 +1,5 @@
 import { z } from 'zod'
+import { Codes, generateNewToken, getToken } from '../auth/token'
 
 const bodySchema = z.object({
     email: z.string().email(),
@@ -11,11 +12,26 @@ export default defineEventHandler(async (event) => {
     const users = await useDrizzle().select().from(tables.Users).where(eq(tables.Users.email, email))
 
     if (users.length > 0 && await verifyPassword(users[0].hash, password)) {
-        // set the user session in the cookie
-        // this server util is auto-imported by the auth-utils module
+        const generateToken = await generateNewToken(users[0].email)
+        if (generateToken === Codes.GENERATE_TOKEN_ERROR) {
+            throw createError({
+                statusCode: 401,
+                message: "Token could not be generated"
+            })
+        }
+
+        const token = await getToken(users[0].email)
+        if (!token) {
+            throw createError({
+                statusCode: 401,
+                message: "Could not get token"
+            })
+        }        
+
         await setUserSession(event, {
             user: {
-                email: users[0].email
+                email: users[0].email,
+                token: token
             }
         })
         return {}

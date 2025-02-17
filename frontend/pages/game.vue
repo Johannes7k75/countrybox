@@ -11,7 +11,7 @@ type Types = typeof types[number]
 
 const [type1, type2] = ["name","flag"] as [Types, Types]
 
-const maxRounds = 3;
+const maxRounds = 20;
 const maxFails = 3;
 
 // Types

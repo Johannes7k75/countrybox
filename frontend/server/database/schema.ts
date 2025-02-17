@@ -31,6 +31,7 @@ export const Users = mysqlTable("users", {
   id: int("id").primaryKey().autoincrement().notNull(),
   email: varchar("email", { length: 255 }).notNull(),
   hash: varchar("hash", { length: 255 }).notNull(),
+  sessionToken: varchar("session",{length: 36}),
 });
 
 export const GameTypes = mysqlTable("gameTypes", {

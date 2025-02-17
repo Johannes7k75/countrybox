@@ -11,12 +11,22 @@
                 </div>
             </template>
         </UPopover>
+
+        <UButton color="red" label="Logout" @click="logout" class="px-2 py-1" v-show="loggedIn">
+            
+        </UButton>
+
         <span class="ml-auto mr-2 h-min">{{ user?.email }}</span>
   </div>
 </template>
 
 <script lang="ts" setup>
-const {user} = useUserSession()
+const {user, clear: clearSession, loggedIn} = useUserSession()
+
+async function logout() {
+    await clearSession()
+    window.location.reload()
+}
 </script>
 
 <style>

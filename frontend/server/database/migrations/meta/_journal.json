@@ -15,6 +15,20 @@
       "when": 1739819846524,
       "tag": "0001_yielding_killraven",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1739830292802,
+      "tag": "0002_keen_sally_floyd",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "5",
+      "when": 1739831354331,
+      "tag": "0003_slimy_iron_monger",
+      "breakpoints": true
     }
   ]
 }
