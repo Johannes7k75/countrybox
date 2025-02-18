@@ -63,7 +63,7 @@ onMounted(async () => {
 
     <div class="max-h-full overflow-y-scroll w-full pb-16 mt-0 mb-auto">
         <NuxtLink to="/"
-            class="flex flex-row mt-4 ml-4 border border-solid border-gray-400 w-max pl-1 px-2 py-1 hover:bg-gray-200">
+            class="flex flex-row mt-4 ml-4 border border-solid border-gray-400 w-max pl-1 px-2 py-1 hover:bg-gray-500/20">
             <Icon name="mdi:home" size="24px" />Home
         </NuxtLink>
 

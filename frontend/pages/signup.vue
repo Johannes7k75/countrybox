@@ -20,19 +20,41 @@ async function signup() {
 }
 
 const secondPassword = ref("")
-const isValid = computed(() => secondPassword.value === credentials.password)
+const isValid = computed(() => secondPassword.value === credentials.password && credentials.password != "" && credentials.email != "")
 
 </script>
 
 <template>
+    <div class="flex h-full">
+        <div class="w-96 bg-gray-700 h-max p-4 rounded-sm mx-auto my-auto">
+            <form @submit.prevent="signup" class="flex flex-col gap-4">
 
-    <div class="max-w-[600px] w-[50vw] bg-slate-500 rounded-md p-4 h-max">
-        <form @submit.prevent="signup" class="flex flex-col gap-2">
-            <input v-model="credentials.email" type="email" placeholder="Email" />
-            <input v-model="credentials.password" type="password" placeholder="Password" />
-            <input v-model="secondPassword" type="password" placeholder="Password" />
-            <button type="submit" :disabled="!isValid" class="w-full py-1 bg-slate-800 rounded-md">Create</button>
-        </form>
+                <div class="flex flex-col">
+                    <label for="email">Email</label>
+                    <input v-model="credentials.email" name="email" type="email" placeholder="john@exmaple.com"
+                        class="bg-transparent rounded-sm border border-gray-600/70 pl-2" />
+                </div>
+
+                <div class="flex flex-col">
+                    <label for="password">Password</label>
+                    <input v-model="credentials.password" name="password" type="password" placeholder="Password"
+                        class="bg-transparent rounded-sm border border-gray-600/70 pl-2" />
+                </div>
+
+                <div class="flex flex-col">
+                    <label for="password">Repeat password</label>
+                    <input v-model="secondPassword" name="password" type="password" placeholder="Password"
+                        class="bg-transparent rounded-sm border border-gray-600/70 pl-2" />
+                </div>
+
+                <button type="submit" class="w-full py-1 bg-green-500 rounded-sm" :class="cn(!isValid && 'opacity-50')"
+                    :disabled="!isValid">
+                    Signup
+                </button>
+
+                <span class="mx-auto">Already have an account? <a href="/login" class="text-green-400">Login</a></span>
+            </form>
+        </div>
     </div>
 
 </template>

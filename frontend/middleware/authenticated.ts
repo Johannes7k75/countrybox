@@ -1,9 +1,11 @@
 export default defineNuxtRouteMiddleware(async () => {
   const { loggedIn, user } = useUserSession();
 
-  if (!loggedIn.value || !user.value) {
-    return navigateTo("/login");
+  if (!loggedIn.value || !user.value || !user.value.token) {
+    return await navigateTo("/login");
   }
+
+  
 
   const isValid = await $fetch("/api/validSession", {
     method: "POST",

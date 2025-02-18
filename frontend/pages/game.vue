@@ -6,10 +6,12 @@ const types = [
   "name", "capital", "tld", "callCode", "flag"
 ] as const
 
+const automaticContinue = ref(true)
+
 
 type Types = typeof types[number]
 
-const [type1, type2] = ["name","flag"] as [Types, Types]
+const [type1, type2] = ["name", "flag"] as [Types, Types]
 
 const maxRounds = 20;
 const maxFails = 3;
@@ -21,7 +23,7 @@ interface RoundEntry {
   capital?: string;
   tld?: string;
   callCode?: string;
-  cca2: string|null;
+  cca2: string | null;
   correct: boolean;
 }
 type Round = RoundEntry[];
@@ -57,12 +59,19 @@ function nextRound() {
 }
 
 function guess(round: RoundEntry) {
+  if (!automaticContinue.value && correctGuessed.value && round.id === correct.value?.id) {
+    nextRound()
+    return;
+  }
+
   if (failed.value || correctGuessed.value || isGuessed(round.id)) return;
 
   alreadyGuessed.value.push(round.id)
   if (round.correct) {
     correctGuessed.value = true
-    setTimeout(() => nextRound(), 1_000)
+    if (automaticContinue.value) {
+      setTimeout(() => nextRound(), 1_000)
+    }
   } else {
     fails.value++
   }
@@ -103,11 +112,17 @@ const displayValue = computed(() => {
 </script>
 
 <template>
-  <div class="flex flex-col items-center justify-center p-2 mx-auto w-full lg:max-w-[70rem] absolute left-1/2 transform -translate-x-1/2">
-    <NuxtLink to="/"
-      class="flex flex-row border border-solid border-gray-400 w-max pl-1 px-2 py-1 ml-0 mr-auto hover:bg-gray-200 cursor-pointer">
-      <Icon name="mdi:home" size="24px" />Home
-    </NuxtLink>
+  <div
+    class="flex flex-col items-center justify-center p-2 mx-auto w-full lg:max-w-[70rem] absolute left-1/2 transform -translate-x-1/2">
+    <div class="flex flex-row w-full">
+      <NuxtLink to="/"
+        class="flex flex-row border border-solid border-gray-400 w-max pl-1 px-2 py-1 ml-0 mr-auto hover:bg-gray-500/20 cursor-pointer">
+        <Icon name="mdi:home" size="24px" />Home
+      </NuxtLink>
+      <div class="ml-auto mr-0">
+        <input type="checkbox" v-model="automaticContinue"> Automatisch fortfahren
+      </div>
+    </div>
     <div class="flex flex-row w-full py-4">
       <div class="flex">
         <Icon v-for="n in maxFails - fails" name="mdi:heart" class="text-red-600" size="2rem" />
@@ -118,16 +133,18 @@ const displayValue = computed(() => {
   </div>
 
   <div class="lg:w-max flex items-center flex-col mx-auto h-full">
-    <span :class="cn(isGuessed(correct?.id) && 'text-green-500 large', 'text-4xl font-bold flex-grow content-center')"
-      v-show="!failed && !isFinished">
-      <template v-if="type1 === 'flag'">
-        <span :class="cn('fi', `fi-${displayValue}`)"
-          class="!w-full sm:!w-max sm:!h-56 !h-full rounded-md [aspect-ratio:4/3] transition-opacity duration-200"></span>
-      </template>
-      <template v-else>
-        {{ displayValue }}
-      </template>
-    </span>
+    <div class="flex-grow content-center flex flex-col justify-center">
+      <span :class="cn(isGuessed(correct?.id) && 'text-green-500 large', 'text-4xl font-bold  ')"
+        v-show="!failed && !isFinished">
+        <template v-if="type1 === 'flag'">
+          <span :class="cn('fi', `fi-${displayValue}`)"
+            class="!w-full sm:!w-max sm:!h-56 !h-full rounded-md [aspect-ratio:4/3] transition-opacity duration-200"></span>
+        </template>
+        <template v-else>
+          {{ displayValue }}
+        </template>
+      </span>
+    </div>
 
     <span :class="cn('text-red-500 text-8xl font-bold flex-grow content-center max-sm:text-5xl')" v-show="failed">
       Game over<br>
@@ -145,7 +162,7 @@ const displayValue = computed(() => {
       class="grid grid-cols-2 grid-rows-2 gap-8 p-4 max-sm:gap-3 max-w-full w-full sm:w-max bg-slate-400 rounded-md rounded-b-none max-sm:mb-0">
       <div v-for="round of rounds[currentRound]" :key="round.id" @click="guess(round)"
         class="relative cursor-pointer !w-full [aspect-ratio:4/3] rounded-md flex items-center"
-        :class="cn(type2 !== 'flag' && 'bg-gray-600/70', (type2 !== 'flag' && correctGuessed) && 'bg-green-500', (showFlagOverlay(round) || failed) && 'bg-gray-600/40')">
+        :class="cn(type2 !== 'flag' && 'bg-gray-600/70', (type2 !== 'flag' && correctGuessed) && 'bg-green-500', ((showFlagOverlay(round) || failed)) && 'bg-gray-600/40')">
 
         <div class="absolute w-6 h-full content-center text-center max-sm:hidden"
           :class="cn(rounds[currentRound].indexOf(round) % 2 == 0 ? '-left-10' : '-right-10')">
@@ -156,11 +173,15 @@ const displayValue = computed(() => {
         </div>
 
         <template v-if="type2 === 'flag'">
-          <span :class="cn('fi', `fi-${round.cca2}`, (showFlagOverlay(round) || failed) && 'opacity-40')"
+          <span :class="cn('fi', `fi-${round.cca2}`, ((showFlagOverlay(round) || correctGuessed) && correct?.id != round.id) && 'opacity-40')"
             class="!w-full sm:!h-56  rounded-md [aspect-ratio:4/3] transition-opacity duration-200" />
-          <div v-show="isGuessed(round.id) && round.id !== correct!.id && !correctGuessed"
+          <div v-show="round.id !== correct!.id && correctGuessed"
             class="absolute right-1 top-2 p-1 rounded-md bg-gray-600/50">
             {{ round.name }}
+          </div>
+          <div v-show="round.id === correct!.id && correctGuessed && !automaticContinue"
+            class="absolute p-1 text-lg rounded-md bg-gray-600/50 left-1/2 transform -translate-x-1/2">
+            Press to continue
           </div>
         </template>
         <template v-else>

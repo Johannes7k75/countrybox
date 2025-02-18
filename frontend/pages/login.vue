@@ -1,10 +1,7 @@
 <script setup lang="ts">
-const { loggedIn, user, fetch: refreshSession } = useUserSession()
+import { cn } from '~/lib/utils'
 
-if (loggedIn.value) {
-  window.location.href = "/"
-  await navigateTo("/")
-}
+const { fetch: refreshSession } = useUserSession()
 
 const credentials = reactive({
   email: '',
@@ -23,15 +20,36 @@ async function login() {
     })
     .catch(() => alert('Bad credentials'))
 }
+
+const isValid = computed(() => credentials.email != "" && credentials.password != "")
+
 </script>
 
 <template>
 
-  <div class="w-96 bg-gray-500 h-max p-4 rounded-md">
-    <form @submit.prevent="login" class="flex flex-col gap-2">
-      <input v-model="credentials.email" type="email" placeholder="Email" />
-      <input v-model="credentials.password" type="password" placeholder="Password" />
-      <button type="submit" class="w-full py-1 bg-green-500 rounded-md">Login</button>
-    </form>
+  <div class="flex h-full">
+    <div class="w-96 bg-gray-700 h-max p-4 rounded-sm mx-auto my-auto">
+      <form @submit.prevent="login" class="flex flex-col gap-4">
+
+        <div class="flex flex-col">
+          <label for="email">Email</label>
+          <input v-model="credentials.email" name="email" type="email" placeholder="john@exmaple.com"
+            class="bg-transparent rounded-sm border border-gray-600/70 pl-2" />
+        </div>
+
+        <div class="flex flex-col">
+          <label for="password">Password</label>
+          <input v-model="credentials.password" name="password" type="password" placeholder="Password"
+            class="bg-transparent rounded-sm border border-gray-600/70 pl-2" />
+        </div>
+
+        <button type="submit" class="w-full py-1 bg-green-500 rounded-sm" :class="cn(!isValid && 'opacity-50')"
+          :disabled="!isValid">
+          Login
+        </button>
+
+        <span class="mx-auto">Don't have an account? <a href="/signup" class="text-green-400">Create One</a></span>
+      </form>
+    </div>
   </div>
 </template>
