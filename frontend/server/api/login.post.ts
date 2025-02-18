@@ -28,6 +28,7 @@ export default defineEventHandler(async (event) => {
             })
         }        
 
+        console.log("Token", token)
         await setUserSession(event, {
             user: {
                 email: users[0].email,
