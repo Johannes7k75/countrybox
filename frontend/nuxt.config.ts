@@ -15,15 +15,25 @@ export default defineNuxtConfig({
 
   modules: [
     "nuxt-auth-utils",
-    "@nuxtjs/tailwindcss",
     "@nuxt/image",
-    "@nuxt/icon",
-    "@nuxt/ui"
+    "@nuxt/ui",
+    "@pinia/nuxt"
   ],
 
   tailwindcss: {
     exposeConfig: true,
-    viewer: true
+    viewer: true,
+    config: {
+      theme: {
+        extend: {
+          aspectRatio: {
+            "auto": "auto",
+            square: "1 / 1",
+            video: "16 / 9"
+          }
+        }
+      }
+    }
   },
 
   icon: {

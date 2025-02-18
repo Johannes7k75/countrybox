@@ -2,16 +2,9 @@
 import { cn } from '~/lib/utils'
 import "flag-icons/css/flag-icons.min.css"
 
-const types = [
-  "name", "capital", "tld", "callCode", "flag"
-] as const
+const { autoNext, defaultGame } = storeToRefs(useSettingsStore())
 
-const automaticContinue = ref(true)
-
-
-type Types = typeof types[number]
-
-const [type1, type2] = ["name", "flag"] as [Types, Types]
+const [type1, type2] = defaultGame.value
 
 const maxRounds = 20;
 const maxFails = 3;
@@ -59,7 +52,7 @@ function nextRound() {
 }
 
 function guess(round: RoundEntry) {
-  if (!automaticContinue.value && correctGuessed.value && round.id === correct.value?.id) {
+  if (!autoNext.value && correctGuessed.value && round.id === correct.value?.id) {
     nextRound()
     return;
   }
@@ -69,7 +62,7 @@ function guess(round: RoundEntry) {
   alreadyGuessed.value.push(round.id)
   if (round.correct) {
     correctGuessed.value = true
-    if (automaticContinue.value) {
+    if (autoNext.value) {
       setTimeout(() => nextRound(), 1_000)
     }
   } else {
@@ -83,14 +76,16 @@ function showFlagOverlay(round: RoundEntry) {
 
 window.addEventListener("keydown", (e) => {
   const numKey = Number.parseInt(e.key)
-  if (correctGuessed.value || !numKey) return
+  if ((autoNext.value && correctGuessed.value) || !numKey) return
 
   if (rounds.length <= currentRound.value) return
   const round = rounds[currentRound.value]
   if (numKey > round.length) return
 
   const selectedGuess = round[numKey - 1]
-  if (!isGuessed(selectedGuess.id)) guess(selectedGuess)
+  if (autoNext.value ? !isGuessed(selectedGuess.id) : true) {
+    guess(selectedGuess)
+  }
 })
 
 function reloadWindow() {
@@ -108,7 +103,6 @@ const displayValue = computed(() => {
     default: return "Unknown Type";
   }
 })
-
 </script>
 
 <template>
@@ -119,9 +113,7 @@ const displayValue = computed(() => {
         class="flex flex-row border border-solid border-gray-400 w-max pl-1 px-2 py-1 ml-0 mr-auto hover:bg-gray-500/20 cursor-pointer">
         <Icon name="mdi:home" size="24px" />Home
       </NuxtLink>
-      <div class="ml-auto mr-0">
-        <input type="checkbox" v-model="automaticContinue"> Automatisch fortfahren
-      </div>
+
     </div>
     <div class="flex flex-row w-full py-4">
       <div class="flex">
@@ -162,7 +154,7 @@ const displayValue = computed(() => {
       class="grid grid-cols-2 grid-rows-2 gap-8 p-4 max-sm:gap-3 max-w-full w-full sm:w-max bg-slate-400 rounded-md rounded-b-none max-sm:mb-0">
       <div v-for="round of rounds[currentRound]" :key="round.id" @click="guess(round)"
         class="relative cursor-pointer !w-full [aspect-ratio:4/3] rounded-md flex items-center"
-        :class="cn(type2 !== 'flag' && 'bg-gray-600/70', (type2 !== 'flag' && correctGuessed) && 'bg-green-500', ((showFlagOverlay(round) || failed)) && 'bg-gray-600/40')">
+        :class="cn(type2 !== 'flag' && 'bg-gray-600/70', (type2 !== 'flag' && correctGuessed) && 'bg-green-500', (showFlagOverlay(round) || failed) && 'bg-gray-600/40')">
 
         <div class="absolute w-6 h-full content-center text-center max-sm:hidden"
           :class="cn(rounds[currentRound].indexOf(round) % 2 == 0 ? '-left-10' : '-right-10')">
@@ -173,13 +165,14 @@ const displayValue = computed(() => {
         </div>
 
         <template v-if="type2 === 'flag'">
-          <span :class="cn('fi', `fi-${round.cca2}`, ((showFlagOverlay(round) || correctGuessed) && correct?.id != round.id) && 'opacity-40')"
+          <span
+            :class="cn('fi', `fi-${round.cca2}`, ((showFlagOverlay(round) || correctGuessed) && correct?.id != round.id) && 'opacity-40')"
             class="!w-full sm:!h-56  rounded-md [aspect-ratio:4/3] transition-opacity duration-200" />
-          <div v-show="round.id !== correct!.id && correctGuessed"
+          <div v-show="round.id !== correct!.id && (correctGuessed || isGuessed(round.id))"
             class="absolute right-1 top-2 p-1 rounded-md bg-gray-600/50">
             {{ round.name }}
           </div>
-          <div v-show="round.id === correct!.id && correctGuessed && !automaticContinue"
+          <div v-show="round.id === correct!.id && correctGuessed && !autoNext"
             class="absolute p-1 text-lg rounded-md bg-gray-600/50 left-1/2 transform -translate-x-1/2">
             Press to continue
           </div>
