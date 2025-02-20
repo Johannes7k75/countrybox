@@ -72,3 +72,8 @@ export const Boxes = mysqlTable("boxes", {
   trainedAt: datetime("trainedAt"),
   phase: int("phase").default(0).notNull(),
 });
+
+export const GeoJsonCache = mysqlTable("geoJsonCache",{
+  countryId: int("countryId").references(()=>Countries.id),
+  geoJson: json("geoJson").$type<GeoJSON.GeoJSON>()
+})

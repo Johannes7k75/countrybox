@@ -2,7 +2,7 @@
 import { cn } from '~/lib/utils'
 import "flag-icons/css/flag-icons.min.css"
 
-const { autoNext, defaultGame } = storeToRefs(useSettingsStore())
+const { autoNext, defaultGame, showCountry } = storeToRefs(useSettingsStore())
 
 const [type1, type2] = defaultGame.value
 
@@ -16,7 +16,8 @@ interface RoundEntry {
   capital?: string;
   tld?: string;
   callCode?: string;
-  cca2: string | null;
+  cca2: string;
+  cca3: string
   correct: boolean;
 }
 type Round = RoundEntry[];
@@ -34,6 +35,8 @@ const fails = ref(0)
 const correctGuessed = ref(false)
 const alreadyGuessed = ref<number[]>([])
 
+const worldMapRef = ref(null)
+
 const isFinished = computed(() => currentRound.value >= maxRounds)
 const failed = computed(() => fails.value >= maxFails)
 const correct = computed(() => rounds.length > currentRound.value ? rounds[currentRound.value].find(r => r.correct) : undefined)
@@ -43,13 +46,26 @@ function isGuessed(countryId: number | undefined) {
 }
 
 function nextRound() {
-  if (isFinished.value) return
-  if (rounds.length > currentRound.value) currentRound.value += 1
-  alreadyGuessed.value = []
-  correctGuessed.value = false
+  if (isFinished.value) return;
 
-  if (isFinished.value) setTimeout(() => navigateTo("/"), 1_000)
+  currentRound.value += 1;
+  alreadyGuessed.value = [];
+  correctGuessed.value = false;
+
+  if (worldMapRef.value && showCountry.value === "on" && correct.value) {
+    worldMapRef.value.setGeoJson(correct.value.cca3);
+  }
+
+  if (isFinished.value) {
+    setTimeout(async () => {
+      await nextTick();
+      if (worldMapRef.value && correct.value) {
+        worldMapRef.value.setGeoJson(correct.value.cca3);
+      }
+    }, 500); // Give time for the map to appear before setting data
+  }
 }
+
 
 function guess(round: RoundEntry) {
   if (!autoNext.value && correctGuessed.value && round.id === correct.value?.id) {
@@ -62,6 +78,9 @@ function guess(round: RoundEntry) {
   alreadyGuessed.value.push(round.id)
   if (round.correct) {
     correctGuessed.value = true
+    if (worldMapRef.value && showCountry.value==="onAfter") {
+      setTimeout(()=>worldMapRef.value.setGeoJson(correct.value?.cca3),1000)
+    }
     if (autoNext.value) {
       setTimeout(() => nextRound(), 1_000)
     }
@@ -103,6 +122,7 @@ const displayValue = computed(() => {
     default: return "Unknown Type";
   }
 })
+
 </script>
 
 <template>
@@ -137,6 +157,9 @@ const displayValue = computed(() => {
         </template>
       </span>
     </div>
+
+    <WorldMap :ccn3="correct!.cca3" ref="worldMapRef" class="absolute z-0 left-4 !w-[600px] !h-[400px] top-1/2 transform -translate-y-1/2"
+      v-if="showCountry !== 'off'" v-show="showCountry === 'on' || (showCountry === 'onAfter' && correctGuessed)" />
 
     <span :class="cn('text-red-500 text-8xl font-bold flex-grow content-center max-sm:text-5xl')" v-show="failed">
       Game over<br>

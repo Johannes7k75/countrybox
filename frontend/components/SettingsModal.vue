@@ -21,10 +21,17 @@ const settings = storeToRefs(useSettingsStore())
 const autoNext = ref(settings.autoNext.value)
 function updateAutoNext() {
     autoNext.value = !autoNext.value
-    // settings.autoNext.value = autoNext.value
     useSettingsStore().set("autoNext", autoNext.value)
 }
 
+const mapStates = [
+    {value: "off", label: "Immer aus"},
+    {value: "on", label: "Immer an"},
+    {value: "onAfter", label: "An nach fertig"}
+]
+
+const mapState = ref<"on"|"off"|"onAfter">(useSettingsStore().showCountry)
+watch(mapState, ()=>useSettingsStore().set("showCountry", mapState.value))
 </script>
 
 <template>
@@ -46,6 +53,14 @@ function updateAutoNext() {
                     <div class="flex flex-col">
                         <div class="flex items-center gap-2">
                             <UToggle @change="updateAutoNext" :model-value="settings.autoNext.value" /> <span>Automatisch fortfahren</span>
+                        </div>
+                    </div>
+                    
+                    <div class="flex flex-col">
+                        {{ showCountry }}
+                        <div class="flex flex-col gap-2 items-start">
+                            <span>Land auf Karte anzeigen</span>
+                            <URadio v-for="state of mapStates" :key="state.value" v-model="mapState" v-bind="state" class="pl-4"/> 
                         </div>
                     </div>
                     

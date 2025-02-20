@@ -17,7 +17,8 @@ export default defineNuxtConfig({
     "nuxt-auth-utils",
     "@nuxt/image",
     "@nuxt/ui",
-    "@pinia/nuxt"
+    "@pinia/nuxt",
+    "@nuxtjs/leaflet"
   ],
 
   tailwindcss: {

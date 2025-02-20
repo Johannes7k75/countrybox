@@ -6,6 +6,7 @@ export type GameTypes = typeof gameTypes[number]
 const defaultSettings = {
   autoNext: false,
   defaultGame: ['name', 'flag'] as [GameTypes,GameTypes],
+  showCountry: "on" as "on"|"off"|"onAfter"
 };
 
 function getKeys<O extends Object>(obj: O): (keyof O)[] {
