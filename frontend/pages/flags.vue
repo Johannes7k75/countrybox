@@ -11,19 +11,29 @@ const mapping = {
     callCode: "callingCode"
 }
 
+
 const flagCodes = await $fetch<typeof mapping[]>("/api/flags", {
-    method: "POST",
-    body: {
-        mapping
-    }
+    method: "GET",
+    params: mapping
 })
 
-console.log(flagCodes)
+const query = ref("")
 
-const flags = computed(() => flagCodes
-    .map(({ code, name, capital, cca2, countryId, callCode }) => ({ countryId,callCode, code, cca2, name, capital, path: `/flags/${code}.svg` }))
-    .filter(flag => query.value != "" ? flag.capital.toLowerCase().includes(query.value.toLowerCase()) || flag.name.toLowerCase().includes(query.value.toLowerCase()) : true)
-)
+function normalizeString(inputString: string) {
+    return inputString
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .toLowerCase();
+}
+
+function searchFor(strA: string, strB: string) {
+    return normalizeString(strA).includes(normalizeString(strB))
+}
+
+const flags = computed(() => {
+    const filtered = flagCodes.filter(flag => query.value != "" ? searchFor(flag.capital, query.value) || searchFor(flag.name, query.value) : true)
+    return filtered
+})
 
 const flagMap = computed(() => {
     const map = new Map();
@@ -35,7 +45,6 @@ const flagMap = computed(() => {
 })
 
 const isFlipped = ref<string>()
-const query = ref("")
 
 console.log(flagMap.value)
 
@@ -49,7 +58,7 @@ onMounted(async () => {
     })
 
     tlds.forEach(tld => {
-        console.log(tldMap.values().filter(x=>x==tld.tld))
+        console.log(tldMap.values().filter(x => x == tld.tld))
         tldMap.set(flagMap.value.get(tld.countryId), tld.tld)
     })
 
@@ -71,11 +80,10 @@ onMounted(async () => {
             <div class="w-max flex flex-col">
                 <div class="w-full flex justify-between">
                     <label for="search">Land oder Stadt</label>
-                    <span class="text-black/50">({{ flags.length }})</span>
+                    <span class="text-black/50 dark:text-white/50">({{ flags.length }})</span>
                 </div>
-                <input type="text" name="search" placeholder="Deutschland"
-                    class="mb-8 border-solid border-gray-400 border-[2px] rounded-sm after:content-['Test'] "
-                    v-model="query" />
+
+                <UInput type="text" name="search" placeholder="Deutschland" v-model="query" class="mb-8" />
             </div>
 
             <div class="grid grid-cols-2 lg:grid-cols-4 gap-8 mx-auto w-max">
@@ -109,8 +117,7 @@ onMounted(async () => {
 
                                 <span
                                     :class="cn('!absolute bottom-2 right-2 rounded-md bg-white/25 px-2 py-1 text-white/80')"
-                                    v-show="flag.callCode && flag.callCode!=''"
-                                    >
+                                    v-show="flag.callCode && flag.callCode != ''">
                                     +{{ flag.callCode }}
                                 </span>
 

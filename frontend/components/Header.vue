@@ -20,6 +20,7 @@ const closePopover = () => {
         popoverHover.value = false;
     }, 150);
 };
+
 </script>
 
 <template>
@@ -31,10 +32,10 @@ const closePopover = () => {
 
                 <template #panel>
                     <div class="p-2 flex flex-col " @mouseover="hoverPopover" @mouseleave="closePopover">
-                        <UButton label="Einstellungen" @click="isOpen = true"
+                        <UButton :label="$t('dropdown.account.settings')" @click="isOpen = true"
                             class="!bg-transparent !text-white font-bold" />
                         <UDivider />
-                        <UButton label="Ausloggen" color="red" @click="logout"
+                        <UButton :label="$t('dropdown.account.logout')" color="red" @click="logout"
                             class="!bg-transparent !text-red-600 font-bold" />
                     </div>
                 </template>
