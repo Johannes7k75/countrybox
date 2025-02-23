@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-const { user, clear: clearSession } = useUserSession();
+const { user, clear: clearSession, loggedIn } = useUserSession();
 const isOpen = ref(false);
 
 async function logout() {
@@ -35,8 +35,10 @@ const closePopover = () => {
                         <UButton :label="$t('dropdown.account.settings')" @click="isOpen = true"
                             class="!bg-transparent !text-white font-bold" />
                         <UDivider />
-                        <UButton :label="$t('dropdown.account.logout')" color="red" @click="logout"
+                        <UButton v-show="loggedIn" :label="$t('dropdown.account.logout')" color="red" @click="logout"
                             class="!bg-transparent !text-red-600 font-bold" />
+
+                        <UButton v-show="!loggedIn" :label="$t('dropdown.account.login')" class="!bg-transparent !text-white font-bold" @click="useRouter().push({name:'login'})"/>
                     </div>
                 </template>
             </UPopover>
