@@ -1,55 +1,40 @@
 <script setup lang="ts">
-import { cn } from '~/lib/utils'
-
 const { fetch: refreshSession } = useUserSession()
 
-const credentials = reactive({
-  email: '',
-  password: '',
-})
+const loading = ref(false)
+const router = useRouter()
 
-async function login() {
-  $fetch('/api/login', {
-    method: 'POST',
-    body: credentials
-  })
-    .then(async () => {
-      // Refresh the session on client-side and redirect to the home page
-      await refreshSession()
-      await navigateTo('/')
+async function login(body: {
+  email: string,
+  password: string
+}) {
+  loading.value = true
+  try {
+    const res = await useFetch("/api/auth/login", {
+      method: "POST",
+      body
     })
-    .catch(() => alert('Bad credentials'))
+    console.log({res})
+    await refreshSession()
+    await router.push({ path: "/" })
+    loading.value = false
+  } catch (error) {
+    console.log({ error })
+    alert(error.statusMessage || error)
+    loading.value = false
+  }
 }
-
-const isValid = computed(() => credentials.email != "" && credentials.password != "")
-
 </script>
 
 <template>
-
-  <div class="flex h-full">
-    <div class="w-96 bg-gray-700 h-max p-4 rounded-sm mx-auto my-auto">
-      <form @submit.prevent="login" class="flex flex-col gap-4">
-
-        <div class="flex flex-col">
-          <label for="email">Email</label>
-          <input v-model="credentials.email" name="email" type="email" placeholder="john@exmaple.com"
-            class="bg-transparent rounded-sm border border-gray-600/70 pl-2" />
-        </div>
-
-        <div class="flex flex-col">
-          <label for="password">Password</label>
-          <input v-model="credentials.password" name="password" type="password" placeholder="Password"
-            class="bg-transparent rounded-sm border border-gray-600/70 pl-2" />
-        </div>
-
-        <button type="submit" class="w-full py-1 bg-green-500 rounded-sm" :class="cn(!isValid && 'opacity-50')"
-          :disabled="!isValid">
-          Login
-        </button>
-
-        <span class="mx-auto">Don't have an account? <a href="/signup" class="text-green-400">Create One</a></span>
-      </form>
+  <div class="w-80 max-w-full mx-auto flex flex-col gap-4 mt-20">
+    <div class="bg-gray-700/80 p-4 rounded-md">
+      <AuthForm :loading="loading" @on-submit="login" :title="$t('auth.signin')" />
+    </div>
+    <div class="border border-solid border-gray-500 rounded-md py-4 text-center">
+      <p>{{ $t("auth.noAccount") }} <NuxtLink class="text-green-400" :to="{ name: 'signup' }">{{ $t('auth.signup') }}
+        </NuxtLink>
+      </p>
     </div>
   </div>
 </template>

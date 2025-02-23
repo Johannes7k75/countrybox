@@ -16,6 +16,7 @@
         },
         "titles": {
             "flags": "Flaggen",
+            "customGame": "Benutzerdefiniert",
             "click&learn": "Klicken und lernen",
             "flagBox": "Flaggen Boxen"
         }
@@ -23,7 +24,8 @@
     "dropdown": {
         "account": {
             "settings": "Einstellungen",
-            "logout": "Ausloggen"
+            "logout": "Ausloggen",
+            "login": "Anmelden"
         }
     },
     "settings": {
@@ -42,5 +44,15 @@
                 }
             }
         }
+    },
+    "auth": {
+        "loading": "Bitte warten...",
+        "password": "Passwort",
+        "passwordRepeat": "Passwort wiederholen",
+        "email": "Email",
+        "noAccount": "Noch keinen Account?",
+        "alreadyAccount": "Bereits einen Account?",
+        "signup": "Registrieren",
+        "signin": "Anmelden"
     }
 }
