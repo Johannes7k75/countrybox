@@ -9,13 +9,13 @@ interface WorldMapProps {
 
 const props = defineProps<WorldMapProps>();
 
-const tileMapUrl = "http://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}.png"
+const tileMapUrl = "https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}.png"
 const zoom = ref(6);
 const center = ref([47.21322, -1.559482])
 
 const isReady = ref(false)
 
-const map = ref<{ leafletObject: L.Map } | null>(null)
+const map = ref<{leafletObject: L.Map & {tap?: {enable:()=>void,disable:()=>void}},root: HTMLElement}|null>(null)
 const geojson = ref<GeoJSON.GeoJSON | undefined>(undefined)
 
 const geostyler = (feature: any) => ({
@@ -47,8 +47,6 @@ async function updateGeoJson(ccn3: string) {
 function onMapReady() {
   isReady.value = true
   console.log("Map ready")
-
-  console.log(map.value)
 }
 
 onMounted(async () => {
