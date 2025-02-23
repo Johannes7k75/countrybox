@@ -1,3 +1,5 @@
+import { EventEmitter } from "~/lib/EventEmitter";
+
 export interface GameOption {
   name: string;
   capital: string;
@@ -25,10 +27,7 @@ interface GameStore {
   types: GameType;
   options: GameOption[];
 
-  onNext: (()=>void)[],
-  onCorrectGuess:(()=>void)[]
-  onStart:(()=>void)[],
-  onRoundOver:(()=>void)[],
+  events: EventEmitter<Events>
 }
 
 function randomInt(min: number, max: number): number {
@@ -40,6 +39,13 @@ function randomInt(min: number, max: number): number {
   } else {
     return Math.floor(Math.random() * (max - min + 1)) + min;
   }
+}
+
+type Events = {
+  start: [],
+  "next": [],
+  correctGuess: [],
+  roundOver: [],
 }
 
 export const useGameStore = defineStore("gameStore", {
@@ -55,10 +61,7 @@ export const useGameStore = defineStore("gameStore", {
     },
     options: [],
 
-    onNext: [],
-    onCorrectGuess: [],
-    onStart: [],
-    onRoundOver: [],
+    events: new EventEmitter<Events>()
   }),
 
   getters: {
@@ -99,17 +102,19 @@ export const useGameStore = defineStore("gameStore", {
           this.guesses = new Set();
           this.round++;
           this.options = await this.getRoundOptions();
-          this.onNext.forEach(cb=>{
-            console.log("Run On next")
-            cb()
-          })
+          this.events.emit("next")
+          // this.onNext.forEach(cb=>{
+          //   console.log("Run On next")
+          //   cb()
+          // })
       }
 
       if (this.isRoundOver) {
-        this.onRoundOver.forEach(cb=>{
-          console.log("Round over")
-          cb()
-        })
+        this.events.emit("roundOver")
+        // this.onRoundOver.forEach(cb=>{
+        //   console.log("Round over")
+        //   cb()
+        // })
       }
     },
 
@@ -130,15 +135,16 @@ export const useGameStore = defineStore("gameStore", {
       this.types = { ...types };
       this.options = await this.getRoundOptions();
 
-      this.onStart.forEach(cb=>{
-        console.log("Run start cb")
-        cb()
-    })
+      this.events.emit("start")
+    //   this.onStart.forEach(cb=>{
+    //     console.log("Run start cb")
+    //     cb()
+    // })
     },
 
     async getRoundOptions() {
-      const roundData = await useFetch("/api/game", { method: "POST" });
-      const options: GameOption[] = roundData.data.value!.map((r) => ({
+      const roundData = await $fetch("/api/game", { method: "POST" });
+      const options: GameOption[] = roundData!.map((r) => ({
         name: r.name,
         capital: r.capital,
         callCode: r.callCode,
@@ -173,10 +179,11 @@ export const useGameStore = defineStore("gameStore", {
       this.$state.guesses.add(cca2);
       if (this.isCorrect(cca2)) {
 
-        this.onCorrectGuess.forEach(cb=>{
-            console.log("Run correct guess cb")
-            cb()
-        })
+        this.events.emit("correctGuess")
+        // this.onCorrectGuess.forEach(cb=>{
+        //     console.log("Run correct guess cb")
+        //     cb()
+        // })
 
         if (useSettingsStore().autoNext) {
           setTimeout(() => this.nextRound(), 1_000);

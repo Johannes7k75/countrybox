@@ -4,7 +4,7 @@ import "flag-icons/css/flag-icons.min.css"
 import type { GameOption } from '~/stores/game'
 
 const { autoNext, showCountry } = storeToRefs(useSettingsStore())
-const { isGameOver, isRoundOver, types, correctOption, correctGuessed, options, isGuessed, lives, fails, round, maxRounds, getIndex, isCorrect } = storeToRefs(useGameStore())
+const { isGameOver, isRoundOver, types, correctOption, correctGuessed, options, isGuessed, lives, fails, round, maxRounds, getIndex, isCorrect, events } = storeToRefs(useGameStore())
 
 const worldMapRef = ref<{ updateGeoJson: (ccn3: string) => Promise<void>, isReady: boolean, enableInteraction: () => void, disableInteraction: () => void }>()
 
@@ -52,36 +52,34 @@ onMounted(() => {
     })
   }
 
-
-  useGameStore().onNext = [() => {
+  events.value.on("next", () => {
     if (worldMapRef.value && showCountry.value === "on" && correctOption.value) {
       worldMapRef.value.updateGeoJson(correctOption.value.cca3)
     }
-  }, () => {
+
     if (worldMapRef.value && showCountry.value === "onAfter") {
       showMap.value = false
       worldMapRef.value!.updateGeoJson(correctOption.value!.cca3)
     }
-  }]
-
-  if (showCountry.value === "on" && correctOption.value) {
-    worldMapRef.value!.updateGeoJson(correctOption.value!.cca3)
-  }
-
-  useGameStore().onCorrectGuess = [() => {
+  })
+  events.value.on("correctGuess", () => {
     if (worldMapRef.value && showCountry.value === "onAfter") {
       showMap.value = true
     }
-  }]
-
-  useGameStore().onStart = [() => {
+  })
+  events.value.on("start", () => {
     if (showCountry.value === "on" || showCountry.value === "onAfter" && correctOption.value) {
       worldMapRef.value!.updateGeoJson(correctOption.value!.cca3)
     }
-  }]
-  useGameStore().onRoundOver = [() => {
+  })
+  events.value.on("roundOver", () => {
     setTimeout(() => useRouter().push("/"), 2_000)
-  }]
+
+  })
+  
+  if (showCountry.value === "on" && correctOption.value) {
+    worldMapRef.value!.updateGeoJson(correctOption.value!.cca3)
+  }
 })
 
 const showMap = ref(false)
@@ -126,7 +124,7 @@ const mapVisible = computed(() => {
         v-show="!isGameOver && !isRoundOver">
         <template v-if="types.first === 'flag'">
           <span :class="cn('fi', `fi-${displayValue}`)"
-            class="!w-full  sm:!w-max sm:!h-56 !h-full rounded-md [aspect-ratio:4/3] transition-opacity duration-200"></span>
+            class="sm:!w-full sm:!h-56 !h-full rounded-md [aspect-ratio:4/3] transition-opacity duration-200"></span>
         </template>
         <template v-else>
           {{ displayValue }}
@@ -136,8 +134,8 @@ const mapVisible = computed(() => {
 
     <WorldMap ref="worldMapRef" :cca3="correctOption?.cca3"
       class="largeMap:absolute largeMap:!aspect-[6/4] max-largeMap:h-full max-largeMap:flex-grow max-largeMap:!w-full z-0 max-largeMap:mb-6 largeMap:left-4 !max-w-[37rem] !w-1/4 lg:w-1/3 largeMap:top-1/2 transform largeMap:-translate-y-1/2 max-largeMap:duration-700"
-      :class="cn(!mapVisible ? 'max-largeMap:-translate-x-[100vw]' : 'max-largeMap:translate-x-0')" v-if="showCountry !== 'off'"
-      :hide="mapVisible" />
+      :class="cn(!mapVisible ? 'max-largeMap:-translate-x-[100vw]' : 'max-largeMap:translate-x-0')"
+      v-if="showCountry !== 'off'" :hide="mapVisible" />
     <!-- showCountry === 'on' || (showCountry === 'onAfter' && correctGuessed) -->
 
     <span :class="cn('text-red-500 text-8xl font-bold flex-grow content-center max-sm:text-5xl')" v-show="isGameOver">
