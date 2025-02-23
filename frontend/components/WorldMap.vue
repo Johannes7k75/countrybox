@@ -27,8 +27,8 @@ async function setGeoJson(json?: GeoJSON.GeoJSON) {
 
   if (map.value) {
     nextTick(() => {
-      if (json?? geojson.value) {
-        console.log(map.value!.leafletObject.fitBounds(L.geoJSON(json??geojson.value).getBounds()))
+      if (json ?? geojson.value) {
+        console.log(map.value!.leafletObject.fitBounds(L.geoJSON(json ?? geojson.value).getBounds()))
       }
     });
   }
@@ -51,8 +51,8 @@ function onMapReady() {
   console.log(map.value)
 }
 
-onMounted(async()=>{
-  console.log("CCA3",props.cca3)
+onMounted(async () => {
+  console.log("CCA3", props.cca3)
   if (props.cca3) await updateGeoJson(props.cca3)
 })
 
@@ -87,17 +87,24 @@ defineExpose({ updateGeoJson, isReady, disableInteraction, enableInteraction })
 <template>
 
 
+  <div>
     <KeepAlive>
       <LMap ref="map" :zoom="zoom" :center="center" :use-global-leaflet="true" @ready="onMapReady">
 
-        <div class="[perspective:1000px] [transform-style:preserve-3d] w-full h-full absolute z-[1001]">
+        <div
+          class="[perspective:1000px] [transform-style:preserve-3d] w-full absolute z-[1001] !aspect-[3/2]">
           <span
             class="w-1/2 h-full bg-gray-500 absolute left-0 z-[1001] transition-transform duration-[200ms] -translate-x-3/4 rotate-y-120 border-solid border-black border-r"
             :class="cn(!props.hide && '!translate-x-0 !rotate-y-0')"></span>
-          <Icon name="mdi:lock" size="5rem" class="z-[1003] absolute top-0 left-1/2 -translate-x-1/2 -translate-y-full scale-0" :class="cn(!props.hide && 'transition-transform duration-[200ms] -translate-x-1/2 top-1/2 !scale-100 !-translate-y-1/2')"/>
+          <Icon name="mdi:lock" size="5rem"
+            class="z-[1003] absolute top-0 left-1/2 -translate-x-1/2 -translate-y-full scale-0"
+            :class="cn(!props.hide && 'transition-transform duration-[200ms] -translate-x-1/2 top-1/2 !scale-100 !-translate-y-1/2')" />
           <span
             class="w-1/2 h-full bg-gray-500 absolute right-0 z-[1002] transition-transform duration-[200ms] translate-x-3/4 rotate-y-60 border-solid border-black border-l"
             :class="cn(!props.hide && '!translate-x-0 !rotate-y-0')"></span>
+        </div>
+
+        <div class="largeMap:hidden w-full h-full bg-white dark:bg-gray-500 z-[1001] absolute" v-show="!hide">
         </div>
 
         <LTileLayer :url="tileMapUrl"
@@ -107,4 +114,5 @@ defineExpose({ updateGeoJson, isReady, disableInteraction, enableInteraction })
         <LGeoJson v-if="geojson" :geojson="geojson" :geostyler="geostyler" />
       </LMap>
     </KeepAlive>
+  </div>
 </template>

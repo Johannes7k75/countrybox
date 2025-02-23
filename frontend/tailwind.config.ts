@@ -15,6 +15,9 @@ export default defineConfig({
           rotate: {
             60: "60deg",
             120: "120deg"
+          },
+          screens: {
+            largeMap: "1500px"
           }
         }
       }

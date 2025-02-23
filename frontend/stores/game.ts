@@ -27,7 +27,8 @@ interface GameStore {
 
   onNext: (()=>void)[],
   onCorrectGuess:(()=>void)[]
-  onStart:(()=>void)[]
+  onStart:(()=>void)[],
+  onRoundOver:(()=>void)[],
 }
 
 function randomInt(min: number, max: number): number {
@@ -57,6 +58,7 @@ export const useGameStore = defineStore("gameStore", {
     onNext: [],
     onCorrectGuess: [],
     onStart: [],
+    onRoundOver: [],
   }),
 
   getters: {
@@ -101,6 +103,13 @@ export const useGameStore = defineStore("gameStore", {
             console.log("Run On next")
             cb()
           })
+      }
+
+      if (this.isRoundOver) {
+        this.onRoundOver.forEach(cb=>{
+          console.log("Round over")
+          cb()
+        })
       }
     },
 

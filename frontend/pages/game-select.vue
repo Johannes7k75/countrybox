@@ -36,7 +36,16 @@ const firstDiplayNode= computed(()=>dieplayNode(firstType.value, true))
 const secondDiplayNode= computed(()=>dieplayNode(secondType.value))
 
 function startGame() {
-    
+    useGameStore().startGame({
+        maxFails: 3,
+        maxRounds: 20,
+        types: {
+            first: firstType.value,
+            second: secondType.value
+        }
+    })
+
+    navigateTo("/game?redirect")
 }
 </script>
 

@@ -1,4 +1,4 @@
-import de from "./locales/de.yaml"
+import de from "./locales/de.json"
 
 export default defineI18nConfig(()=>({
     legacy: true,

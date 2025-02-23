@@ -86,9 +86,9 @@ onMounted(async () => {
                 <UInput type="text" name="search" placeholder="Deutschland" v-model="query" class="mb-8" />
             </div>
 
-            <div class="grid grid-cols-2 lg:grid-cols-4 gap-8 mx-auto w-max">
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-8 mx-auto w-max max-sm:max-w-[100vw] max-sm:overflow-x-hidden max-sm:w-full max-sm:p-4">
                 <div v-for="flag in flags" :key="flag.code"
-                    class="[perspective:1000px] inline-block w-[240px] [aspect-ratio:4/3] cursor-pointer"
+                    class="[perspective:1000px] inline-block sm:w-[240px] [aspect-ratio:4/3] cursor-pointer"
                     @click="isFlipped === flag.code ? isFlipped = undefined : isFlipped = flag.code">
 
                     <div class="group w-full h-full relative [transform-style:preserve-3d]">
