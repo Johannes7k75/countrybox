@@ -4,7 +4,6 @@ import { GameLink } from '#components';
 definePageMeta({
   middleware: ['authenticated'],
 })
-
 </script>
 
 <template>

@@ -12,7 +12,7 @@ const props = defineProps<{
       v-for="type in gameTypes" 
       :key="type"
       :label="$t(`game.typeSelect.${type}`)" 
-      :color="selectedType === type ? 'green' : 'gray'"
+      :color="selectedType === type ? 'primary' : 'secondary'"
       @click="updateType(type)" 
       :disabled="disabledType === type" 
     />

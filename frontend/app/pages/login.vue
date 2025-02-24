@@ -31,8 +31,9 @@ async function login(body: {
     <div class="bg-gray-700/80 p-4 rounded-md">
       <AuthForm :loading="loading" @on-submit="login" :title="$t('auth.signin')" />
     </div>
+    
     <div class="border border-solid border-gray-500 rounded-md py-4 text-center">
-      <p>{{ $t("auth.noAccount") }} <NuxtLink class="text-green-400" :to="{ name: 'signup' }">{{ $t('auth.signup') }}
+      <p>{{ $t("auth.noAccount") }} <NuxtLink class="text-(--primary)" :to="{ name: 'signup' }">{{ $t('auth.signup') }}
         </NuxtLink>
       </p>
     </div>

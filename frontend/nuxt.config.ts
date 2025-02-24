@@ -7,6 +7,9 @@ export default defineNuxtConfig({
 
   ssr: false,
 
+  srcDir: "app",
+  serverDir: "server",
+
   nitro: {
     experimental: {
       tasks: true,
@@ -16,16 +19,16 @@ export default defineNuxtConfig({
   vite: {
     plugins: [yaml()],
     server: {
-      allowedHosts: ["dev.country.jospace.de"]
-    }
+      allowedHosts: ["dev.country.jospace.de"],
+    },
   },
 
-  css: ["@/assets/css/main.css"],
+  css: ["~/assets/css/main.css"],
 
   modules: [
+    "@nuxt/ui",
     "nuxt-auth-utils",
     "@nuxt/image",
-    "@nuxt/ui",
     "@pinia/nuxt",
     "@nuxtjs/leaflet",
     "@nuxtjs/i18n",
@@ -35,20 +38,12 @@ export default defineNuxtConfig({
     vueI18n: "./i18n/i18n.config.ts",
   },
 
-  tailwindcss: {
-    exposeConfig: true,
-    viewer: true,
-    config: {
-      theme: {
-        extend: {
-          aspectRatio: {
-            auto: "auto",
-            square: "1 / 1",
-            video: "16 / 9",
-          },
-        },
-      },
-    },
+  ui: {
+    devtools: { enabled: true },
+    colorMode: true,
+    theme: {
+      colors: ["primary", "secondary","accent","background"],
+    }
   },
 
   icon: {

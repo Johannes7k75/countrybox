@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import L from "leaflet"
-import { cn } from "~/lib/utils";
+import { cn } from "~~/lib/utils";
 
 interface WorldMapProps {
   hide?: boolean,
@@ -11,7 +11,7 @@ const props = defineProps<WorldMapProps>();
 
 const tileMapUrl = "https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}.png"
 const zoom = ref(6);
-const center = ref([47.21322, -1.559482])
+const center = ref<[number, number]>([47.21322, -1.559482])
 
 const isReady = ref(false)
 

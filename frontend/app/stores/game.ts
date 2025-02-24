@@ -1,4 +1,4 @@
-import { EventEmitter } from "~/lib/EventEmitter";
+import { EventEmitter } from "~~/lib/EventEmitter";
 
 export interface GameOption {
   name: string;

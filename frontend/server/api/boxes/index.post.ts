@@ -1,4 +1,4 @@
-import { getFlagBox } from "~/server/box/FlagBox"
+import { getFlagBox } from "~~/server/box/FlagBox"
 
 export default defineEventHandler(async(event)=>{
     const {user: {email}} = await requireUserSession(event)

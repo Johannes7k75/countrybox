@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import "flag-icons/css/flag-icons.min.css"
-import { cn } from "~/lib/utils"
+import { cn } from "~~/lib/utils"
 
 const mapping = {
     name: "name",

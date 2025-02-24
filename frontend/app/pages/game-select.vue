@@ -1,6 +1,5 @@
 <script lang="ts" setup>
 import "flag-icons/css/flag-icons.min.css"
-import { ref } from 'vue';
 
 definePageMeta({
     layout: "centered"

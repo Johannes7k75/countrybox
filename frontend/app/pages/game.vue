@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { cn } from '~/lib/utils'
+import { cn } from '~~/lib/utils'
 import "flag-icons/css/flag-icons.min.css"
 import type { GameOption } from '~/stores/game'
 
@@ -103,11 +103,7 @@ const mapVisible = computed(() => {
   <div
     class="flex flex-col items-center justify-center p-2 mx-auto w-full lg:max-w-[70rem] absolute left-1/2 transform -translate-x-1/2">
     <div class="flex flex-row w-full">
-      <NuxtLink to="/"
-        class="flex flex-row border border-solid border-gray-400 w-max pl-1 px-2 py-1 ml-0 mr-auto hover:bg-gray-500/20 cursor-pointer">
-        <Icon name="mdi:home" size="24px" />Home
-      </NuxtLink>
-
+            <UButton variant="subtle" label="Home" icon="mdi:home" to="/" view-transition class="rounded-sm text-(--text)" size="xl"/>
     </div>
     <div class="flex flex-row w-full py-4">
       <div class="flex">
@@ -174,7 +170,7 @@ const mapVisible = computed(() => {
             {{ option.name }}
           </div>
           <div v-show="isCorrect(option.cca2) && correctGuessed && !autoNext"
-            class="absolute p-1 text-lg rounded-md bg-gray-600/50 left-1/2 transform -translate-x-1/2">
+            class="absolute p-1 text-lg rounded-md bg-background-800/80 text-(--text) left-1/2 transform -translate-x-1/2">
             Press to continue
           </div>
         </template>

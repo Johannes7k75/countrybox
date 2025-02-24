@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { Codes, generateNewToken, getToken } from "~/server/auth/token";
+import { Codes, generateNewToken, getToken } from "~~/server/auth/token";
 
 const bodySchema = z.object({
   email: z.string().email(),
