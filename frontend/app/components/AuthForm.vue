@@ -16,7 +16,7 @@ defineProps({
     default: false,
   },
 });
-const emit = defineEmits(["onSubmit"]);
+const emit = defineEmits<{onSubmit: [data: {email: string, password: string}]}>();
 
 const schema = object({
   email: string().email("Invalid email"),
@@ -53,6 +53,7 @@ function validate(state: any): FormError[] {
     errors.push({ name: "passwordRepeat", message: "Müssen gleich sein" });
   return errors;
 }
+
 </script>
 
 <template>
@@ -77,9 +78,8 @@ function validate(state: any): FormError[] {
       name="passwordRepeat"
       required
       v-if="repeatPassword"
-      class="w-full"
     >
-      <UInput v-model="passwordRepeat" type="password" />
+      <UInput v-model="passwordRepeat" type="password" class="w-full" />
     </UFormField>
 
     <UButton
@@ -92,4 +92,14 @@ function validate(state: any): FormError[] {
       <template v-else>{{ title }}</template>
     </UButton>
   </UForm>
+
+  <!-- <USeparator class="py-4" label="oder" />
+
+  <UButton
+    variant="subtle"
+    class="w-full cursor-pointer justify-center text-(--text)"
+    @click="guestLogin"
+    :loading="guestLoading"
+    >Gast</UButton
+  > -->
 </template>

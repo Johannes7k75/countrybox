@@ -1,0 +1,59 @@
+{
+    "game": {
+      "typeSelect": {
+        "name": "Name",
+        "capital": "Capital",
+        "tld": "Domain",
+        "callCode": "Call code",
+        "flag": "Flag"
+      }
+    },
+    "main": {
+      "types": {
+        "play": "Game",
+        "train": "Train",
+        "learn": "Learn"
+      },
+      "titles": {
+        "flags": "Flags",
+        "customGame": "Custom",
+        "click&learn": "Click and learn",
+        "flagBox": "Flag boxes"
+      }
+    },
+    "dropdown": {
+      "account": {
+        "settings": "Settings",
+        "logout": "Logout",
+        "login": "Login"
+      }
+    },
+    "settings": {
+      "head": {
+        "settings": "Settings"
+      },
+      "categories": {
+        "game": {
+          "name": "Game",
+          "autoNext": "Continue automatically",
+          "showMap": {
+            "legend": "Show country on map",
+            "off": "Always off",
+            "on": "Always on",
+            "onAfter": "After finished"
+          }
+        }
+      }
+    },
+    "auth": {
+      "loading": "Please wait...",
+      "password": "Password",
+      "passwordRepeat": "Repeat password",
+      "email": "Email",
+      "noAccount": "No account yet?",
+      "alreadyAccount": "Already have an account?",
+      "signup": "Register",
+      "signin": "Log in"
+    }
+  }
+  

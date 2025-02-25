@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import "flag-icons/css/flag-icons.min.css";
 import { cn } from "~~/lib/utils";
+import type { Country, Tld } from "~~/server/utils/drizzle";
 
 const mapping = {
   name: "name",
@@ -19,6 +20,8 @@ const flagCodes = await $fetch<(typeof mapping)[]>("/api/flags", {
 const query = ref("");
 
 function normalizeString(inputString: string) {
+  if (!inputString) return ""
+
   return inputString
     .normalize("NFD")
     .replace(/[\u0300-\u036f]/g, "")
@@ -33,56 +36,49 @@ const flags = computed(() => {
   const filtered = flagCodes.filter((flag) =>
     query.value != ""
       ? searchFor(flag.capital, query.value) ||
-        searchFor(flag.name, query.value)
+        searchFor(flag.name, query.value) ||
+        searchFor(tldMap.get(flag.cca2)!, query.value)  ||
+        searchFor(`+${flag.callCode}`, query.value)
+        // || searchFor(flag.callCode, query.value)
       : true,
   );
   return filtered;
 });
 
 const flagMap = computed(() => {
-  const map = new Map();
-  flagCodes
-    .filter(({ capital, name }) =>
-      query.value != ""
-        ? capital.toLowerCase().includes(query.value.toLowerCase()) ||
-          name.toLowerCase().includes(query.value.toLowerCase())
-        : true,
-    )
-    .forEach(({ code, countryId }) => map.set(countryId, code));
+  const map = new Map<string, string>();
+
+  flagCodes.forEach(({ countryId,cca2 }) => map.set(countryId, cca2));
 
   return map;
 });
 
 const isFlipped = ref<string>();
 
-console.log(flagMap.value);
-
 const tldMap = new Map<string, string>();
 onMounted(async () => {
-  const tlds = await $fetch("/api/flags/tlds", {
+  const data = await $fetch<{tld: Tld, countries: Country}[]>("/tlds", {
     method: "POST",
-    body: {
-      countries: flags.value.map((flag) => flag.code),
-    },
+    body: flags.value.map((flag) => flag.cca2) ?? [],
   });
 
-  tlds.forEach((tld) => {
-    console.log(tldMap.values().filter((x) => x == tld.tld));
-    tldMap.set(flagMap.value.get(tld.countryId), tld.tld);
+  data.forEach(({tld}) => {
+    tldMap.set(flagMap.value.get(tld.countryId)!, tld.tld);
   });
-
-  console.log(tldMap);
 });
 </script>
 
 <template>
-  <div class="mt-0 mb-auto max-h-full w-full overflow-y-scroll pb-16">
-    <NuxtLink
-      to="/"
-      class="mt-4 ml-4 flex w-max flex-row border border-solid border-gray-400 px-2 py-1 pl-1 hover:bg-gray-500/20"
-    >
-      <Icon name="mdi:home" size="24px" />Home
-    </NuxtLink>
+  <div class="mt-0 mb-auto mx-auto max-h-full w-full overflow-y-scroll pb-16 p-2 lg:max-w-[70rem] no-scrollbar">
+      <UButton
+        variant="subtle"
+        label="Home"
+        icon="mdi:home"
+        to="/"
+        view-transition
+        class="rounded-sm text-(--text)"
+        size="xl"
+      />
 
     <div class="flex flex-col items-center">
       <div class="flex w-max flex-col">
@@ -156,7 +152,7 @@ onMounted(async () => {
                     )
                   "
                 >
-                  {{ tldMap.get(flag.code) }}
+                  {{ tldMap.get(flag.cca2) }}
                 </span>
 
                 <span

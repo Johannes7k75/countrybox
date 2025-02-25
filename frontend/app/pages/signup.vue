@@ -1,25 +1,36 @@
 <script setup lang="ts">
-const { loggedIn, user, fetch: refreshSession } = useUserSession();
+import { FetchError } from "ofetch";
+
+definePageMeta({
+  middleware: ["guest-only"]
+})
+
+const {signup} = useAuth()
 
 const loading = ref(false);
-const router = useRouter();
 
-async function signup(body: { email: string; password: string }) {
+async function onSignup({email,password}:{email:string,password:string}) {
   loading.value = true;
   try {
-    await useFetch("/api/signup", {
-      method: "POST",
-      body,
+    await signup(email,password)
+
+    await navigateTo({name: "index"})
+  } catch(error) {
+    console.error(error)
+    if (!(error instanceof FetchError)) {
+      throw error
+    }
+
+    useToast().add({
+      title: "Error on signup",
+      description: error.statusMessage,
+      color: "error",
     });
-    await refreshSession();
-    await router.push({ name: "/" });
-    loading.value = false;
-  } catch (error) {
-    console.log({ error });
-    alert(error.statusMessage || error);
-    loading.value = false;
+  } finally {
+    loading.value = false
   }
 }
+
 </script>
 
 <template>
@@ -37,7 +48,7 @@ async function signup(body: { email: string; password: string }) {
     >
       <p>
         {{ $t("auth.alreadyAccount") }}
-        <NuxtLink class="text-green-400" :to="{ name: 'login' }"
+        <NuxtLink class="text-(--primary)" :to="{ name: 'login' }"
           >{{ $t("auth.signin") }}
         </NuxtLink>
       </p>

@@ -1,13 +1,12 @@
 <script setup lang="ts">
 import { GameLink } from "#components";
 
-definePageMeta({
-  middleware: ["authenticated"],
-});
+const currentUser = useAuthUser()
+
 </script>
 
 <template>
-  <Header />
+  <Header :user="currentUser" />
 
   <div class="mt-10 flex flex-col items-center">
     <ul class="flex w-max flex-col items-center gap-4">

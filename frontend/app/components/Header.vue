@@ -1,9 +1,15 @@
 <script lang="ts" setup>
-const { user, clear: clearSession, loggedIn } = useUserSession();
+import type { User } from '~~/shared/types';
+
+
+defineProps<{user: User|null}>()
+
+const {logout} = useAuth()
+
 const isOpen = ref(false);
 
-async function logout() {
-  await clearSession();
+async function onLogout() {
+  await logout()
   await navigateTo("/");
 }
 
@@ -20,6 +26,7 @@ const closePopover = () => {
     popoverHover.value = false;
   }, 150);
 };
+
 </script>
 
 <template>
@@ -53,15 +60,15 @@ const closePopover = () => {
             <USeparator />
 
             <UButton
-              v-if="loggedIn"
+              v-if="user"
               :label="$t('dropdown.account.logout')"
-              color="red"
-              @click="logout"
+              color="error"
+              @click="onLogout"
               class="cursor-pointer !bg-transparent font-bold !text-red-600"
             />
 
             <UButton
-              v-else-if="!loggedIn"
+              v-else-if="!user"
               :label="$t('dropdown.account.login')"
               class="cursor-pointer !bg-transparent font-bold !text-white"
               @click="useRouter().push({ name: 'login' })"

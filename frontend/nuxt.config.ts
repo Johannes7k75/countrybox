@@ -1,4 +1,7 @@
-import yaml from "@rollup/plugin-yaml";
+import ViteYaml from "@modyfi/vite-plugin-yaml";
+
+const ONE_DAY = 60 * 60 * 24 * 1000;
+const ONE_WEEK = ONE_DAY * 7;
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
@@ -7,8 +10,16 @@ export default defineNuxtConfig({
 
   ssr: false,
 
-  srcDir: "app",
-  serverDir: "server",
+  future: {
+    compatibilityVersion: 4,
+  },
+
+  runtimeConfig: {
+    cookieName: "__session",
+    cookieSecret: "secret",
+    cookieExpires: ONE_DAY.toString(),
+    cookieRememberMeExpires: ONE_WEEK.toString(),
+  },
 
   nitro: {
     experimental: {
@@ -17,7 +28,7 @@ export default defineNuxtConfig({
   },
 
   vite: {
-    plugins: [yaml()],
+    plugins: [ViteYaml()],
     server: {
       allowedHosts: ["dev.country.jospace.de"],
     },
@@ -27,7 +38,7 @@ export default defineNuxtConfig({
 
   modules: [
     "@nuxt/ui",
-    "nuxt-auth-utils",
+    // "nuxt-auth-utils",
     "@nuxt/image",
     "@pinia/nuxt",
     "@nuxtjs/leaflet",
@@ -42,7 +53,16 @@ export default defineNuxtConfig({
     devtools: { enabled: true },
     colorMode: true,
     theme: {
-      colors: ["primary", "secondary", "accent", "background"],
+      colors: [
+        "primary",
+        "secondary",
+        "accent",
+        "background",
+        "info",
+        "success",
+        "warning",
+        "error",
+      ],
     },
   },
 

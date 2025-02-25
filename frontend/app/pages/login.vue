@@ -1,26 +1,64 @@
 <script setup lang="ts">
-const { fetch: refreshSession } = useUserSession();
+import { FetchError } from "ofetch";
+
+definePageMeta({
+  middleware: ["guest-only"],
+})
+
+const {login} = useAuth()
 
 const loading = ref(false);
-const router = useRouter();
 
-async function login(body: { email: string; password: string }) {
+async function onLogin({email, password}:{email: string, password: string}) {
   loading.value = true;
   try {
-    const res = await useFetch("/api/auth/login", {
-      method: "POST",
-      body,
+    await login(email,password, false)
+
+    await navigateTo({name: "index"})
+  } catch(error) {
+    console.error(error)
+    if (!(error instanceof FetchError)) {
+      throw error
+    }
+
+    useToast().add({
+      title: "Error on login",
+      description: error.statusMessage,
+      color: "error",
     });
-    console.log({ res });
-    await refreshSession();
-    await router.push({ path: "/" });
-    loading.value = false;
-  } catch (error) {
-    console.log({ error });
-    alert(error.statusMessage || error);
-    loading.value = false;
+  } finally {
+    loading.value = false
   }
 }
+
+// async function login(body: { email: string; password: string }) {
+//   loading.value = true;
+//   try {
+//     const res = await useFetch("/auth/login", {
+//       method: "POST",
+//       body,
+//     });
+//     console.log({ res });
+//     await refreshSession();
+//     await router.push({ path: "/" });
+//     loading.value = false;
+//   } catch (error) {
+//     if (error instanceof FetchError) {
+//       useToast().add({
+//         title: "Error on login",
+//         description: error.statusMessage,
+//         color: "error",
+//       });
+//     } else {
+//       useToast().add({
+//         title: "Error on login",
+//         description: `${error}`,
+//         color: "error",
+//       });
+//     }
+//     loading.value = false;
+//   }
+// }
 </script>
 
 <template>
@@ -28,7 +66,7 @@ async function login(body: { email: string; password: string }) {
     <div class="rounded-md bg-gray-700/80 p-4">
       <AuthForm
         :loading="loading"
-        @on-submit="login"
+        @on-submit="onLogin"
         :title="$t('auth.signin')"
       />
     </div>
