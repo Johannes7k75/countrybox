@@ -23,7 +23,7 @@ async function onLogin({email, password}:{email: string, password: string}) {
 
     useToast().add({
       title: "Error on login",
-      description: error.statusMessage,
+      description: error.data?.message ?? error.statusMessage ?? error.message,
       color: "error",
     });
   } finally {

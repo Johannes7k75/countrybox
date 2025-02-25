@@ -1,4 +1,5 @@
 import { count } from "drizzle-orm";
+import { hashPassword } from "./password";
 
 export const roles = ["ADMIN", "USER"] as const
 export type UserRoles = typeof roles[number][]
@@ -30,7 +31,9 @@ export async function createUser(email: string, password: string) {
         return null
     }
 
-    await useDrizzle().insert(tables.Users).values([{email, password, roles: ["USER"]}])
+    const hashedPassword = await hashPassword(password)
+
+    await useDrizzle().insert(tables.Users).values([{email, password:hashedPassword, roles: ["USER"]}])
     
     return findUserByEmail(email)
 }

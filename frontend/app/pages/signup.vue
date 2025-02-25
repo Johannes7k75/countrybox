@@ -2,35 +2,34 @@
 import { FetchError } from "ofetch";
 
 definePageMeta({
-  middleware: ["guest-only"]
-})
+  middleware: ["guest-only"],
+});
 
-const {signup} = useAuth()
+const { signup } = useAuth();
 
 const loading = ref(false);
 
-async function onSignup({email,password}:{email:string,password:string}) {
+async function onSignup({email, password}: {email: string, password: string}) {
   loading.value = true;
   try {
-    await signup(email,password)
+    await signup(email, password);
 
-    await navigateTo({name: "index"})
-  } catch(error) {
-    console.error(error)
+    await navigateTo({ name: "index" });
+  } catch (error) {
+    console.error(error);
     if (!(error instanceof FetchError)) {
-      throw error
+      throw error;
     }
 
     useToast().add({
       title: "Error on signup",
-      description: error.statusMessage,
+      description: error.data?.message ?? error.statusMessage ?? error.message,
       color: "error",
     });
   } finally {
-    loading.value = false
+    loading.value = false;
   }
 }
-
 </script>
 
 <template>
@@ -38,7 +37,7 @@ async function onSignup({email,password}:{email:string,password:string}) {
     <div class="rounded-md bg-gray-700/80 p-4">
       <AuthForm
         :loading="loading"
-        @on-submit="signup"
+        @on-submit="onSignup"
         :title="$t('auth.signup')"
         repeat-password
       />
