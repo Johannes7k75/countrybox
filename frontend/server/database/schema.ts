@@ -6,6 +6,7 @@ import {
   boolean,
   datetime,
 } from "drizzle-orm/mysql-core";
+import { UserRoles } from "../lib/user";
 
 export const Countries = mysqlTable("countries", {
   id: int("id").primaryKey().autoincrement().notNull(),
@@ -30,8 +31,8 @@ export const Tld = mysqlTable("tld", {
 export const Users = mysqlTable("users", {
   id: int("id").primaryKey().autoincrement().notNull(),
   email: varchar("email", { length: 255 }).notNull(),
-  hash: varchar("hash", { length: 255 }).notNull(),
-  sessionToken: varchar("session", { length: 36 }),
+  password: varchar("password", { length: 255 }).notNull(),
+  roles: json("roles").$type<UserRoles>()
 });
 
 export const GameTypes = mysqlTable("gameTypes", {
