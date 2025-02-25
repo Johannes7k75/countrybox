@@ -1,10 +1,10 @@
 <script>
-import "~/assets/css/tailwind.css"
+import "~/assets/css/tailwind.css";
 </script>
 
 <template>
   <UApp>
-    <div class="w-screen max-h-full h-screen">
+    <div class="h-screen max-h-full w-screen">
       <slot />
     </div>
   </UApp>

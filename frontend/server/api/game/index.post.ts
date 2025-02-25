@@ -2,13 +2,13 @@ import { notInArray } from "drizzle-orm";
 
 export default defineEventHandler(async (event) => {
   const answers: {
-    id: typeof tables.Countries.$inferSelect.id,
-    name: typeof tables.Countries.$inferSelect.name,
-    capital: typeof tables.Countries.$inferSelect.capital,
-    callCode: typeof tables.Countries.$inferSelect.callingCode,
-    cca2: typeof tables.Countries.$inferSelect.cca2,
-    cca3: typeof tables.Countries.$inferSelect.cca3,
-    tld: typeof tables.Tld.$inferSelect.tld,
+    id: typeof tables.Countries.$inferSelect.id;
+    name: typeof tables.Countries.$inferSelect.name;
+    capital: typeof tables.Countries.$inferSelect.capital;
+    callCode: typeof tables.Countries.$inferSelect.callingCode;
+    cca2: typeof tables.Countries.$inferSelect.cca2;
+    cca3: typeof tables.Countries.$inferSelect.cca3;
+    tld: typeof tables.Tld.$inferSelect.tld;
   }[] = [];
 
   while (answers.length < 4) {
@@ -27,13 +27,14 @@ export default defineEventHandler(async (event) => {
         answers.length > 0
           ? notInArray(
               tables.Countries.id,
-              answers.map((a) => a.id)
+              answers.map((a) => a.id),
             )
-          : undefined
+          : undefined,
       )
       .orderBy(sql`RAND()`)
       .innerJoin(tables.Tld, eq(tables.Countries.id, tables.Tld.countryId))
-      .limit(1).execute();
+      .limit(1)
+      .execute();
     answers.push(answer[0]);
   }
 

@@ -4,21 +4,17 @@ export { sql, eq, and, or } from "drizzle-orm";
 import * as schema from "../database/schema";
 import mysql from "mysql2/promise";
 
-export const tables = schema
-
+export const tables = schema;
 
 declare global {
   var _db: ReturnType<typeof drizzle> | undefined;
 }
 
-
-
-
 const connection = mysql.createPool({
   uri: process.env.DB_URL,
 });
 
-const db = globalThis._db || drizzle(connection, {schema, mode: "default"})
+const db = globalThis._db || drizzle(connection, { schema, mode: "default" });
 if (process.env.NODE_ENV !== "production") {
   globalThis._db = db;
 }
@@ -26,7 +22,7 @@ if (process.env.NODE_ENV !== "production") {
 // const drzl = drizzle(connection, { schema: schema, mode: "default" })
 
 export function useDrizzle() {
-  return db
+  return db;
 }
 
 export type User = typeof schema.Users.$inferSelect;

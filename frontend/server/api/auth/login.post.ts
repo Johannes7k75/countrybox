@@ -47,7 +47,7 @@ export default defineEventHandler(async (event) => {
   try {
     const { email, password } = await readValidatedBody(
       event,
-      bodySchema.parse
+      bodySchema.parse,
     );
 
     console.log(email, password);

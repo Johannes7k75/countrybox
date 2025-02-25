@@ -31,7 +31,7 @@ export const Users = mysqlTable("users", {
   id: int("id").primaryKey().autoincrement().notNull(),
   email: varchar("email", { length: 255 }).notNull(),
   hash: varchar("hash", { length: 255 }).notNull(),
-  sessionToken: varchar("session",{length: 36}),
+  sessionToken: varchar("session", { length: 36 }),
 });
 
 export const GameTypes = mysqlTable("gameTypes", {
@@ -73,7 +73,7 @@ export const Boxes = mysqlTable("boxes", {
   phase: int("phase").default(0).notNull(),
 });
 
-export const GeoJsonCache = mysqlTable("geoJsonCache",{
-  countryId: int("countryId").references(()=>Countries.id),
-  geoJson: json("geoJson").$type<GeoJSON.GeoJSON>()
-})
+export const GeoJsonCache = mysqlTable("geoJsonCache", {
+  countryId: int("countryId").references(() => Countries.id),
+  geoJson: json("geoJson").$type<GeoJSON.GeoJSON>(),
+});

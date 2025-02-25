@@ -38,6 +38,8 @@
     "@types/geojson": "^7946.0.16",
     "@types/leaflet": "^1.9.16",
     "drizzle-kit": "^0.30.4",
+    "prettier": "^3.5.2",
+    "prettier-plugin-tailwindcss": "^0.6.11",
     "tailwindcss-3d": "^1.0.7",
     "wrangler": "^3.107.3"
   },
@@ -47,6 +49,10 @@
       "@tailwindcss/postcss": "4.0.7",
       "@tailwindcss/vite": "4.0.7"
     }
+  },
+  "engines": {
+    "node": ">=20",
+    "pnpm": ">=9"
   },
   "packageManager": "pnpm@9.10.0+sha512.73a29afa36a0d092ece5271de5177ecbf8318d454ecd701343131b8ebc0c1a91c487da46ab77c8e596d6acf1461e3594ced4becedf8921b074fbd8653ed7051c"
 }

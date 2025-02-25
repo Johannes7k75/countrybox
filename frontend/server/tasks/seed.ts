@@ -14,12 +14,12 @@ export default defineTask({
 
     await useDrizzle().delete(tables.Boxes);
     useDrizzle().execute(
-      sql`UPDATE sqlite_sequence SET seq = 0 WHERE name = 'boxes'`
+      sql`UPDATE sqlite_sequence SET seq = 0 WHERE name = 'boxes'`,
     );
 
     await useDrizzle().delete(tables.Users);
     useDrizzle().execute(
-      sql`UPDATE sqlite_sequence SET seq = 0 WHERE name = 'users'`
+      sql`UPDATE sqlite_sequence SET seq = 0 WHERE name = 'users'`,
     );
     await useDrizzle()
       .insert(tables.Users)
@@ -34,7 +34,7 @@ export default defineTask({
     if (seedCountries) {
       await useDrizzle().delete(tables.Tld);
       useDrizzle().execute(
-        sql`UPDATE sqlite_sequence SET seq = 0 WHERE name = 'tld'`
+        sql`UPDATE sqlite_sequence SET seq = 0 WHERE name = 'tld'`,
       );
 
       // await useDrizzle().delete(tables.callingCodes);
@@ -44,7 +44,7 @@ export default defineTask({
 
       await useDrizzle().delete(tables.Countries);
       useDrizzle().execute(
-        sql`UPDATE sqlite_sequence SET seq = 0 WHERE name = 'countries'`
+        sql`UPDATE sqlite_sequence SET seq = 0 WHERE name = 'countries'`,
       );
 
       let i = 0;
@@ -80,10 +80,19 @@ export default defineTask({
       console.log(`Seeded ${i} countries...`);
     }
 
-    const boxes: typeof tables.Boxes.$inferInsert[] = [];
+    const boxes: (typeof tables.Boxes.$inferInsert)[] = [];
     for (let i = 0; i < 6; i++) {
-      const [{id: countryId}] = await useDrizzle().select({id: tables.Countries.id}).from(tables.Countries).orderBy(sql`RAND()`).limit(1).execute()
-      const [{id: userId}] = await useDrizzle().select().from(tables.Users).limit(1).execute()
+      const [{ id: countryId }] = await useDrizzle()
+        .select({ id: tables.Countries.id })
+        .from(tables.Countries)
+        .orderBy(sql`RAND()`)
+        .limit(1)
+        .execute();
+      const [{ id: userId }] = await useDrizzle()
+        .select()
+        .from(tables.Users)
+        .limit(1)
+        .execute();
 
       boxes.push({
         userId: userId,

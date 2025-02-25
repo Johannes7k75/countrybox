@@ -1,12 +1,12 @@
 import { inArray } from "drizzle-orm";
-import { z } from "zod"
+import { z } from "zod";
 
 const bodySchema = z.object({
-    countries: z.array(z.string().length(3)).optional(),
-})
+  countries: z.array(z.string().length(3)).optional(),
+});
 
 export default defineEventHandler(async (event) => {
-    const { countries } = await readValidatedBody(event, bodySchema.parse);
+  const { countries } = await readValidatedBody(event, bodySchema.parse);
 
   let select = useDrizzle().select().from(tables.CallingCodes);
 
@@ -17,7 +17,7 @@ export default defineEventHandler(async (event) => {
       .from(tables.Countries)
       .where(inArray(tables.Countries.cca3, countries));
 
-    const countryIds = countryIdsQuery.map(row => row.id);
+    const countryIds = countryIdsQuery.map((row) => row.id);
 
     if (countryIds.length > 0) {
       select = select.where(inArray(tables.CallingCodes.countryId, countryIds));
@@ -25,5 +25,4 @@ export default defineEventHandler(async (event) => {
   }
 
   return await select;
-
-})
+});

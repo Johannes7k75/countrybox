@@ -1,19 +1,24 @@
 import { SelectedFields } from "drizzle-orm/sqlite-core";
 import { z, ZodError, ZodSchema } from "zod";
 
-type H3Event = import("h3").H3Event
+type H3Event = import("h3").H3Event;
 
 const keys = tables.Countries;
 
 const keyEnum = z.enum(
-  Object.keys(keys) as [keyof typeof keys, ...Array<keyof typeof keys>]
+  Object.keys(keys) as [keyof typeof keys, ...Array<keyof typeof keys>],
 );
 
 const paramsSchema = z.record(keyEnum).optional();
 
-async function parseParams<T>(event: H3Event, paramsSchema: ZodSchema<T>["parse"]): Promise<T> {
+async function parseParams<T>(
+  event: H3Event,
+  paramsSchema: ZodSchema<T>["parse"],
+): Promise<T> {
   try {
-    const params = Object.fromEntries(new URLSearchParams(event.path.split("?")[1]));
+    const params = Object.fromEntries(
+      new URLSearchParams(event.path.split("?")[1]),
+    );
 
     const validatedBody = paramsSchema(params);
 
@@ -34,8 +39,7 @@ export default defineEventHandler(async (event) => {
 
   let select = useDrizzle().select();
 
-
-  console.log(params)
+  console.log(params);
 
   if (params) {
     const selectedFields = Object.keys(params)
@@ -43,7 +47,7 @@ export default defineEventHandler(async (event) => {
         (k) =>
           ({
             [k]: tables.Countries[params[k as keyof typeof keys]],
-          } as SelectedFields)
+          }) as SelectedFields,
       )
       .reduce((p, c) => Object.assign(p, c), {});
     select = useDrizzle().select(selectedFields);

@@ -1,23 +1,30 @@
 <script lang="ts" setup>
 definePageMeta({
-    middleware: ['authenticated'],
-})
+  middleware: ["authenticated"],
+});
 
-const boxes = await $fetch("/api/boxes", { method: "POST" }) ?? []
+const boxes = (await $fetch("/api/boxes", { method: "POST" })) ?? [];
 
-console.log(boxes)
-
+console.log(boxes);
 </script>
 
 <template>
-    <div class="flex flex-row gap-8 items-center w-full justify-center h-full">
-        <div v-for="box of boxes" :key="box!.phase" class="flex flex-col w-max items-center">
-            <div class="rounded-xl bg-gray-700 w-12 h-20 flex items-center justify-center [font-size:32px] relative">
-                <span class="z-[5]">{{ box!.phase }}</span>
-                <div class="z-[3] absolute bg-green-500 w-full h-1/2 bottom-0 rounded-[inherit] rounded-t-[0]"></div>
-            </div>
+  <div class="flex h-full w-full flex-row items-center justify-center gap-8">
+    <div
+      v-for="box of boxes"
+      :key="box!.phase"
+      class="flex w-max flex-col items-center"
+    >
+      <div
+        class="relative flex h-20 w-12 items-center justify-center rounded-xl bg-gray-700 [font-size:32px]"
+      >
+        <span class="z-[5]">{{ box!.phase }}</span>
+        <div
+          class="absolute bottom-0 z-[3] h-1/2 w-full rounded-[inherit] rounded-t-[0] bg-green-500"
+        ></div>
+      </div>
 
-            <span>{{ box!.flagIds.length }}</span>
-        </div>
+      <span>{{ box!.flagIds.length }}</span>
     </div>
+  </div>
 </template>

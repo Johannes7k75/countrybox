@@ -7,14 +7,14 @@ const props = defineProps<{
 </script>
 
 <template>
-  <div class="w-full flex justify-center gap-2 mt-2">
-    <UButton 
-      v-for="type in gameTypes" 
+  <div class="mt-2 flex w-full justify-center gap-2">
+    <UButton
+      v-for="type in gameTypes"
       :key="type"
-      :label="$t(`game.typeSelect.${type}`)" 
+      :label="$t(`game.typeSelect.${type}`)"
       :color="selectedType === type ? 'primary' : 'secondary'"
-      @click="updateType(type)" 
-      :disabled="disabledType === type" 
+      @click="updateType(type)"
+      :disabled="disabledType === type"
     />
   </div>
 </template>

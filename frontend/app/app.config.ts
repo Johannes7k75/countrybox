@@ -21,15 +21,17 @@ export default defineAppConfig({
       ],
     },
     tabs: {
-        compoundVariants: [{
-            color: "primary",
-            variant: "pill",
-            class: {
-                indicator: "bg-(--ui-primary)",
-                trigger: "data-[state=active]:text-(--text) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--ui-primary)"
-                
-            }
-        }],
+      compoundVariants: [
+        {
+          color: "primary",
+          variant: "pill",
+          class: {
+            indicator: "bg-(--ui-primary)",
+            trigger:
+              "data-[state=active]:text-(--text) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--ui-primary)",
+          },
+        },
+      ],
     },
     // colors: {
     //     primary: "blue",

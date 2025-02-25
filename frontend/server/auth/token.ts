@@ -1,8 +1,8 @@
 import { randomUUID } from "node:crypto";
 
 export enum Codes {
-    GENERATE_TOKEN_ERROR,
-    GENERATE_TOKEN_SUCCESS
+  GENERATE_TOKEN_ERROR,
+  GENERATE_TOKEN_SUCCESS,
 }
 
 export async function generateNewToken(email: string) {
@@ -13,13 +13,13 @@ export async function generateNewToken(email: string) {
     .limit(1);
 
   if (users.length == 0 || users.length > 1) {
-    console.log("To many or to few users")
+    console.log("To many or to few users");
     return Codes.GENERATE_TOKEN_ERROR;
   }
   const user = users[0];
 
   if (user.sessionToken) {
-    console.log("Session already exists")
+    console.log("Session already exists");
     return Codes.GENERATE_TOKEN_SUCCESS;
   }
 
@@ -62,5 +62,5 @@ export async function getToken(email: string) {
     return null;
   }
 
-  return users[0].sessionToken
+  return users[0].sessionToken;
 }

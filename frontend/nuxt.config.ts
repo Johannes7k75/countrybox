@@ -42,8 +42,8 @@ export default defineNuxtConfig({
     devtools: { enabled: true },
     colorMode: true,
     theme: {
-      colors: ["primary", "secondary","accent","background"],
-    }
+      colors: ["primary", "secondary", "accent", "background"],
+    },
   },
 
   icon: {

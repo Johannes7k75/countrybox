@@ -50,12 +50,8 @@
           "name": "boxes_userId_users_id_fk",
           "tableFrom": "boxes",
           "tableTo": "users",
-          "columnsFrom": [
-            "userId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["userId"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -63,12 +59,8 @@
           "name": "boxes_countryId_countries_id_fk",
           "tableFrom": "boxes",
           "tableTo": "countries",
-          "columnsFrom": [
-            "countryId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["countryId"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -76,9 +68,7 @@
       "compositePrimaryKeys": {
         "boxes_id": {
           "name": "boxes_id",
-          "columns": [
-            "id"
-          ]
+          "columns": ["id"]
         }
       },
       "uniqueConstraints": {},
@@ -156,9 +146,7 @@
       "compositePrimaryKeys": {
         "countries_id": {
           "name": "countries_id",
-          "columns": [
-            "id"
-          ]
+          "columns": ["id"]
         }
       },
       "uniqueConstraints": {},
@@ -203,12 +191,8 @@
           "name": "gameRounds_gameId_games_id_fk",
           "tableFrom": "gameRounds",
           "tableTo": "games",
-          "columnsFrom": [
-            "gameId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["gameId"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -216,9 +200,7 @@
       "compositePrimaryKeys": {
         "gameRounds_id": {
           "name": "gameRounds_id",
-          "columns": [
-            "id"
-          ]
+          "columns": ["id"]
         }
       },
       "uniqueConstraints": {},
@@ -247,9 +229,7 @@
       "compositePrimaryKeys": {
         "gameTypes_id": {
           "name": "gameTypes_id",
-          "columns": [
-            "id"
-          ]
+          "columns": ["id"]
         }
       },
       "uniqueConstraints": {},
@@ -317,12 +297,8 @@
           "name": "games_userId_users_id_fk",
           "tableFrom": "games",
           "tableTo": "users",
-          "columnsFrom": [
-            "userId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["userId"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -330,12 +306,8 @@
           "name": "games_gameType_gameTypes_id_fk",
           "tableFrom": "games",
           "tableTo": "gameTypes",
-          "columnsFrom": [
-            "gameType"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["gameType"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -343,9 +315,7 @@
       "compositePrimaryKeys": {
         "games_id": {
           "name": "games_id",
-          "columns": [
-            "id"
-          ]
+          "columns": ["id"]
         }
       },
       "uniqueConstraints": {},
@@ -375,12 +345,8 @@
           "name": "geoJsonCache_countryId_countries_id_fk",
           "tableFrom": "geoJsonCache",
           "tableTo": "countries",
-          "columnsFrom": [
-            "countryId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["countryId"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -420,12 +386,8 @@
           "name": "tld_countryId_countries_id_fk",
           "tableFrom": "tld",
           "tableTo": "countries",
-          "columnsFrom": [
-            "countryId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["countryId"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -433,9 +395,7 @@
       "compositePrimaryKeys": {
         "tld_id": {
           "name": "tld_id",
-          "columns": [
-            "id"
-          ]
+          "columns": ["id"]
         }
       },
       "uniqueConstraints": {},
@@ -478,9 +438,7 @@
       "compositePrimaryKeys": {
         "users_id": {
           "name": "users_id",
-          "columns": [
-            "id"
-          ]
+          "columns": ["id"]
         }
       },
       "uniqueConstraints": {},
