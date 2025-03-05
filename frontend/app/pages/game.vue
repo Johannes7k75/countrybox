@@ -23,7 +23,7 @@
     <div class="grid flex-grow grid-cols-[1fr_max-content_1fr] gap-4 largeMap:grid-cols-[max-content] max-sm:grid-cols-[max-content] max-sm:gap-0">
         <ReuseWorldMap v-if="isLargeMap"/>
       
-      <div class="col-start-2 flex flex-col">
+      <div class="col-start-2 flex flex-col items-center">
         <Display :displayValue="displayValue"  />
 
         <ReuseWorldMap :class="cn(isGameOver && 'hidden')" v-if="!isLargeMap" />

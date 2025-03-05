@@ -1,6 +1,6 @@
 <template>
   <div
-    class="col-start-2 mt-auto grid h-max w-full max-w-full grid-cols-2 grid-rows-2 gap-8 rounded-md rounded-b-none bg-(--ui-primary)/20 p-4 ring ring-(--ui-primary)/35 ring-inset max-sm:gap-3"
+    class="col-start-2 mt-auto grid h-max w-full w-max max-w-full grid-cols-2 grid-rows-2 gap-8 rounded-md rounded-b-none bg-(--ui-primary)/20 p-4 ring ring-(--ui-primary)/35 ring-inset max-sm:gap-3"
   >
     <div
       v-for="option of options"
