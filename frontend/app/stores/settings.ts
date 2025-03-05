@@ -11,6 +11,7 @@ const defaultSettings = {
   autoNext: false,
   defaultGame: ["name", "flag"] as [GameTypes, GameTypes],
   showCountry: "on" as "on" | "off" | "onAfter",
+  selectedGame: ["name", "flag"] as [GameTypes, GameTypes]
 };
 
 function getKeys<O extends Object>(obj: O): (keyof O)[] {
@@ -20,7 +21,6 @@ function getKeys<O extends Object>(obj: O): (keyof O)[] {
 export const useSettingsStore = defineStore("settings", {
   state: (): typeof defaultSettings => {
     const cookie = useCookie("settings", { default: () => defaultSettings });
-    console.log(cookie.value);
 
     return {
       ...defaultSettings, // Default settings

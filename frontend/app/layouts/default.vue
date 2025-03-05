@@ -4,7 +4,7 @@ import "~/assets/css/tailwind.css";
 
 <template>
   <UApp>
-    <div class="h-screen max-h-full w-screen">
+    <div class="h-screen max-h-dvh w-screen">
       <slot />
     </div>
   </UApp>

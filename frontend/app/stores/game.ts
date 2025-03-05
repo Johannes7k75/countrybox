@@ -1,4 +1,4 @@
-import { EventEmitter } from "~~/lib/EventEmitter";
+import EventEmitter from "~~/lib/EventEmitter"
 
 export interface GameOption {
   name: string;
@@ -35,17 +35,17 @@ function randomInt(min: number, max: number): number {
     const range = max - min + 1;
     const buffer = new Uint32Array(1);
     window.crypto.getRandomValues(buffer);
-    return (buffer[0] % range) + min;
+    return (buffer[0]! % range) + min;
   } else {
     return Math.floor(Math.random() * (max - min + 1)) + min;
   }
 }
 
 type Events = {
-  start: [];
-  next: [];
-  correctGuess: [];
-  roundOver: [];
+  start: ()=>void;
+  next: ()=>void;
+  correctGuess: ()=>void;
+  roundOver: ()=>void;
 };
 
 export const useGameStore = defineStore("gameStore", {
@@ -155,7 +155,7 @@ export const useGameStore = defineStore("gameStore", {
       }));
       const rndOption = randomInt(0, options.length - 1);
       console.log(rndOption);
-      options[rndOption].correct = true;
+      options[rndOption]!.correct = true;
       return options;
     },
 

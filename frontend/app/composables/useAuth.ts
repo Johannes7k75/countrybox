@@ -48,8 +48,6 @@ export const useAuth = () => {
   const me = async () => {
     if (!authUser.value) {
       try {
-        console.log(useRequestHeaders(["cookie"]))
-
         const data = await $fetch<{ user: User }>("/auth/me", {
           headers: useRequestHeaders(["cookie"])
         })

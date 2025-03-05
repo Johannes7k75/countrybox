@@ -27,15 +27,12 @@ const geostyler = (feature: any) => ({
 });
 
 async function setGeoJson(json?: GeoJSON.GeoJSON) {
-  console.log("Set geoJson", map.value);
 
   if (map.value) {
     nextTick(() => {
       if (json ?? geojson.value) {
-        console.log(
-          map.value!.leafletObject.fitBounds(
-            L.geoJSON(json ?? geojson.value).getBounds(),
-          ),
+        map.value!.leafletObject.fitBounds(
+          L.geoJSON(json ?? geojson.value).getBounds(),
         );
       }
     });
@@ -43,7 +40,6 @@ async function setGeoJson(json?: GeoJSON.GeoJSON) {
 }
 
 async function updateGeoJson(ccn3: string) {
-  console.log("Update GeoJson");
   enableInteraction();
   const response = await $fetch(`/api/geojson/${ccn3}`);
   geojson.value = response;

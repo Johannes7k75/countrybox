@@ -36,14 +36,8 @@ export default defineNuxtConfig({
 
   css: ["~/assets/css/main.css"],
 
-  modules: [
-    "@nuxt/ui",
-    // "nuxt-auth-utils",
-    "@nuxt/image",
-    "@pinia/nuxt",
-    "@nuxtjs/leaflet",
-    "@nuxtjs/i18n",
-  ],
+  modules: [// "nuxt-auth-utils",
+  "@nuxt/ui", "@nuxt/image", "@pinia/nuxt", "@nuxtjs/leaflet", "@nuxtjs/i18n", "@vueuse/nuxt"],
 
   i18n: {
     vueI18n: "./i18n/i18n.config.ts",

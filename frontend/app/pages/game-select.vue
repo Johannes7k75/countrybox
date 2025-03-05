@@ -1,32 +1,52 @@
 <script lang="ts" setup>
 import "flag-icons/css/flag-icons.min.css";
 
-definePageMeta({
-  layout: "centered",
-});
+const { selectedGame } = storeToRefs(useSettingsStore());
 
-const firstType = ref<GameTypes>("name");
-const secondType = ref<GameTypes>("flag");
+const firstType = computed({
+  get() {
+    return selectedGame.value[0];
+  },
+  set(val: GameTypes) {
+    selectedGame.value[0] = val;
+  },
+});
+const secondType = computed({
+  get() {
+    return selectedGame.value[1];
+  },
+  set(val: GameTypes) {
+    selectedGame.value[1] = val;
+  },
+});
 
 const updateFirstType = (type: GameTypes) => {
   firstType.value = type;
+
+  useSettingsStore().set("selectedGame", selectedGame.value);
 };
 
 const updateSecondType = (type: GameTypes) => {
   secondType.value = type;
+
+  useSettingsStore().set("selectedGame", selectedGame.value);
 };
 
 const placeholder = await $fetch(`/api/flags/de`);
 const tld = await $fetch(`/api/data/tld/de`);
 
 function dieplayNode(type: GameTypes, first?: true) {
+  if (!placeholder) {
+    return h("span", {}, "Unknown Type");
+  }
+
   switch (type) {
     case "name":
       return h("span", {}, placeholder.name);
     case "capital":
       return h("span", {}, placeholder.capital);
     case "tld":
-      return h("span", {}, tld[0].tld);
+      return h("span", {}, tld[0]?.tld ?? "");
     case "callCode":
       return h("span", {}, `+${placeholder.callingCode}`);
     case "flag":
@@ -39,7 +59,9 @@ function dieplayNode(type: GameTypes, first?: true) {
   }
 }
 
-const firstDiplayNode = computed(() => dieplayNode(firstType.value, true));
+const firstDiplayNode = computed(() =>
+  dieplayNode(firstType.value, true),
+);
 const secondDiplayNode = computed(() => dieplayNode(secondType.value));
 
 function startGame() {
@@ -52,12 +74,16 @@ function startGame() {
     },
   });
 
-  navigateTo("/game?redirect");
+  useRouter().push({
+    path: "game",
+  });
 }
 </script>
 
 <template>
-  <div class="mx-auto w-max">
+  <GameCountryFilters />
+
+  <div class="mx-auto w-max p-4">
     <GameTypeSelector
       :selectedType="firstType"
       :disabledType="secondType"
@@ -69,7 +95,9 @@ function startGame() {
       :updateType="updateSecondType"
     />
 
-    <div class="mt-4 flex h-[600px] w-[400px] flex-col rounded-md bg-slate-900">
+    <div
+      class="mt-4 flex h-[600px] w-[400px] flex-col rounded-sm border-[1px] border-solid border-white/30 bg-slate-900"
+    >
       <div class="w-full flex-grow content-center text-center">
         <firstDiplayNode />
       </div>

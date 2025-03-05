@@ -44,6 +44,7 @@ const closePopover = () => {
           aria-haspopup="true"
           @mouseover="hoverPopover"
           @mouseleave="closePopover"
+          @touch="hoverPopover"
         />
 
         <template #content>

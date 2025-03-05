@@ -1,6 +1,7 @@
 [Unit]
 Description=CountryBox Service %i
-After=network.target
+After=network-online.target
+Wants=network-online.target
 
 [Service]
 ExecStart=/usr/bin/node /home/deploy/production/countryBox/server/index.mjs
@@ -8,14 +9,10 @@ WorkingDirectory=/home/deploy/production
 User=deploy
 Group=deploy
 Environment="PORT=%i"
-LimitNOFILE=65536
+Environment="NUXT_SESSION_PASSWORD=secret"
+Environment="DB_URL=mysql://user:password@127.0.0.1:3306/country-box"
 Restart=on-failure
 TimeoutSec=30
-PrivateTmp=true
-ProtectSystem=full
-ProtectHome=yes
-NoNewPrivileges=true
-AmbientCapabilities=CAP_NET_BIND_SERVICE
 
 [Install]
 WantedBy=multi-user.target
