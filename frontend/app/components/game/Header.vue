@@ -13,7 +13,7 @@
         size="xl"
       />
     </div>
-    <div class="row-start-2 flex items-center justify-between">
+    <div class="min-[70rem]:col-start-2 row-start-2 flex items-center justify-between">
       <div class="min-[70rem]:col-start-2">
         <Icon
           v-for="n in lives"
