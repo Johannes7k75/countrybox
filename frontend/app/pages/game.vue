@@ -26,7 +26,7 @@
       <div class="col-start-2 flex flex-col items-center">
         <Display :displayValue="displayValue"  />
 
-        <ReuseWorldMap :class="cn(isGameOver && 'hidden')" v-if="!isLargeMap" />
+        <ReuseWorldMap :class="cn(isGameOver && 'hidden')" v-if="!isLargeMap" class="grow-[10]" />
       
         <GameOver :is-game-over="isGameOver" />
 
@@ -50,10 +50,6 @@ import { cn } from "~~/lib/utils";
 
 const isSmallScreen = useMediaQuery("(width < 40rem)")
 const isLargeMap = useMediaQuery("(width > 1500px)")
-
-const {vibrate, stop,isSupported} = useVibrate({pattern: [300, 100, 300]})
-
-vibrate([300])
 
 const [DefineWorldMap, ReuseWorldMap] = createReusableTemplate();
 
