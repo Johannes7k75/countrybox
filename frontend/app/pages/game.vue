@@ -3,6 +3,7 @@
     <WorldMap
       ref="worldMapRef"
       v-if="showCountry !== 'off'"
+      v-show="!isRoundOver"
       :cca3="correctOption?.cca3"
       class="my-auto !aspect-[6/4] !max-w-[37rem] p-4"
       :class="cn(!mapVisible
@@ -16,7 +17,7 @@
     <Header
       :lives="lives"
       :fails="fails"
-      :round="round"
+      :round="isRoundOver ? round : round + 1"
       :maxRounds="maxRounds"
     />
 
@@ -24,11 +25,12 @@
         <ReuseWorldMap v-if="isLargeMap"/>
       
       <div class="col-start-2 flex flex-col items-center">
-        <Display :displayValue="displayValue"  />
+        <Display :displayValue="displayValue" v-show="!isRoundOver" />
 
         <ReuseWorldMap :class="cn(isGameOver && 'hidden')" v-if="!isLargeMap" class="grow-[10]" />
       
-        <GameOver :is-game-over="isGameOver" />
+        <GameOver :is-game-over="isGameOver" :restartGame="restartGame"/>
+        <GameWon :is-game-won="isRoundOver" />
 
         <Options
           v-show="!isRoundOver"
@@ -46,6 +48,7 @@ import Display from "~/components/game/Display.vue";
 import GameOver from "~/components/game/GameOver.vue";
 import Options from "~/components/game/Options.vue";
 import { cn } from "~~/lib/utils";
+import GameWon from "~/components/game/GameWon.vue";
 // import WorldMap from "~/components/game/WorldMap.vue";
 
 const isSmallScreen = useMediaQuery("(width < 40rem)")
@@ -126,19 +129,22 @@ const keys = [1,2,3,4]
 defineShortcuts(keys.map(key=>({[key.toString()]: ()=>pressKey(key)})).reduce((p,c)=>Object.assign(p,c),{}))
 
 onMounted(() => {
-  if ("redirect" in useRoute().query) {
+  console.log(useGameStore().options.length)
+  if ("redirect" in useRoute().query || (useGameStore().round == 0 && useGameStore().options.length > 0)) {
     useRouter().replace({ query: {}, path: "/game" });
   } else {
     if (round.value >= 0) {
       useGameStore().startGame({
         maxFails: 3,
-        maxRounds: 20,
+        maxRounds: 4,
       });
     }
   }
 
   events.value
     .on("next", () => {
+      if (isRoundOver.value) return
+
       if (
         worldMapRef.value &&
         showCountry.value === "on" &&
@@ -167,7 +173,13 @@ onMounted(() => {
       ) {
         worldMapRef.value?.updateGeoJson(correctOption.value!.cca3);
       }
-    });
+    })
+    .on("wrongGuess", ()=>{
+      console.log("Wrong Guess", fails.value, lives.value)
+      if (isGameOver.value) {
+        showMap.value = true
+      }
+    })
 
   if (showCountry.value === "on" && correctOption.value) {
     worldMapRef.value?.updateGeoJson(correctOption.value.cca3);
@@ -191,4 +203,14 @@ const mapVisible = computed(() => {
   }
   return state;
 });
+
+function restartGame() {
+  useGameStore().startGame({
+    maxFails: 3,
+    maxRounds: 20,
+    types: useGameStore().types,
+  });
+
+  showMap.value = false
+}
 </script>

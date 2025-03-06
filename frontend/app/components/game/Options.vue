@@ -20,7 +20,7 @@
         :class="cn(getIndex(option) % 2 == 0 ? '-left-10' : '-right-10')"
       >
         <span
-          class="bg-accent-500 h-4 w-8 rounded-md p-2 font-semibold text-gray-900/80"
+          class="bg-(--ui-primary)/20 h-4 w-8 rounded-md p-2 font-semibold text-(--text)"
           :class="
             cn(getIndex(option) % 2 == 0 ? 'rounded-r-none' : 'rounded-l-none')
           "
@@ -35,7 +35,7 @@
             cn(
               'fi',
               `fi-${option.cca2}`,
-              (showFlagOverlay(option) || correctGuessed) &&
+              (showFlagOverlay(option) || isGameOver || correctGuessed) &&
                 useGameStore().isNotCorrect(option.cca2) &&
                 'opacity-40',
             )
@@ -44,8 +44,8 @@
         />
         <div
           v-show="
-            useGameStore().isNotCorrect(option.cca2) &&
-            (correctGuessed || isGuessed(option.cca2))
+            (useGameStore().isNotCorrect(option.cca2) && (correctGuessed || isGameOver || isGuessed(option.cca2) )) ||
+            (useGameStore().isCorrect(option.cca2) && (isGameOver))
           "
           class="absolute top-2 right-1 rounded-md bg-gray-600/50 p-1"
         >
@@ -61,7 +61,7 @@
       <template v-else>
         <span
           :class="cn((showFlagOverlay(option) || isGameOver) && 'opacity-40')"
-          class="!w-full text-center text-2xl text-(--text) transition-opacity duration-200"
+          class="!w-full h-56 [aspect-ratio:4/3] text-center text-2xl text-(--text) transition-opacity duration-200 content-center"
         >
           {{ option[types.second] }}
         </span>

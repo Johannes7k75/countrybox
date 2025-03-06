@@ -45,7 +45,9 @@ type Events = {
   start: ()=>void;
   next: ()=>void;
   correctGuess: ()=>void;
+  wrongGuess: ()=>void;
   roundOver: ()=>void;
+  gameOver: ()=>void
 };
 
 export const useGameStore = defineStore("gameStore", {
@@ -98,23 +100,15 @@ export const useGameStore = defineStore("gameStore", {
 
   actions: {
     async nextRound() {
-      if (!this.isGameOver) {
+      if (!this.isRoundOver && !this.isGameOver) {
         this.guesses = new Set();
         this.round++;
         this.options = await this.getRoundOptions();
         this.events.emit("next");
-        // this.onNext.forEach(cb=>{
-        //   console.log("Run On next")
-        //   cb()
-        // })
       }
 
       if (this.isRoundOver) {
         this.events.emit("roundOver");
-        // this.onRoundOver.forEach(cb=>{
-        //   console.log("Round over")
-        //   cb()
-        // })
       }
     },
 
@@ -136,10 +130,6 @@ export const useGameStore = defineStore("gameStore", {
       this.options = await this.getRoundOptions();
 
       this.events.emit("start");
-      //   this.onStart.forEach(cb=>{
-      //     console.log("Run start cb")
-      //     cb()
-      // })
     },
 
     async getRoundOptions() {
@@ -179,16 +169,13 @@ export const useGameStore = defineStore("gameStore", {
       this.$state.guesses.add(cca2);
       if (this.isCorrect(cca2)) {
         this.events.emit("correctGuess");
-        // this.onCorrectGuess.forEach(cb=>{
-        //     console.log("Run correct guess cb")
-        //     cb()
-        // })
 
         if (useSettingsStore().autoNext) {
           setTimeout(() => this.nextRound(), 1_000);
         }
       } else {
         this.fails++;
+        this.events.emit("wrongGuess")
       }
     },
 

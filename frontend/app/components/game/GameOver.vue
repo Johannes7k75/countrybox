@@ -5,7 +5,7 @@
   >
     <span>Game over</span>
     <button
-      @click.prevent="reloadWindow"
+      @click.prevent="restartGame"
       class="flex cursor-pointer items-center justify-center rounded-2xl bg-red-500 px-4 py-2 text-white"
     >
       <Icon name="mdi:reload" /> Neustarten
@@ -14,13 +14,5 @@
 </template>
 
 <script lang="ts" setup>
-const {isGameOver} = storeToRefs(useGameStore())
-
-function reloadWindow() {
-  useGameStore().startGame({
-    maxFails: 3,
-    maxRounds: 20,
-    types: useGameStore().types,
-  });
-}
+defineProps<{restartGame: ()=>void, isGameOver: boolean}>()
 </script>
