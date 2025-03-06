@@ -160,7 +160,7 @@ const openRegions = ref(new Set());
 </script>
 
 <template>
-  <UModal default-open>
+  <UModal :default-open="false">
     <UButton
       label="Filter"
       color="accent"
