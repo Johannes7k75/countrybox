@@ -136,7 +136,7 @@ onMounted(() => {
     if (round.value >= 0) {
       useGameStore().startGame({
         maxFails: 3,
-        maxRounds: 4,
+        maxRounds: 20,
       });
     }
   }
