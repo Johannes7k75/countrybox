@@ -5,6 +5,10 @@ definePageMeta({
   middleware: ["guest-only"],
 })
 
+defineRouteRules({
+  prerender: true
+})
+
 const {login} = useAuth()
 
 const loading = ref(false);

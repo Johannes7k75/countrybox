@@ -3,6 +3,10 @@ import "flag-icons/css/flag-icons.min.css";
 import { cn } from "~~/lib/utils";
 import type { Country, Tld } from "~~/server/utils/drizzle";
 
+defineRouteRules({
+  prerender: true
+})
+
 const mapping = {
   name: "name",
   capital: "capital",

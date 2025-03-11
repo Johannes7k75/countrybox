@@ -21,6 +21,10 @@ export default defineNuxtConfig({
     cookieRememberMeExpires: ONE_WEEK.toString(),
   },
 
+  experimental: {
+    inlineRouteRules: true
+  },
+
   nitro: {
     experimental: {
       tasks: true,
