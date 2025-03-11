@@ -1,3 +1,4 @@
+import { hashPassword } from "../lib/password";
 import { tables } from "../utils/drizzle";
 
 import countries from "./countries.json";
@@ -14,19 +15,19 @@ export default defineTask({
 
     await useDrizzle().delete(tables.Boxes);
     useDrizzle().execute(
-      sql`UPDATE sqlite_sequence SET seq = 0 WHERE name = 'boxes'`,
+      sql`ALTER TABLE 'boxes' AUTO_INCREMENT = 1;`,
     );
 
     await useDrizzle().delete(tables.Users);
     useDrizzle().execute(
-      sql`UPDATE sqlite_sequence SET seq = 0 WHERE name = 'users'`,
+      sql`ALTER TABLE 'users' AUTO_INCREMENT = 1;`,
     );
     await useDrizzle()
       .insert(tables.Users)
       .values([
         {
           email: "jonas@jospace.de",
-          hash: await hashPassword("Freddy!2024"),
+          password: await hashPassword("Freddy!2024")
         },
       ]);
     console.log("Seeded users...");
@@ -34,7 +35,7 @@ export default defineTask({
     if (seedCountries) {
       await useDrizzle().delete(tables.Tld);
       useDrizzle().execute(
-        sql`UPDATE sqlite_sequence SET seq = 0 WHERE name = 'tld'`,
+        sql`ALTER TABLE 'tld' AUTO_INCREMENT = 1;`,
       );
 
       // await useDrizzle().delete(tables.callingCodes);
@@ -44,7 +45,7 @@ export default defineTask({
 
       await useDrizzle().delete(tables.Countries);
       useDrizzle().execute(
-        sql`UPDATE sqlite_sequence SET seq = 0 WHERE name = 'countries'`,
+        sql`ALTER TABLE 'countries' AUTO_INCREMENT = 1;`,
       );
 
       let i = 0;
@@ -62,6 +63,7 @@ export default defineTask({
               region: contry.region,
               subregion: contry.subregion,
               callingCode: contry.callingCode,
+              unMember: contry.unMember
             },
           ])
           .$returningId();
