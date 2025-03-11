@@ -1,40 +1,13 @@
 <script setup lang="ts">
-// const regionTree = {
-//   Americas: ["Caribbean", "South America", "Central America", "North America"],
-//   Asia: [
-//     "Southern Asia",
-//     "Western Asia",
-//     "South-Eastern Asia",
-//     "Eastern Asia",
-//     "Central Asia",
-//   ],
-//   Africa: [
-//     "Middle Africa",
-//     "Eastern Africa",
-//     "Western Africa",
-//     "Southern Africa",
-//     "Northern Africa",
-//   ],
-//   Europe: [
-//     "Northern Europe",
-//     "Southeast Europe",
-//     "Southern Europe",
-//     "Central Europe",
-//     "Western Europe",
-//     "Eastern Europe",
-//   ],
-//   Oceania: [
-//     "Polynesia",
-//     "Australia and New Zealand",
-//     "Melanesia",
-//     "Micronesia",
-//   ],
-//   Antarctic: [],
-// };
 
 const countries = await useFetch("/countries");
 
 const independent = ref(false)
+const unMembers = ref(false)
+
+function updateUnMembers() {
+  console.log(unMembers.value)
+}
 
 const regionsTree = reactive<Record<string, boolean>>({});
 const regionsMap = ref<Map<string, { region: string; subregion?: string }>>(
@@ -120,6 +93,9 @@ function getKeyOf<T extends object>(obj: T): keyof T[] {
   return Object.keys(obj) as unknown as keyof T[];
 }
 
+function select(type: "independent"|"unMembers") {
+}
+
 function selectRegion(
   regionKey: keyof typeof regionsTree,
   val: boolean | "indeterminate",
@@ -153,14 +129,15 @@ const filteredRegions = computed(() =>
     const key = c.subregion !== "" ? `${c.region}-${c.subregion}` : c.region;
     const mappedRegion = regionsMap.value.get(key);
     return regionsTree[c.region] || regionsTree[key];
-  }).filter((c)=>independent.value ? c.independent: true),
+  }).filter((c)=>independent.value ? c.independent: true)
+  .filter((c)=>unMembers.value ? c.unMember : true),
 );
 
 const openRegions = ref(new Set());
 </script>
 
 <template>
-  <UModal :default-open="false">
+  <UModal :default-open="true">
     <UButton
       label="Filter"
       color="accent"
@@ -247,8 +224,13 @@ const openRegions = ref(new Set());
 
         <USeparator class="my-4" />
 
-        <div class="mt-4 flex flex-col">
-          <USwitch label="Unabhängig" v-model="independent" />
+        <div class="mt-4 flex flex-row items-center gap-2">
+          <UButton label="Auswählen" class="w-max" @click="select('independent')"/>
+          <USwitch label="Nur Unabhängige Länder" v-model="independent" />
+        </div>
+        <div class="mt-4 flex flex-row items-center gap-2">
+          <UButton label="Auswählen" class="w-max" @click="select('unMembers')"/>
+          <USwitch label="Nur UN Mitglieder" v-model="unMembers" @update:model-value="updateUnMembers"/>
         </div>
       </div>
     </template>
