@@ -16,6 +16,7 @@ interface GameType {
 }
 
 interface GameStore {
+  roundId: number | null;
   round: number;
   maxRounds: number;
 
@@ -52,6 +53,7 @@ type Events = {
 
 export const useGameStore = defineStore("gameStore", {
   state: (): GameStore => ({
+    roundId: null,
     round: 0,
     maxRounds: 20,
     fails: 0,
@@ -127,13 +129,21 @@ export const useGameStore = defineStore("gameStore", {
       this.round = round;
       this.maxRounds = maxRounds;
       this.types = { ...types };
+      this.roundId = await this.startNewRound();
       this.options = await this.getRoundOptions();
 
       this.events.emit("start");
     },
 
+    async startNewRound() {
+      const roundData = await $fetch<{roundId: number|null}>("/game/startRound",{method: "POST"})
+
+      return roundData.roundId
+    },
+
     async getRoundOptions() {
-      const roundData = await $fetch("/api/game", { method: "POST" });
+      const roundData = await $fetch("/api/game", { method: "POST", body: {roundId: this.roundId} });
+      
       const options: GameOption[] = roundData!.map((r) => ({
         name: r.name,
         capital: r.capital,
