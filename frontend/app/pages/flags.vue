@@ -4,8 +4,8 @@ import { cn } from "~~/lib/utils";
 import type { Country, Tld } from "~~/server/utils/drizzle";
 
 defineRouteRules({
-  prerender: true
-})
+  prerender: true,
+});
 
 const mapping = {
   name: "name",
@@ -14,6 +14,8 @@ const mapping = {
   cca2: "cca2",
   countryId: "id",
   callCode: "callingCode",
+  unMember: "unMember",
+  independent: "independent",
 };
 
 const flagCodes = await $fetch<(typeof mapping)[]>("/api/flags", {
@@ -21,10 +23,24 @@ const flagCodes = await $fetch<(typeof mapping)[]>("/api/flags", {
   params: mapping,
 });
 
+const filter = reactive({
+  onlyUN: false
+})
+
+function updateQuery() {
+  console.log("Update params")
+
+  const mappedParams = (Object.keys(filter) as (keyof typeof filter)[]).reduce((p,c)=> filter[c] ? Object.assign(p,{[c]:filter[c]}): p, {})
+
+  useRouter().replace({
+    query: !mappedParams ? {}:mappedParams
+  })
+}
+
 const query = ref("");
 
 function normalizeString(inputString: string) {
-  if (!inputString) return ""
+  if (!inputString) return "";
 
   return inputString
     .normalize("NFD")
@@ -37,52 +53,64 @@ function searchFor(strA: string, strB: string) {
 }
 
 const flags = computed(() => {
-  const filtered = flagCodes.filter((flag) =>
-    query.value != ""
-      ? searchFor(flag.capital, query.value) ||
-        searchFor(flag.name, query.value) ||
-        searchFor(tldMap.get(flag.cca2)!, query.value)  ||
-        searchFor(`+${flag.callCode}`, query.value)
-        // || searchFor(flag.callCode, query.value)
-      : true,
-  );
+  const filtered = flagCodes
+    .filter((flag) =>
+      query.value != ""
+        ? searchFor(flag.capital, query.value) ||
+          searchFor(flag.name, query.value) ||
+          searchFor(tldMap.get(flag.cca2)!, query.value) ||
+          searchFor(`+${flag.callCode}`, query.value)
+        : // || searchFor(flag.callCode, query.value)
+          true,
+    )
+    .filter((flag) => (filter.onlyUN ? flag.unMember : true));
   return filtered;
 });
 
 const flagMap = computed(() => {
   const map = new Map<string, string>();
 
-  flagCodes.forEach(({ countryId,cca2 }) => map.set(countryId, cca2));
+  flagCodes.forEach(({ countryId, cca2 }) => map.set(countryId, cca2));
 
   return map;
 });
 
 const isFlipped = ref<string>();
 
+
 const tldMap = new Map<string, string>();
 onMounted(async () => {
-  const data = await $fetch<{tld: Tld, countries: Country}[]>("/tlds", {
+  (Object.keys(filter) as (keyof typeof filter)[]).forEach((f)=>{
+    if (typeof filter[f] === "boolean") {
+      filter[f] = useRoute().query[f] === 'true'
+    }
+    // console.log({[f]: useRoute().query[f]})
+  })
+
+  const data = await $fetch<{ tld: Tld; countries: Country }[]>("/tlds", {
     method: "POST",
     body: flags.value.map((flag) => flag.cca2) ?? [],
   });
 
-  data.forEach(({tld}) => {
+  data.forEach(({ tld }) => {
     tldMap.set(flagMap.value.get(tld.countryId)!, tld.tld);
   });
 });
 </script>
 
 <template>
-  <div class="mt-0 mb-auto mx-auto max-h-full w-full overflow-y-scroll pb-16 p-2 lg:max-w-[70rem] no-scrollbar">
-      <UButton
-        variant="subtle"
-        label="Home"
-        icon="mdi:home"
-        to="/"
-        view-transition
-        class="rounded-sm text-(--text)"
-        size="xl"
-      />
+  <div
+    class="no-scrollbar mx-auto mt-0 mb-auto max-h-full w-full overflow-y-scroll p-2 pb-16 lg:max-w-[70rem]"
+  >
+    <UButton
+      variant="subtle"
+      label="Home"
+      icon="mdi:home"
+      to="/"
+      view-transition
+      class="rounded-sm text-(--text)"
+      size="xl"
+    />
 
     <div class="flex flex-col items-center">
       <div class="flex w-max flex-col">
@@ -93,13 +121,30 @@ onMounted(async () => {
           >
         </div>
 
-        <UInput
-          type="text"
-          name="search"
-          placeholder="Deutschland"
-          v-model="query"
-          class="mb-8"
-        />
+        <div class="flex flex-row">
+          <UInput
+            type="text"
+            name="search"
+            placeholder="Deutschland"
+            v-model="query"
+            class="mb-8"
+          />
+
+          <UPopover>
+
+            <UButton icon="mdi:filter" class="h-max mx-1" />
+
+            <template #content>
+              <div class="bg-(--ui-bg-accented)/40 h-16 max-w-60 p-2 pr-4">
+
+                <USwitch label="UN Mitglied" v-model="filter.onlyUN" @update:model-value="updateQuery" />
+              </div>
+
+            </template>
+
+          </UPopover>
+
+        </div>
       </div>
 
       <div
