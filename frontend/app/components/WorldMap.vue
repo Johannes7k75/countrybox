@@ -16,10 +16,8 @@ const center = ref<[number, number]>([47.21322, -1.559482]);
 
 const isReady = ref(false);
 
-const map = ref<{
-  leafletObject: L.Map & { tap?: { enable: () => void; disable: () => void } };
-  root: HTMLElement;
-} | null>(null);
+const map = useTemplateRef("map")
+
 const geojson = ref<GeoJSON.GeoJSON | undefined>(undefined);
 
 const geostyler = (feature: any) => ({
@@ -31,7 +29,7 @@ async function setGeoJson(json?: GeoJSON.GeoJSON) {
   if (map.value) {
     nextTick(() => {
       if (json ?? geojson.value) {
-        map.value!.leafletObject.fitBounds(
+        map.value?.leafletObject?.fitBounds(
           L.geoJSON(json ?? geojson.value).getBounds(),
         );
       }
@@ -67,7 +65,7 @@ function enableInteraction() {
   map.value.leafletObject.boxZoom.enable();
   map.value.leafletObject.keyboard.enable();
   if (map.value.leafletObject.tap) map.value.leafletObject.tap.enable();
-  map.value.root.style.cursor = "grab";
+  map.value.root!.style.cursor = "grab";
 }
 
 function disableInteraction() {
@@ -79,7 +77,7 @@ function disableInteraction() {
   map.value.leafletObject.boxZoom.disable();
   map.value.leafletObject.keyboard.disable();
   if (map.value.leafletObject.tap) map.value.leafletObject.tap.disable();
-  map.value.root.style.cursor = "default";
+  map.value.root!.style.cursor = "default";
 }
 
 defineExpose({ updateGeoJson, isReady, disableInteraction, enableInteraction });
