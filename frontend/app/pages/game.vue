@@ -162,6 +162,17 @@ onMounted(() => {
       if (worldMapRef.value && showCountry.value === "onAfter") {
         showMap.value = true;
       }
+
+      $fetch("/game/round", {
+        method: "POST",
+        body: {
+          options: options.value.map(o=>({
+            cca2: o.cca2,
+            correct: o.correct,
+            guessed: isGuessed(o.cca2)
+          }))
+        }
+      })
     })
     .on("roundOver", () => {
       setTimeout(() => useRouter().push("/"), 2_000);
