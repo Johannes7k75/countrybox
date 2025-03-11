@@ -1,0 +1,1 @@
+ALTER TABLE `games` MODIFY COLUMN `startedAt` datetime NOT NULL DEFAULT '2025-03-10 13:13:43.245';

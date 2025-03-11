@@ -18,6 +18,7 @@ export const Countries = mysqlTable("countries", {
   cca3: varchar("cca3", { length: 3 }).notNull(),
   cca2: varchar("cca2", { length: 2 }).notNull(),
   callingCode: varchar("callingCode", { length: 10 }),
+  unMember: boolean("unMember").notNull().default(false)
 });
 
 export const Tld = mysqlTable("tld", {
@@ -45,9 +46,8 @@ export const Games = mysqlTable("games", {
   userId: int("userId")
     .notNull()
     .references(() => Users.id),
-  gameType: int("gameType")
-    .notNull()
-    .references(() => GameTypes.id),
+  firstType: int("firstType").notNull().references(()=>GameTypes.id),
+  secondType: int("secondType").notNull().references(()=>GameTypes.id),
   round: int("round").default(0).notNull(),
   rounds: int("rounds").default(10).notNull(),
   startedAt: datetime("startedAt").default(new Date()).notNull(),
@@ -65,6 +65,16 @@ export const GameRounds = mysqlTable("gameRounds", {
     correct: boolean;
   }>(),
 });
+
+export const GuessedFlags = mysqlTable("guessedFlags", {
+  id: int("id").primaryKey().autoincrement().notNull(),
+  gameId: int("gameId").references(()=>Games.id),
+  userId: int("userId")
+    .notNull()
+    .references(() => Users.id),
+  correct: boolean("correct").notNull().default(true),
+  guessedAt: datetime("guessedAt").default(new Date())
+})
 
 export const Boxes = mysqlTable("boxes", {
   id: int("id").primaryKey().autoincrement().notNull(),
