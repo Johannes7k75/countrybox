@@ -27,6 +27,7 @@ type Country = {
   region: string;
   subregion: string;
   callingCode: string | null;
+  unMember: boolean
 };
 
 const extract: Country[] = [];
@@ -52,6 +53,7 @@ data.forEach((v) => {
     callingCode: isSupportedCountry(v.cca2.toUpperCase())
       ? getCountryCallingCode(v.cca2.toUpperCase() as CountryCode).toString()
       : null,
+      unMember: v.unMember
   };
 
   extract.push(country);
