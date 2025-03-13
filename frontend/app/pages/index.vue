@@ -1,6 +1,10 @@
 <script setup lang="ts">
 import { GameLink } from "#components";
 
+defineRouteRules({
+  prerender: true
+})
+
 const currentUser = useAuthUser()
 
 </script>

@@ -14,6 +14,8 @@ export default defineNuxtConfig({
     compatibilityVersion: 4,
   },
 
+  debug: true,
+
   runtimeConfig: {
     cookieName: "__session",
     cookieSecret: "secret",

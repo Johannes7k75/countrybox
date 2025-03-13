@@ -1,9 +1,17 @@
 import { serialize, sign } from "~~/server/lib/cookie"
 import { findUserByEmail } from "~~/server/lib/user"
 import { verifyPassword } from "~~/server/lib/password"
+import { z } from "zod"
+
+const bodySchema = z.object({
+  email: z.string().email(),
+  password: z.string(),
+  rememberMe: z.boolean(),
+})
 
 export default defineEventHandler(async (event) => {
-  const body = await readBody<{ email: string, password: string, rememberMe: boolean }>(event)
+  const body = await readValidatedBody(event, bodySchema.parse);
+  // const body = await readBody<{ email: string, password: string, rememberMe: boolean }>(event)
 
   const { email, password, rememberMe } = body
   if (!email || !password) {

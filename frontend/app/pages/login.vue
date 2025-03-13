@@ -84,6 +84,13 @@ async function onLogin({email, password}:{email: string, password: string}) {
           >{{ $t("auth.signup") }}
         </NuxtLink>
       </p>
+
+      <USeparator label="oder" class="px-4 py-4" />
+
+      <NuxtLink class="text-(--primary)" :to="{path:'/anonym'}" >
+        Anonym
+      </NuxtLink>
+
     </div>
   </div>
 </template>

@@ -14,6 +14,9 @@ class FlagBox {
       FlagBoxType,
       FlagBoxType,
     ],
+    private updaters: {
+      swap: (box1: number, box2: number, flagId: string) => void
+    }
   ) {
     this.boxes = [];
     this.boxes.toString = () => {
@@ -73,11 +76,13 @@ class FlagBox {
     boxId2: T,
     flagId: string,
   ) {
-    const box1 = this.boxMap.get(boxId1),
-      box2 = this.boxMap.get(boxId2);
-
+    const box1 = this.boxMap.get(boxId1)
+    const box2 = this.boxMap.get(boxId2);
+    
     if (box1?.removeFlagId(flagId)) {
       box2?.addFlagId(flagId);
+
+      this.updaters.swap(box1!.getPhase(), box2!.getPhase(), flagId);
     }
   }
 
@@ -96,7 +101,7 @@ class FlagBox {
 
 class Box<T extends number> {
   private flagIds: Set<string> = new Set();
-  constructor(private phase: T) {}
+  constructor(private phase: T) { }
 
   public getPhase() {
     return this.phase;
@@ -124,6 +129,7 @@ class Box<T extends number> {
     return {
       phase: this.getPhase(),
       flagIds: Array.from(this.flagIds.values()),
+
     };
   }
 }
@@ -150,9 +156,18 @@ export async function getFlagBox(userId: number) {
   flagBoxes.set(
     userId,
     new FlagBox(
-      Object.keys(groupedBoxes).map((key) => [
+      (Object.keys(groupedBoxes) as (keyof typeof groupedBoxes)[]).map((key) => [
         groupedBoxes[key as keyof typeof groupedBoxes]![0].flagId,
       ]),
+      {
+        async swap(box1,box2,flagId) {
+          const [country] = await useDrizzle().select().from(tables.Boxes).where(and(eq(tables.Boxes.userId, userId),eq(tables.Boxes.flagId, country.id)))
+
+          useDrizzle().update(tables.Boxes).set({
+            phase: box2,
+          }).where(and(eq(tables.Boxes.userId, userId), eq(tables.Boxes.countryId, )))
+        }
+      }
     ),
   );
   // }

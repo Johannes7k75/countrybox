@@ -1,0 +1,2 @@
+ALTER TABLE `games` MODIFY COLUMN `startedAt` datetime NOT NULL DEFAULT '2025-03-12 09:09:53.309';--> statement-breakpoint
+ALTER TABLE `guessedFlags` MODIFY COLUMN `guessedAt` datetime DEFAULT '2025-03-12 09:09:53.310';
