@@ -81,7 +81,6 @@ function startGame() {
 </script>
 
 <template>
-  <GameCountryFilters />
 
   <div class="mx-auto w-max p-4">
     <GameTypeSelector
@@ -89,18 +88,16 @@ function startGame() {
       :disabledType="secondType"
       :updateType="updateFirstType"
     />
-    <GameTypeSelector
-      :selectedType="secondType"
-      :disabledType="firstType"
-      :updateType="updateSecondType"
-    />
 
     <div
-      class="mt-4 flex h-[600px] w-[400px] flex-col rounded-sm border-[1px] border-solid border-white/30 bg-slate-900"
+      class="my-4 flex h-[600px] w-[400px] flex-col rounded-sm border-[1px] border-solid border-white/30 bg-slate-900 relative"
     >
+      <GameCountryFilters class="w-max float-right m-2 absolute right-0" />
       <div class="w-full flex-grow content-center text-center">
         <firstDiplayNode />
       </div>
+
+
 
       <div class="mt-auto mb-0 grid w-full grid-cols-2 grid-rows-2 gap-2 p-2">
         <secondDiplayNode
@@ -109,6 +106,12 @@ function startGame() {
         />
       </div>
     </div>
+
+    <GameTypeSelector
+      :selectedType="secondType"
+      :disabledType="firstType"
+      :updateType="updateSecondType"
+    />
 
     <div class="mt-8 w-full px-2">
       <UButton

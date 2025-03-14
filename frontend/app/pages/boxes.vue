@@ -3,6 +3,17 @@ definePageMeta({
   middleware: ["user-only"],
 });
 
+const {data: countryNames} = await useLazyAsyncData("country:names", async()=>{
+  const names = await $fetch("/api/v2/flags/names")
+  return new Map(names.map(({cca3, name})=>([cca3, name])))
+})
+
+const {data: countryTlds} = await useLazyAsyncData("country:tlds", async()=>{
+  const tlds = await $fetch("/api/v2/tlds/")
+  return new Map(tlds.map(({countryId, tld})=>([countryId.toString(),tld])))
+})
+
+
 // const boxes = await $fetch("/api/v2/boxes", { method: "GET",  });
 const { data: boxes, status } = await useLazyAsyncData('boxes', () => $fetch("/api/v2/boxes", { method: "GET", }))
 
@@ -12,7 +23,7 @@ const allFlagsCount = computed(() => (boxes.value ?? []).reduce((p, box) => p + 
 
 const modalOpen = reactive<Record<string, boolean>>({})
 
-console.log(boxes);
+console.log(boxes, useCountry().getName("deu"));
 </script>
 
 <template>
@@ -26,7 +37,7 @@ console.log(boxes);
           <span class="z-[5]">{{ box + 1 }}</span>
         </USkeleton>
 
-        {{ 0 }}
+        0
       </div>
     </template>
     <template v-else>

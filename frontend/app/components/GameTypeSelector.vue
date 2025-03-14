@@ -7,7 +7,7 @@ const props = defineProps<{
 </script>
 
 <template>
-  <div class="mb-2 flex w-full justify-center gap-2">
+  <div class="my-2 flex w-full justify-center gap-2">
     <UButton
       v-for="type in gameTypes"
       :key="type"

@@ -118,13 +118,6 @@ const displayValue = computed(() => {
   }
 });
 
-// defineShortcuts({
-//   "1": () => pressKey(1),
-//   "2": () => pressKey(2),
-//   "3": () => pressKey(3),
-//   "4": () => pressKey(4),
-// });
-
 const keys = [1,2,3,4]
 defineShortcuts(keys.map(key=>({[key.toString()]: ()=>pressKey(key)})).reduce((p,c)=>Object.assign(p,c),{}))
 
@@ -133,12 +126,10 @@ onMounted(() => {
   if ("redirect" in useRoute().query || (useGameStore().round == 0 && useGameStore().options.length > 0)) {
     useRouter().replace({ query: {}, path: "/game" });
   } else {
-    if (round.value >= 0) {
-      useGameStore().startGame({
-        maxFails: 3,
-        maxRounds: 20,
-      });
-    }
+    useGameStore().startGame({
+      maxFails: 3,
+      maxRounds: 20,
+    });
   }
 
   events.value

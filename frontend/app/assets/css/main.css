@@ -141,7 +141,6 @@
   }
 }
 
-,
 :root {
   --ui-text: var(--text);
   --ui-text-muted: var(--text-500);

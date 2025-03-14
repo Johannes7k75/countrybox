@@ -53,7 +53,7 @@
         </div>
         <div
           v-show="isCorrect(option.cca2) && correctGuessed && !autoNext"
-          class="bg-background-800/80 absolute left-1/2 -translate-x-1/2 transform rounded-md p-1 text-lg text-(--text) select-none"
+          class="bg-gray-600/50 absolute left-1/2 -translate-x-1/2 transform rounded-md p-1 text-lg text-(--text) select-none"
         >
           Press to continue
         </div>

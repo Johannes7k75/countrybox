@@ -43,12 +43,12 @@ function randomInt(min: number, max: number): number {
 }
 
 type Events = {
-  start: ()=>void;
-  next: ()=>void;
-  correctGuess: ()=>void;
-  wrongGuess: ()=>void;
-  roundOver: ()=>void;
-  gameOver: ()=>void
+  start: () => void;
+  next: () => void;
+  correctGuess: () => void;
+  wrongGuess: () => void;
+  roundOver: () => void;
+  gameOver: () => void
 };
 
 export const useGameStore = defineStore("gameStore", {
@@ -96,8 +96,8 @@ export const useGameStore = defineStore("gameStore", {
 
     getIndex:
       (state) =>
-      (option: GameOption): number =>
-        state.options.indexOf(option),
+        (option: GameOption): number =>
+          state.options.indexOf(option),
   },
 
   actions: {
@@ -136,14 +136,14 @@ export const useGameStore = defineStore("gameStore", {
     },
 
     async startNewRound() {
-      const roundData = await $fetch<{roundId: number|null}>("/game/startRound",{method: "POST"})
+      const roundData = await $fetch<{ roundId: number | null }>("/game/startRound", { method: "POST" })
 
       return roundData.roundId
     },
 
     async getRoundOptions() {
-      const roundData = await $fetch("/api/game", { method: "POST", body: {roundId: this.roundId} });
-      
+      const roundData = await $fetch("/api/game", { method: "POST", body: { roundId: this.roundId } });
+
       const options: GameOption[] = roundData!.map((r) => ({
         name: r.name,
         capital: r.capital,
