@@ -1,0 +1,48 @@
+game:
+  typeSelect:
+    name: Name
+    capital: Hauptstadt
+    tld: Domain
+    callCode: Vorwahl
+    flag: Flagge
+main:
+  types:
+    play: Spiel
+    train: Üben
+    learn: Lernen
+  titles:
+    flags: Flaggen
+    customGame: Benutzerdefiniert
+    click&learn: Klicken und lernen
+    flagBox: Flaggen Boxen
+dropdown:
+  account:
+    settings: Einstellungen
+    logout: Ausloggen
+    login: Anmelden
+settings:
+  head:
+    settings: Einstellungen
+  categories:
+    game:
+      name: Spiel
+      autoNext: Automatisch fortfahren
+      showMap:
+        legend: Land auf Karte anzeigen
+        off: Immer aus
+        on: Immer an
+        onAfter: Nach fertig
+auth:
+  loading: Bitte warten...
+  password: Passwort
+  passwordRepeat: Passwort wiederholen
+  email: Email / Account ID
+  noAccount: Noch keinen Account?
+  alreadyAccount: Bereits einen Account?
+  signup: Registrieren
+  signin: Anmelden
+
+boxes:
+  box:
+    title: Box {boxNumber}
+    back: Zurück

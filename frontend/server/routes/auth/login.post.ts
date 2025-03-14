@@ -4,7 +4,7 @@ import { verifyPassword } from "~~/server/lib/password"
 import { z } from "zod"
 
 const bodySchema = z.object({
-  email: z.string().email(),
+  email: z.string().email().or(z.string()),
   password: z.string(),
   rememberMe: z.boolean(),
 })

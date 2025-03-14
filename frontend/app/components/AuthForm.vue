@@ -16,10 +16,10 @@ defineProps({
     default: false,
   },
 });
-const emit = defineEmits<{onSubmit: [data: {email: string, password: string}]}>();
+const emit = defineEmits<{ onSubmit: [data: { email: string; password: string }] }>();
 
 const schema = object({
-  email: string().email("Invalid email"),
+  email: string().email("Invalid email").or(z.string()),
   password: string().min(8, "Must be at least 8 characters"),
 });
 
@@ -49,22 +49,14 @@ function validate(state: any): FormError[] {
   const errors: FormError[] = [];
   if (!state.email) errors.push({ name: "email", message: "Required" });
   if (!state.password) errors.push({ name: "password", message: "Required" });
-  if (state.password !== passwordRepeat.value)
-    errors.push({ name: "passwordRepeat", message: "Müssen gleich sein" });
+  if (state.password !== passwordRepeat.value) errors.push({ name: "passwordRepeat", message: "Müssen gleich sein" });
   return errors;
 }
-
 </script>
 
 <template>
   <h1 class="w-full text-center">{{ title }}</h1>
-  <UForm
-    :validate="validate"
-    :schema="schema"
-    :state="state"
-    @submit="onSubmit"
-    @error="onError"
-  >
+  <UForm :validate="validate" :schema="schema" :state="state" @submit="onSubmit" @error="onError">
     <UFormField :label="$t('auth.email')" name="email" required>
       <UInput v-model="state.email" class="w-full" />
     </UFormField>
@@ -73,33 +65,13 @@ function validate(state: any): FormError[] {
       <UInput v-model="state.password" type="password" class="w-full" />
     </UFormField>
 
-    <UFormField
-      :label="$t('auth.passwordRepeat')"
-      name="passwordRepeat"
-      required
-      v-if="repeatPassword"
-    >
+    <UFormField :label="$t('auth.passwordRepeat')" name="passwordRepeat" required v-if="repeatPassword">
       <UInput v-model="passwordRepeat" type="password" class="w-full" />
     </UFormField>
 
-    <UButton
-      :loading="loading"
-      class="mt-3 w-full cursor-pointer justify-center text-(--text)"
-      type="submit"
-      @click="onSubmit({ data: state })"
-    >
+    <UButton :loading="loading" class="mt-3 w-full cursor-pointer justify-center text-(--text)" type="submit" @click="onSubmit({ data: state })">
       <template v-if="loading">please wait...</template>
       <template v-else>{{ title }}</template>
     </UButton>
   </UForm>
-
-  <!-- <USeparator class="py-4" label="oder" />
-
-  <UButton
-    variant="subtle"
-    class="w-full cursor-pointer justify-center text-(--text)"
-    @click="guestLogin"
-    :loading="guestLoading"
-    >Gast</UButton
-  > -->
 </template>

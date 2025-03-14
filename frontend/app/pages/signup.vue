@@ -6,14 +6,15 @@ definePageMeta({
 });
 
 defineRouteRules({
-  prerender: true
-})
+  prerender: true,
+});
 
 const { signup } = useAuth();
 
 const loading = ref(false);
+const isAnonym = ref(true)
 
-async function onSignup({email, password}: {email: string, password: string}) {
+async function onSignup({ email, password }: { email: string; password: string }) {
   loading.value = true;
   try {
     await signup(email, password);
@@ -39,21 +40,13 @@ async function onSignup({email, password}: {email: string, password: string}) {
 <template>
   <div class="mx-auto mt-20 flex w-80 max-w-full flex-col gap-4">
     <div class="rounded-md bg-gray-700/80 p-4">
-      <AuthForm
-        :loading="loading"
-        @on-submit="onSignup"
-        :title="$t('auth.signup')"
-        repeat-password
-      />
+      <AuthForm :loading="loading" @on-submit="onSignup" :title="$t('auth.signup')" repeat-password v-if="!isAnonym"/>
+      <AuthFormAnonym :loading="loading" @on-submit="onSignup" :title="$t('auth.createAccount')" :label="$t('auth.createAccountId')" repeat-password v-else />
     </div>
-    <div
-      class="rounded-md border border-solid border-gray-500 py-4 text-center"
-    >
+    <div class="rounded-md border border-solid border-gray-500 py-4 text-center">
       <p>
         {{ $t("auth.alreadyAccount") }}
-        <NuxtLink class="text-(--primary)" :to="{ name: 'login' }"
-          >{{ $t("auth.signin") }}
-        </NuxtLink>
+        <NuxtLink class="text-(--primary)" :to="{ name: 'login' }">{{ $t("auth.signin") }} </NuxtLink>
       </p>
     </div>
   </div>

@@ -3,30 +3,48 @@ definePageMeta({
   middleware: ["user-only"],
 });
 
-const boxes = (await $fetch("/api/v2/boxes", { method: "GET" })) ?? [];
+const boxes = await $fetch("/api/v2/boxes", { method: "GET" });
+
+const allFlagsCount = computed(()=>(boxes ?? []).reduce((p, box)=>p+box.flagIds.length,0))
+
+const modalOpen = reactive<Record<string, boolean>>({})
 
 console.log(boxes);
 </script>
 
 <template>
   <div class="flex h-full w-full flex-row items-center justify-center gap-8">
-    <UPopover v-for="box of boxes" :key="box!.phase">
-      <div class="flex w-max flex-col items-center">
-        <div class="relative flex h-20 w-12 items-center justify-center rounded-xl bg-gray-700 [font-size:32px]">
-          <span class="z-[5]">{{ box!.phase }}</span>
-          <div class="absolute bottom-0 z-[3] h-1/2 w-full rounded-[inherit] rounded-t-[0] bg-green-500"></div>
-        </div>
+      <div class="flex w-max flex-col items-center" v-for="box of boxes" :key="box.phase">
+        <UModal v-model:open="modalOpen[box.id]">
+          <div class="relative flex h-20 w-12 items-center justify-center rounded-xl bg-gray-700 [font-size:32px] cursor-pointer">
+            <span class="z-[5]">{{ box.id+1 }}</span>
+            <div class="absolute bottom-0 z-[3] w-full rounded-[inherit] rounded-t-[0] bg-green-500" :style="{ height: `${Math.round((box.flagIds.length / allFlagsCount) * 100)}%` }"></div>
+          </div>
+          
+          <template #content> 
+            <UCard :ui="{header: 'bg-(--accent) rounded-t-[inherit] pb-2'}">
+              <template #header class="bg-(--accent) w-full ">
+                <div>
+                  {{ $t("boxes.box.title", {boxNumber: box.id+1} ) }}
+                </div>
+              </template>
+
+              <div class="flex flex-col overflow-y-scroll max-h-100">
+                <span v-for="flagId of box.flagIds">{{ useFlagNames().value.get(flagId) }}</span>
+              </div>
+
+              <template #footer>
+                <div class="text-right text-(--secondary)" >
+                  <span @click="modalOpen[box.id] = false" class="font-semibold cursor-pointer">
+                    {{ $t("boxes.box.back") }}
+                  </span>
+                </div>
+              </template>
+            </UCard>  
+          </template>
+        </UModal>
 
         <span>{{ box!.flagIds.length }}</span>
       </div>
-      <template #content>
-        <div class="p-4 bg-accent-100">
-          <p v-for="cca2 of box?.flagIds">
-            {{ cca2 }}
-          </p>
-        </div>
-      </template>
-
-    </UPopover>
   </div>
 </template>

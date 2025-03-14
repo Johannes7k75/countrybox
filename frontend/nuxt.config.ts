@@ -46,7 +46,7 @@ export default defineNuxtConfig({
   "@nuxt/ui", "@nuxt/image", "@pinia/nuxt", "@nuxtjs/leaflet", "@nuxtjs/i18n", "@vueuse/nuxt"],
 
   i18n: {
-    vueI18n: "./i18n/i18n.config.ts",
+    vueI18n: "~~/i18n/i18n.config.ts",
   },
 
   ui: {

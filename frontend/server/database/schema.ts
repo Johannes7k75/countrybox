@@ -8,6 +8,7 @@ import {
 } from "drizzle-orm/mysql-core";
 import { UserRoles } from "../lib/user";
 
+// Benutzt
 export const Countries = mysqlTable("countries", {
   id: int("id").primaryKey().autoincrement().notNull(),
   name: varchar("name", { length: 255 }).notNull(),
@@ -21,6 +22,7 @@ export const Countries = mysqlTable("countries", {
   unMember: boolean("unMember").notNull().default(false)
 });
 
+// Benutzt
 export const Tld = mysqlTable("tld", {
   id: int("id").primaryKey().autoincrement().notNull(),
   tld: varchar("tld", { length: 10 }).notNull(),
@@ -29,6 +31,7 @@ export const Tld = mysqlTable("tld", {
     .references(() => Countries.id),
 });
 
+// Benutzt
 export const Users = mysqlTable("users", {
   id: int("id").primaryKey().autoincrement().notNull(),
   email: varchar("email", { length: 255 }).notNull(),

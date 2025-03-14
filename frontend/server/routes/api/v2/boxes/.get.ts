@@ -7,8 +7,8 @@ export default defineEventHandler(async(event)=>{
 
     const flagBox = await getFlagBox(user.id);
 
-    flagBox?.add("deu")
-    flagBox?.train("deu", true)
+    flagBox!.add("deu")
+    flagBox!.train("deu", true)
 
-    return flagBox?.json();
+    return flagBox!.json();
 })

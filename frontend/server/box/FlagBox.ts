@@ -5,17 +5,13 @@ class FlagBox {
   public boxMap: Map<number, Box<(typeof this.phases)[number]>> = new Map();
   public phases = [1, 3, 7, 14, 28, 56] as const;
 
+  private updaters: {
+    swap: (box1: number, box2: number, flagId: string) => void
+  };
+
   constructor(
-    flagBoxes?: [
-      FlagBoxType,
-      FlagBoxType,
-      FlagBoxType,
-      FlagBoxType,
-      FlagBoxType,
-      FlagBoxType,
-    ],
-    private updaters: {
-      swap: (box1: number, box2: number, flagId: string) => void
+    { flagBoxes, updaters }: {
+      flagBoxes: [FlagBoxType, FlagBoxType, FlagBoxType, FlagBoxType, FlagBoxType, FlagBoxType,], updaters: FlagBox["updaters"]
     }
   ) {
     this.boxes = [];
@@ -23,8 +19,9 @@ class FlagBox {
       return `[${this.boxes.map((b) => b.toString()).join(", ")}]`;
     };
 
+    let id = 0;
     for (const phase of this.phases) {
-      const box = new Box(phase);
+      const box = new Box(phase, id++);
       this.boxes.push(box);
       this.boxMap.set(phase, box);
     }
@@ -39,6 +36,8 @@ class FlagBox {
         flagBox.forEach((flagId) => box?.addFlagId(flagId));
       }
     }
+
+    this.updaters = updaters;
   }
 
   public getBoxByFlagId(flagId: string) {
@@ -78,7 +77,7 @@ class FlagBox {
   ) {
     const box1 = this.boxMap.get(boxId1)
     const box2 = this.boxMap.get(boxId2);
-    
+
     if (box1?.removeFlagId(flagId)) {
       box2?.addFlagId(flagId);
 
@@ -95,13 +94,14 @@ class FlagBox {
   }
 
   public json() {
-    return this.phases.map((phase) => this.boxMap.get(phase)?.json());
+    return this.phases.map((phase) => this.boxMap.get(phase)!.json());
   }
 }
 
 class Box<T extends number> {
+
   private flagIds: Set<string> = new Set();
-  constructor(private phase: T) { }
+  constructor(private phase: T, private id: number) { }
 
   public getPhase() {
     return this.phase;
@@ -129,7 +129,7 @@ class Box<T extends number> {
     return {
       phase: this.getPhase(),
       flagIds: Array.from(this.flagIds.values()),
-
+      id: this.id
     };
   }
 }
@@ -156,18 +156,21 @@ export async function getFlagBox(userId: number) {
   flagBoxes.set(
     userId,
     new FlagBox(
-      (Object.keys(groupedBoxes) as (keyof typeof groupedBoxes)[]).map((key) => [
-        groupedBoxes[key as keyof typeof groupedBoxes]![0].flagId,
-      ]),
       {
-        async swap(box1,box2,flagId) {
-          const [country] = await useDrizzle().select().from(tables.Boxes).where(and(eq(tables.Boxes.userId, userId),eq(tables.Boxes.flagId, country.id)))
+        flagBoxes: (Object.keys(groupedBoxes) as (keyof typeof groupedBoxes)[]).map((key) => [
+          groupedBoxes[key as keyof typeof groupedBoxes]![0].flagId,
+        ]),
+        updaters: {
+          async swap(box1, box2, countryId) {
+            const [country] = await useDrizzle().select().from(tables.Countries).where(eq(tables.Countries.cca3, countryId))
 
-          useDrizzle().update(tables.Boxes).set({
-            phase: box2,
-          }).where(and(eq(tables.Boxes.userId, userId), eq(tables.Boxes.countryId, )))
+            useDrizzle().update(tables.Boxes).set({
+              phase: box2,
+            }).where(and(eq(tables.Boxes.userId, userId), eq(tables.Boxes.countryId, country.id)))
+          }
+
         }
-      }
+      },
     ),
   );
   // }
