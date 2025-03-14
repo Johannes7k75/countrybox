@@ -1,9 +1,11 @@
 <script>
+import { NuxtLoadingIndicator } from "#components";
 import "~/assets/css/tailwind.css";
 </script>
 
 <template>
   <UApp>
+    <NuxtLoadingIndicator />
     <div class="h-screen max-h-dvh w-screen">
       <slot />
     </div>

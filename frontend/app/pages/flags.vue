@@ -18,10 +18,13 @@ const mapping = {
   independent: "independent",
 };
 
-const flagCodes = await $fetch<(typeof mapping)[]>("/api/flags", {
-  method: "GET",
-  params: mapping,
-});
+// const flagCodes = await $fetch<(typeof mapping)[]>("/api/flags", {
+//   method: "GET",
+//   params: mapping,
+// });
+
+const { data: flagCodes, status } = await useLazyAsyncData('flagCodes', () => $fetch('/api/v2/flags'))
+const isPending = computed(()=>status.value==="pending")
 
 const filter = reactive({
   onlyUN: false
@@ -53,13 +56,15 @@ function searchFor(strA: string, strB: string) {
 }
 
 const flags = computed(() => {
-  const filtered = flagCodes
+  if (isPending.value) return []
+
+  const filtered = flagCodes.value!
     .filter((flag) =>
       query.value != ""
         ? searchFor(flag.capital, query.value) ||
           searchFor(flag.name, query.value) ||
-          searchFor(tldMap.get(flag.cca2)!, query.value) ||
-          searchFor(`+${flag.callCode}`, query.value)
+          searchFor(tldMap.value.get(flag.cca2)!, query.value) ||
+          searchFor(`+${flag.callingCode}`, query.value)
         : // || searchFor(flag.callCode, query.value)
           true,
     )
@@ -68,17 +73,28 @@ const flags = computed(() => {
 });
 
 const flagMap = computed(() => {
-  const map = new Map<string, string>();
+  const map = new Map<number, string>();
 
-  flagCodes.forEach(({ countryId, cca2 }) => map.set(countryId, cca2));
+  flagCodes.value!.forEach(({ id: countryId, cca2 }) => map.set(countryId, cca2));
 
   return map;
 });
 
 const isFlipped = ref<string>();
 
+const {data: tldMap, status: tldStatus} = useLazyAsyncData("tlds", async()=>{
+  const data = await $fetch("/api/v2/tlds")
 
-const tldMap = new Map<string, string>();
+  const tldMap = new Map<string, string>()
+
+  data.map(({countryId, tld})=>tldMap.set(flagMap.value.get(countryId)!, tld))
+
+  console.log(data, tldMap)
+
+  return data;
+});
+
+// const tldMap = new Map<string, string>();
 onMounted(async () => {
   (Object.keys(filter) as (keyof typeof filter)[]).forEach((f)=>{
     if (typeof filter[f] === "boolean") {
@@ -87,14 +103,13 @@ onMounted(async () => {
     // console.log({[f]: useRoute().query[f]})
   })
 
-  const data = await $fetch<{ tld: Tld; countries: Country }[]>("/tlds", {
-    method: "POST",
-    body: flags.value.map((flag) => flag.cca2) ?? [],
-  });
+  // const data = await $fetch("/api/v2/tlds", {
+  //   method: "GET",
+  // });
 
-  data.forEach(({ tld }) => {
-    tldMap.set(flagMap.value.get(tld.countryId)!, tld.tld);
-  });
+  // data.forEach(({ countryId, tld }) => {
+  //   tldMap.set(flagMap.value.get(countryId)!, tld);
+  // });
 });
 </script>
 
@@ -150,14 +165,19 @@ onMounted(async () => {
       <div
         class="mx-auto grid w-max grid-cols-2 gap-8 max-sm:w-full max-sm:max-w-[100vw] max-sm:overflow-x-hidden max-sm:p-4 lg:grid-cols-4"
       >
+
+      <template v-if="isPending">
+        <USkeleton v-for="flag of 4" class="sm:w-[240px] [aspect-ratio:4/3]" />
+      </template>
+      <template v-else>
         <div
           v-for="flag in flags"
-          :key="flag.code"
+          :key="flag.cca2"
           class="inline-block [aspect-ratio:4/3] cursor-pointer [perspective:1000px] sm:w-[240px]"
           @click="
-            isFlipped === flag.code
+            isFlipped === flag.cca2
               ? (isFlipped = undefined)
-              : (isFlipped = flag.code)
+              : (isFlipped = flag.cca2)
           "
         >
           <div
@@ -166,7 +186,7 @@ onMounted(async () => {
             <!-- Front -->
             <div
               class="card-face bg-white transition-transform duration-[700ms]"
-              :class="isFlipped === flag.code && '[transform:rotateX(180deg)]'"
+              :class="isFlipped === flag.cca2 && '[transform:rotateX(180deg)]'"
             >
               <!-- <img :src="flag.path" class="w-full h-full rounded-2xl object-cover" /> -->
 
@@ -178,7 +198,7 @@ onMounted(async () => {
             <!-- Back -->
             <div
               class="card-face relative [transform:rotateX(180deg)] bg-[#1a202c] text-center text-white transition-transform duration-[700ms]"
-              :class="isFlipped === flag.code && '[transform:rotateX(360deg)]'"
+              :class="isFlipped === flag.cca2 && '[transform:rotateX(360deg)]'"
             >
               <div
                 class="relative flex h-full w-full items-center [font-size:16px]"
@@ -210,9 +230,9 @@ onMounted(async () => {
                       '!absolute right-2 bottom-2 rounded-md bg-white/25 px-2 py-1 text-white/80',
                     )
                   "
-                  v-show="flag.callCode && flag.callCode != ''"
+                  v-show="flag.callingCode && flag.callingCode != ''"
                 >
-                  +{{ flag.callCode }}
+                  +{{ flag.callingCode }}
                 </span>
 
                 <div class="mx-auto my-auto">
@@ -225,6 +245,7 @@ onMounted(async () => {
 
           <!-- <img :src="path" /> -->
         </div>
+      </template>
       </div>
     </div>
   </div>
