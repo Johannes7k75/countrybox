@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import { UButton, UIcon } from "#components";
 import "flag-icons/css/flag-icons.min.css";
 
 const { selectedGame } = storeToRefs(useSettingsStore());
@@ -35,34 +36,38 @@ const updateSecondType = (type: GameTypes) => {
 const placeholder = await $fetch(`/api/flags/de`);
 const tld = await $fetch(`/api/data/tld/de`);
 
-function dieplayNode(type: GameTypes, first?: true) {
-  if (!placeholder) {
-    return h("span", {}, "Unknown Type");
-  }
+function createEditableNode(label: string, ops?: {parentClass?: string, labelClass?: string, editClass?: string}) {
+  return h("div", { className: `relative leading-4 ${ops?.parentClass}` }, [
+    h("span", {className: ops?.labelClass}, label),
+    h(UButton, { icon: "mdi:pencil", class: "absolute right-0 top-0 m-1 ".concat(ops?.editClass??""), size: "sm", onClick: ()=>console.log(1) }),
+  ]);
+}
+
+function displayNode(type: GameTypes) {
+  if (!placeholder) return h("span", {}, "Unknown Type");
 
   switch (type) {
     case "name":
-      return h("span", {}, placeholder.name);
+      return createEditableNode(placeholder.name);
     case "capital":
-      return h("span", {}, placeholder.capital);
+      return createEditableNode(placeholder.capital);
     case "tld":
-      return h("span", {}, tld[0]?.tld ?? "");
+      return createEditableNode(tld?.[0]?.tld ?? "");
     case "callCode":
-      return h("span", {}, `+${placeholder.callingCode}`);
+      return createEditableNode(`+${placeholder.callingCode}`);
     case "flag":
-      return h("span", {
-        class: `fi fi-${placeholder.cca2} !w-full h-full ${first && "!max-w-[50%]"}`,
-      });
-
+      return createEditableNode("",{parentClass: "w-1/2 mx-auto", labelClass: `fi fi-${placeholder.cca2} !w-full !aspect-[4/3]`})
+      // h("div", { className: "relative w-1/2 mx-auto" }, [
+      //   h("span", { className: `fi fi-${placeholder.cca2} !w-full !aspect-[4/3]` }),
+      //   h(UButton, { icon: "mdi:pencil", class: "absolute right-0 top-0 m-1 mt-2", size: "sm" }),
+      // ]);
     default:
       return h("span", {}, "Unknown Type");
   }
 }
 
-const firstDiplayNode = computed(() =>
-  dieplayNode(firstType.value, true),
-);
-const secondDiplayNode = computed(() => dieplayNode(secondType.value));
+const firstDiplayNode = computed(() => displayNode(firstType.value));
+const secondDiplayNode = computed(() => displayNode(secondType.value));
 
 function startGame() {
   useGameStore().startGame({
@@ -81,44 +86,34 @@ function startGame() {
 </script>
 
 <template>
-
   <div class="mx-auto w-max p-4">
-    <GameTypeSelector
+    <!-- <GameTypeSelector
       :selectedType="firstType"
       :disabledType="secondType"
       :updateType="updateFirstType"
-    />
+    /> -->
 
-    <div
-      class="my-4 flex h-[600px] w-[400px] flex-col rounded-sm border-[1px] border-solid border-white/30 bg-slate-900 relative"
-    >
-      <GameCountryFilters class="w-max float-right m-2 absolute right-0" />
-      <div class="w-full flex-grow content-center text-center">
-        <firstDiplayNode />
+    <div class="relative my-4 flex h-[600px] w-[400px] flex-col rounded-sm border-[1px] border-solid border-white/30 bg-slate-900">
+      <!-- <GameCountryFilters class="w-max float-right m-2 absolute right-0" /> -->
+      <div class="h-full w-full flex-grow content-center text-center">
+        <!-- <firstDiplayNode  /> -->
+         <GameSelectorEditable :type="firstType" :secondType="secondType" :update="(t)=>firstType = t"/>
       </div>
 
-
-
       <div class="mt-auto mb-0 grid w-full grid-cols-2 grid-rows-2 gap-2 p-2">
-        <secondDiplayNode
-          v-for="n in 4"
-          class="!aspect-[4/3] w-full content-center rounded-md bg-gray-500 text-center"
-        />
+        <!-- <secondDiplayNode v-for="n in 4" class="relative !aspect-[4/3] w-full content-center rounded-md bg-gray-500 text-center" /> -->
+        <GameSelectorEditable :type="secondType" :secondType="firstType" :update="(t)=>secondType = t" v-for="n in 4" class="relative !aspect-[4/3] w-full content-center rounded-md bg-gray-500 text-center" />
       </div>
     </div>
 
-    <GameTypeSelector
+    <!-- <GameTypeSelector
       :selectedType="secondType"
       :disabledType="firstType"
       :updateType="updateSecondType"
-    />
+    /> -->
 
     <div class="mt-8 w-full px-2">
-      <UButton
-        label="Start"
-        class="w-full justify-center p-4 text-2xl font-bold"
-        @click="startGame"
-      />
+      <UButton label="Start" class="w-full justify-center p-4 text-2xl font-bold" @click="startGame" />
     </div>
   </div>
 </template>

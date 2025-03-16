@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import type { TreeItem } from "@nuxt/ui";
-
 const countries = await useFetch("/api/v2/flags/");
 
 const independent = ref(false);
@@ -27,7 +25,7 @@ const filteredRegions = computed(() => (countries.data.value ?? [])
 </script>
 
 <template>
-  <UModal :default-open="true">
+  <UModal :default-open="false">
     <UButton label="Filter" color="accent" icon="mdi:filter" class="cursor-pointer text-(--text)" />
 
     <template #content>
