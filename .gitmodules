@@ -1,0 +1,3 @@
+[submodule "geojson-places-api"]
+	path = geojson-places-api
+	url = https://github.com/rapomon/geojson-places-api
