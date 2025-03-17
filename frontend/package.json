@@ -18,7 +18,6 @@
     "clsx": "^2.1.1",
     "drizzle-orm": "^0.39.2",
     "flag-icons": "^7.3.2",
-    "geojson-places": "^1.0.8",
     "i18n-iso-countries": "^7.14.0",
     "leaflet": "^1.9.4",
     "mysql2": "^3.12.0",
@@ -31,12 +30,11 @@
   "devDependencies": {
     "@iconify-json/mdi": "^1.2.3",
     "@iconify-json/uil": "^1.2.3",
-    "@intlify/message-compiler": "^11.1.2",
     "@modyfi/vite-plugin-yaml": "^1.1.1",
     "@nuxt/image": "^1.9.0",
-    "@nuxt/ui": "^3.0.0",
+    "@nuxt/ui": "3.0.0-alpha.13",
     "@nuxtjs/device": "^3.2.4",
-    "@nuxtjs/i18n": "^9.3.1",
+    "@nuxtjs/i18n": "^9.2.1",
     "@nuxtjs/leaflet": "^1.2.6",
     "@pinia/nuxt": "^0.10.1",
     "@rollup/plugin-yaml": "^4.1.2",
@@ -55,8 +53,12 @@
     "overrides": {
       "tailwindcss": "4.0.7",
       "@tailwindcss/postcss": "4.0.7",
-      "@tailwindcss/vite": "4.0.7"
-    }
+      "@tailwindcss/vite": "4.0.7",
+      "@intlify/message-compiler": "^11.1.2"
+    },
+    "onlyBuiltDependencies": [
+      "esbuild"
+    ]
   },
   "engines": {
     "node": ">=20",

@@ -13,14 +13,14 @@ async function loadLocaleFiles() {
   return locales
 }
 
-const locales = await loadLocaleFiles() as { [x: string]: DefaultLocaleMessageSchema }
+const locales = loadLocaleFiles() as Promise<{ [x: string]: DefaultLocaleMessageSchema }>
 
-export default defineI18nConfig(() => {
+export default defineI18nConfig(async () => {
   return {
     // legacy: false,
     locale: "de",
     fallbackLocale: "en",
-    messages: locales
+    messages: await locales
 
   }
 });

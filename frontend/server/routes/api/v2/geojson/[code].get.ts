@@ -11,7 +11,9 @@ export default defineEventHandler(async(event)=>{
         })
     }
 
+    console.log(code)
+
     const {cca2} = resolve(code)
 
-    return getCountryGeoJSONByAlpha2(cca2)
+    return await fetch(`http://127.0.0.1:3000/country/${cca2}/geojson`)
 })

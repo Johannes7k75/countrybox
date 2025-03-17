@@ -9,12 +9,12 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
 
   ssr: false,
-
+  
   future: {
     compatibilityVersion: 4,
   },
 
-  debug: true,
+  // debug: true,
 
   runtimeConfig: {
     cookieName: "__session",
@@ -31,6 +31,11 @@ export default defineNuxtConfig({
     experimental: {
       tasks: true,
     },
+    routeRules: {
+      "/api/v2/geojson/x/**": {
+        redirect: "http://127.0.0.1:3000/country/**"
+      }
+    }
   },
 
   vite: {
@@ -50,7 +55,7 @@ export default defineNuxtConfig({
   },
 
   ui: {
-    devtools: { enabled: true },
+    // devtools: { enabled: true },
     colorMode: true,
     theme: {
       colors: [

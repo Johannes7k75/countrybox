@@ -14,6 +14,7 @@
   </DefineWorldMap>
 
   <div class="flex h-full max-h-full flex-col">
+    {{ correctOption?.cca2 }}
     <Header
       :lives="lives"
       :fails="fails"
@@ -73,7 +74,7 @@ const { autoNext, showCountry } = storeToRefs(useSettingsStore());
 const { isGuessed, guess, isNotCorrect } = useGameStore();
 
 const worldMapRef = ref<{
-  updateGeoJson: (ccn3: string) => Promise<void>;
+  updateGeoJson: (cca2: string) => Promise<void>;
   isReady: boolean;
   enableInteraction: () => void;
   disableInteraction: () => void;
@@ -141,12 +142,12 @@ onMounted(() => {
         showCountry.value === "on" &&
         correctOption.value
       ) {
-        worldMapRef.value.updateGeoJson(correctOption.value.cca3);
+        worldMapRef.value.updateGeoJson(correctOption.value.cca2);
       }
 
       if (worldMapRef.value && showCountry.value === "onAfter") {
         showMap.value = false;
-        worldMapRef.value.updateGeoJson(correctOption.value!.cca3);
+        worldMapRef.value.updateGeoJson(correctOption.value!.cca2);
       }
     })
     .on("correctGuess", () => {
@@ -173,7 +174,7 @@ onMounted(() => {
         showCountry.value === "on" ||
         (showCountry.value === "onAfter" && correctOption.value)
       ) {
-        worldMapRef.value?.updateGeoJson(correctOption.value!.cca3);
+        worldMapRef.value?.updateGeoJson(correctOption.value!.cca2);
       }
     })
     .on("wrongGuess", ()=>{
@@ -184,7 +185,7 @@ onMounted(() => {
     })
 
   if (showCountry.value === "on" && correctOption.value) {
-    worldMapRef.value?.updateGeoJson(correctOption.value.cca3);
+    worldMapRef.value?.updateGeoJson(correctOption.value.cca2);
   }
 });
 
