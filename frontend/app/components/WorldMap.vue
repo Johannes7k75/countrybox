@@ -4,7 +4,7 @@ import { cn } from "~~/lib/utils";
 
 interface WorldMapProps {
   hide?: boolean;
-  cca3?: string;
+  cca2?: string;
 }
 
 const props = defineProps<WorldMapProps>();
@@ -37,9 +37,9 @@ async function setGeoJson(json?: GeoJSON.GeoJSON) {
   }
 }
 
-async function updateGeoJson(ccn3: string) {
+async function updateGeoJson(cca2: string) {
   enableInteraction();
-  const response = await $fetch(`/api/geojson/${ccn3}`);
+  const response = await $fetch(`/api/v2/geojson/${cca2}`);
   geojson.value = response;
   // console.log(geojson.value.type)
 
@@ -52,8 +52,8 @@ function onMapReady() {
 }
 
 onMounted(async () => {
-  console.log("CCA3", props.cca3);
-  if (props.cca3) await updateGeoJson(props.cca3);
+  console.log("CCA3", props.cca2);
+  if (props.cca2) await updateGeoJson(props.cca2);
 });
 
 function enableInteraction() {

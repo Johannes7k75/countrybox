@@ -18,6 +18,8 @@
     "clsx": "^2.1.1",
     "drizzle-orm": "^0.39.2",
     "flag-icons": "^7.3.2",
+    "geojson-places": "^1.0.8",
+    "i18n-iso-countries": "^7.14.0",
     "leaflet": "^1.9.4",
     "mysql2": "^3.12.0",
     "nuxt": "^3.16.0",

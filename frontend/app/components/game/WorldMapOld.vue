@@ -1,7 +1,7 @@
 <template>
   <WorldMap
     ref="worldMapRef"
-    :cca3="correctOption?.cca3"
+    :cca3="correctOption?.cca2"
     class="my-auto !aspect-[3/2] !max-w-[37rem]"
     :class="
       cn(

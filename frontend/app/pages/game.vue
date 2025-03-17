@@ -4,7 +4,7 @@
       ref="worldMapRef"
       v-if="showCountry !== 'off'"
       v-show="!isRoundOver"
-      :cca3="correctOption?.cca3"
+      :cca2="correctOption?.cca2"
       class="my-auto !aspect-[6/4] !max-w-[37rem] p-4"
       :class="cn(!mapVisible
             ? 'max-largeMap:-translate-x-[100vw]'
