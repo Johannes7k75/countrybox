@@ -6,11 +6,6 @@ defineRouteRules({
   prerender: true,
 });
 
-const { data: countryNames } = await useLazyAsyncData("country:names", async () => {
-  const names = await $fetch("/api/v2/flags/names");
-  return new Map(names.map(({ cca3, name }) => [cca3, name]));
-});
-
 const { data: countryTlds } = await useLazyAsyncData("country:tlds", async () => {
   const tlds = await $fetch("/api/v2/tlds/");
   return new Map(tlds.map(({ countryId, tld }) => [countryId, tld]));
@@ -62,29 +57,8 @@ const flags = computed(() => {
   return filtered;
 });
 
-const flagMap = computed(() => {
-  const map = new Map<number, string>();
-
-  flagCodes.value!.forEach(({ id: countryId, cca2 }) => map.set(countryId, cca2));
-
-  return map;
-});
-
 const isFlipped = ref<string>();
 
-// const {data: tldMap, status: tldStatus} = useLazyAsyncData("tlds", async()=>{
-//   const data = await $fetch("/api/v2/tlds")
-
-//   const tldMap = new Map<string, string>()
-
-//   data.map(({countryId, tld})=>tldMap.set(flagMap.value.get(countryId)!, tld))
-
-//   console.log(data, tldMap)
-
-//   return data;
-// });
-
-// const tldMap = new Map<string, string>();
 onMounted(async () => {
   (Object.keys(filter) as (keyof typeof filter)[]).forEach((f) => {
     if (typeof filter[f] === "boolean") {
