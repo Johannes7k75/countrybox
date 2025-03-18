@@ -1,7 +1,8 @@
 <script lang="ts" setup>
+import { type DropdownMenuItem } from "@nuxt/ui/runtime/components/DropdownMenu.vue"
 import type { User } from "~~/shared/types";
 
-defineProps<{ user: User | null }>();
+const props = defineProps<{ user: User | null }>();
 
 const { logout } = useAuth();
 
@@ -12,91 +13,47 @@ async function onLogout() {
   await navigateTo("/");
 }
 
-const popoverHover = ref(false);
-const popoverTimeout = ref();
+const dropdownItems = computed(() => {
+  return [
+      {
+        label:useI18n().t("dropdown.account.settings"),
+        icon: "mdi:cog-outline",
+        onSelect() {
+          isOpen.value = true
+        }
+      },
+      {type: "separator"},
+       props.user ?{
+        label: useI18n().t("dropdown.account.logout"),
+        icon: "mdi:logout",
+        color: "error",
+        onSelect() {
+          onLogout()
+        }
+      }: {
+        label: useI18n().t("dropdown.account.login"),
+        icon: "mdi:login",
+        color: "neutral",
+        to: {
+          path: "/login"
+        }
+      }
+  ] as DropdownMenuItem[]
+})
 
-const hoverPopover = () => {
-  popoverHover.value = true;
-  if (popoverTimeout.value) clearTimeout(popoverTimeout.value);
-};
-
-const closePopover = () => {
-  popoverTimeout.value = setTimeout(() => {
-    popoverHover.value = false;
-  }, 150);
-};
 </script>
 
 <template>
-  <div
-    class="flex h-14 w-full items-center border-b-[1px] border-solid border-white/10"
-  >
+  <div class="flex h-14 w-full items-center border-b-[1px] border-solid border-white/10">
     <!-- px-[12%] py-2 max-2xl:px-[7%] max-lg:px-[20px] max-lg:py-[10px] -->
 
-    <div class="relative mr-2 ml-auto">
-      <template v-if="user">
-        <UPopover v-model:open="popoverHover">
-          <UButton
-            color="accent"
-            :label="user?.email"
-            trailing-icon="i-heroicons-chevron-down-20-solid"
-            variant="subtle"
-            class="text-(--text)"
-            aria-haspopup="true"
-            @mouseover="hoverPopover"
-            @mouseleave="closePopover"
-            @touch="hoverPopover"
-          />
+    <div class="relative ml-auto flex gap-2 mr-2">
+      <LazyUDropdownMenu :items="dropdownItems">
+        <UButton color="accent" :label="user?.email" trailing-icon="i-heroicons-chevron-down-20-solid" variant="subtle"
+          class="text-(--text)" />
+      </LazyUDropdownMenu>
 
-          <template #content>
-            <div
-              class="flex flex-col p-2"
-              @mouseover="hoverPopover"
-              @mouseleave="closePopover"
-            >
-              <UButton
-                :label="$t('dropdown.account.settings')"
-                @click="isOpen = true"
-                class="cursor-pointer !bg-transparent font-bold !text-white"
-              />
-              <USeparator />
-
-              <UButton
-                v-if="user"
-                :label="$t('dropdown.account.logout')"
-                color="error"
-                @click="onLogout"
-                class="cursor-pointer !bg-transparent font-bold !text-red-600"
-              />
-
-              <UButton
-                v-else-if="!user"
-                :label="$t('dropdown.account.login')"
-                class="cursor-pointer !bg-transparent font-bold !text-white"
-                @click="useRouter().push({ name: 'login' })"
-              />
-            </div>
-          </template>
-        </UPopover>
-
-        <SettingsModal
-          v-model:model-value="isOpen"
-          @update:model-value="(e) => (isOpen = e)"
-        />
-      </template>
-      <template v-else>
-        <UButton
-          :label="$t('auth.signin')"
-          class="px-4 py-2"
-          :to="{ path: '/login' }"
-        />
-        <UButton
-          :label="$t('auth.signup')"
-          class="ml-4 px-4 py-2 text-(--text)"
-          variant="outline"
-          :to="{ path: '/signup' }"
-        />
-      </template>
+      <SettingsModal v-model:model-value="isOpen" @update:model-value="(e) => (isOpen = e)" />
     </div>
   </div>
 </template>

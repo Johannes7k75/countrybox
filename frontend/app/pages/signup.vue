@@ -40,8 +40,17 @@ async function onSignup({ email, password }: { email: string; password: string }
 <template>
   <div class="mx-auto mt-20 flex w-80 max-w-full flex-col gap-4">
     <div class="rounded-md bg-gray-700/80 p-4">
-      <AuthForm :loading="loading" @on-submit="onSignup" :title="$t('auth.signup')" repeat-password v-if="!isAnonym"/>
-      <AuthFormAnonym :loading="loading" @on-submit="onSignup" :title="$t('auth.createAccount')" :label="$t('auth.createAccountId')" repeat-password v-else />
+      <AuthForm :loading="loading" @on-submit="onSignup" :title="$t('auth.signup')" repeat-password v-if="!isAnonym">
+        <template #overSubmit>
+          <LazyUCheckbox label="Anonymes Account" v-model="isAnonym"/>
+        </template>
+      </AuthForm>
+      <AuthFormAnonym :loading="loading" @on-submit="onSignup" :title="$t('auth.createAccount')" :label="$t('auth.createAccountId')" repeat-password v-else>
+        <template #overSubmit>
+          <LazyUCheckbox label="Anonymes Account" v-model="isAnonym"/>
+        </template>
+      </AuthFormAnonym>
+
     </div>
     <div class="rounded-md border border-solid border-gray-500 py-4 text-center">
       <p>

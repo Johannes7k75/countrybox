@@ -1,5 +1,6 @@
-import {getCountryGeoJSONByAlpha2} from "geojson-places"
-import { resolve } from "~~/server/lib/code"
+import { getCountryGeoJSON } from "~~/server/lib/geojson-places"
+
+import fs from "node:fs"
 
 export default defineEventHandler(async(event)=>{
     const code = getRouterParam(event, "code")
@@ -11,9 +12,7 @@ export default defineEventHandler(async(event)=>{
         })
     }
 
-    console.log(code)
+    console.log(import.meta, fs.readdirSync("."))
 
-    const {cca2} = resolve(code)
-
-    return await fetch(`http://127.0.0.1:3000/country/${cca2}/geojson`)
+    return await getCountryGeoJSON(code)
 })

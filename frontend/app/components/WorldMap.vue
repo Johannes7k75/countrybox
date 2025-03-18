@@ -85,7 +85,6 @@ defineExpose({ updateGeoJson, isReady, disableInteraction, enableInteraction });
 
 <template>
   <div>
-    {{ cca2 }}
     <KeepAlive>
       <LMap
         ref="map"

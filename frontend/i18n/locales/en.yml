@@ -41,3 +41,14 @@ auth:
   alreadyAccount: Already have an account?
   signup: Register
   signin: Log in
+  createAccount: Create Account
+  createAccountId: Generate Account ID
+  anonym:
+    yourAccountId: Your Account ID, save it you doesnt see it anymore!
+    accountIdSaved: Did you save your Account ID?
+    switcher: Anomynous Account?
+
+boxes: 
+  box:  
+    title: Box {boxNumber}
+    back: Back

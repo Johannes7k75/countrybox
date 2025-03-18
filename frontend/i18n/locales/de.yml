@@ -41,6 +41,12 @@ auth:
   alreadyAccount: Bereits einen Account?
   signup: Registrieren
   signin: Anmelden
+  createAccount: Account erstellen
+  createAccountId: Generiere eine Account ID
+  anonym:
+    yourAccountId: Deine Account ID, speicher Sie den du siehst sich nie wieder! 
+    accountIdSaved: Hast du deine Account ID gespeichert?
+    switcher: Anonymer Account?
 
 boxes:
   box:

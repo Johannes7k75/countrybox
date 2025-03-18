@@ -69,8 +69,10 @@ function validate(state: any): FormError[] {
       <UInput v-model="passwordRepeat" type="password" class="w-full" />
     </UFormField>
 
+    <slot name="overSubmit" />
+
     <UButton :loading="loading" class="mt-3 w-full cursor-pointer justify-center text-(--text)" type="submit" @click="onSubmit({ data: state })">
-      <template v-if="loading">please wait...</template>
+      <template v-if="loading">{{ $t("auth.loading") }}</template>
       <template v-else>{{ title }}</template>
     </UButton>
   </UForm>

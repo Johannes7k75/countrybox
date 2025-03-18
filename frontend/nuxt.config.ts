@@ -30,11 +30,6 @@ export default defineNuxtConfig({
   nitro: {
     experimental: {
       tasks: true,
-    },
-    routeRules: {
-      "/api/v2/geojson/x/**": {
-        redirect: "http://127.0.0.1:3000/country/**"
-      }
     }
   },
 
@@ -55,8 +50,8 @@ export default defineNuxtConfig({
   },
 
   ui: {
-    // devtools: { enabled: true },
     colorMode: true,
+    devtools: {enabled: false},
     theme: {
       colors: [
         "primary",

@@ -24,12 +24,15 @@ export default defineEventHandler(async (event) => {
       })
       .from(tables.Countries)
       .where(
-        answers.length > 0
+        and(
+          answers.length > 0
           ? notInArray(
               tables.Countries.id,
               answers.map((a) => a.id),
             )
           : undefined,
+          eq(tables.Countries.independent, true)
+        ),
       )
       .orderBy(sql`RAND()`)
       .innerJoin(tables.Tld, eq(tables.Countries.id, tables.Tld.countryId))

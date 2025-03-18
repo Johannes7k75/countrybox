@@ -79,10 +79,13 @@ async function generateAccountId() {
       <UInput v-model="passwordRepeat" type="password" class="w-full" />
     </UFormField>
 
+    <slot name="overSubmit" />
+    
     <UButton :loading="loading" :disabled="typeof state.email === 'string'" class="mt-3 w-full cursor-pointer justify-center text-(--text)" type="submit" @click="generateAccountId">
       <template v-if="loading">please wait...</template>
       <template v-else>{{ label }}</template>
     </UButton>
+
 
     <div class="w-full mt-8 p-4 border-(--primary) rounded-md border" v-show="typeof state.email === 'string'">
       {{ $t('auth.anonym.yourAccountId') }}

@@ -14,7 +14,6 @@
   </DefineWorldMap>
 
   <div class="flex h-full max-h-full flex-col">
-    {{ correctOption?.cca2 }}
     <Header
       :lives="lives"
       :fails="fails"
@@ -53,7 +52,7 @@ import GameWon from "~/components/game/GameWon.vue";
 // import WorldMap from "~/components/game/WorldMap.vue";
 
 const isSmallScreen = useMediaQuery("(width < 40rem)")
-const isLargeMap = useMediaQuery("(width > 1500px)")
+const isLargeMap = useMediaQuery("(width > 1400px)")
 
 const [DefineWorldMap, ReuseWorldMap] = createReusableTemplate();
 
