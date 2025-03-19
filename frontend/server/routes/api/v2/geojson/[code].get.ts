@@ -1,7 +1,3 @@
-import { getCountryGeoJSON } from "~~/server/lib/geojson-places"
-
-import fs from "node:fs"
-
 export default defineEventHandler(async(event)=>{
     const code = getRouterParam(event, "code")
 
@@ -12,7 +8,7 @@ export default defineEventHandler(async(event)=>{
         })
     }
 
-    console.log(import.meta, fs.readdirSync("."))
+    const [{geoJson}] = await useDrizzle().select().from(tables.GeoJson).where(eq(tables.GeoJson.countryCode, code))
 
-    return await getCountryGeoJSON(code)
+    return geoJson
 })
