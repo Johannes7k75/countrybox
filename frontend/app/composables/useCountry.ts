@@ -4,7 +4,7 @@ export const useCountry = () => {
 
     const fetchTlds = async () => {
         if (tldMap.value.size > 0) return
-        const tlds = await $fetch<{ countryId: string; tld: string }[]>("/api/v2/tlds")
+        const tlds = await $fetch<{ countryId: string; tld: string }[]>("/api/v3/tlds")
         const map = new Map<string, string>()
         tlds.forEach(({ countryId, tld }) => map.set(countryId.toString(), tld))
         tldMap.value = map
@@ -12,7 +12,7 @@ export const useCountry = () => {
 
     const fetchFlagNames = async () => {
         if (flagNames.value.size > 0) return
-        const names = await $fetch<{ cca3: string; name: string }[]>("/api/v2/flags/names")
+        const names = await $fetch<{ cca3: string; name: string }[]>("/api/v3/countries/names")
         const map = new Map<string, string>()
         names.forEach(({ cca3, name }) => map.set(cca3, name))
         flagNames.value = map
