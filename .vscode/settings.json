@@ -1,3 +1,22 @@
 {
-    "npm.packageManager": "pnpm"
+    "npm.packageManager": "pnpm",
+    "restoreTerminals.terminals": [
+        {
+            "splitTerminals": [
+                {
+                    "name": "Backend",
+                    "commands": [
+                        "air"
+                    ],
+                    "shouldRunCommands": false
+                },
+                {
+                    "name": "Frontend",
+                    "commands": [
+                        "pnpm --prefix ./frontend dev"
+                    ]
+                }
+            ]
+        }
+    ]
 }
