@@ -1,17 +1,53 @@
-# CountryBox
+# Project country-box
 
-<!-- Alle länder anzeigen beim fertig werden -->
+One Paragraph of project description goes here
 
-<!-- Land anzeigen wo es liegt am Ende  -->
+## Getting Started
 
-Timer
+These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
 
-Undendlich leben
+## MakeFile
 
-FLaggen Gruppen manuell -> 4
+Run build make command with tests
+```bash
+make all
+```
 
-<!-- Handy karte verbessern, Desjtop -->
+Build the application
+```bash
+make build
+```
 
-Runden zähler bei 1 beginnen
+Run the application
+```bash
+make run
+```
+Create DB container
+```bash
+make docker-run
+```
 
-https://www.realtimecolors.com/?colors=edf0f8-12151c-315dc4-163274-1640a2&fonts=Inter-Inter
+Shutdown DB Container
+```bash
+make docker-down
+```
+
+DB Integrations Test:
+```bash
+make itest
+```
+
+Live reload the application:
+```bash
+make watch
+```
+
+Run the test suite:
+```bash
+make test
+```
+
+Clean up binary from the last build:
+```bash
+make clean
+```
