@@ -10,14 +10,14 @@ import { UserRoles } from "../lib/user";
 
 // Benutzt
 export const Countries = mysqlTable("countries", {
-  id: int("id").primaryKey().autoincrement().notNull(),
+  // id: int("id").primaryKey().autoincrement().notNull(),
   name: varchar("name", { length: 255 }).notNull(),
   capital: varchar("capital", { length: 255 }).notNull(),
   independent: boolean("independent").notNull(),
   region: varchar("region", { length: 255 }).notNull(),
   subregion: varchar("subregion", { length: 255 }).notNull(),
-  cca3: varchar("cca3", { length: 3 }).notNull(),
-  cca2: varchar("cca2", { length: 2 }).notNull(),
+  cca3: varchar("cca3", { length: 3 }).primaryKey().notNull().unique(),
+  cca2: varchar("cca2", { length: 2 }).notNull().unique(),
   callingCode: varchar("callingCode", { length: 10 }),
   unMember: boolean("unMember").notNull().default(false)
 });
@@ -26,9 +26,9 @@ export const Countries = mysqlTable("countries", {
 export const Tld = mysqlTable("tld", {
   id: int("id").primaryKey().autoincrement().notNull(),
   tld: varchar("tld", { length: 10 }).notNull(),
-  countryId: int("countryId")
+  countryCode: varchar("countryCode",{length:2})
     .notNull()
-    .references(() => Countries.id),
+    .references(() => Countries.cca2),
 });
 
 // Benutzt
@@ -82,12 +82,12 @@ export const GuessedFlags = mysqlTable("guessedFlags", {
 export const Boxes = mysqlTable("boxes", {
   id: int("id").primaryKey().autoincrement().notNull(),
   userId: int("userId").references(() => Users.id),
-  countryId: int("countryId").references(() => Countries.id),
+  countryCode: varchar("countryCode",{length: 2}).references(() => Countries.cca2),
   trainedAt: datetime("trainedAt"),
   phase: int("phase").default(0).notNull(),
 });
 
-export const GeoJsonCache = mysqlTable("geoJsonCache", {
-  countryId: int("countryId").references(() => Countries.id),
+export const GeoJson = mysqlTable("geoJson", {
+  countryCode: varchar("countryCode",{length: 2}).references(() => Countries.cca2),
   geoJson: json("geoJson").$type<GeoJSON.GeoJSON>(),
 });

@@ -92,6 +92,34 @@
       "when": 1741770593331,
       "tag": "0012_charming_warhawk",
       "breakpoints": true
+    },
+    {
+      "idx": 13,
+      "version": "5",
+      "when": 1742301480878,
+      "tag": "0013_peaceful_wolf_cub",
+      "breakpoints": true
+    },
+    {
+      "idx": 14,
+      "version": "5",
+      "when": 1742301512483,
+      "tag": "0014_pale_the_watchers",
+      "breakpoints": true
+    },
+    {
+      "idx": 15,
+      "version": "5",
+      "when": 1742301633840,
+      "tag": "0015_long_felicia_hardy",
+      "breakpoints": true
+    },
+    {
+      "idx": 16,
+      "version": "5",
+      "when": 1742302178952,
+      "tag": "0016_abandoned_toro",
+      "breakpoints": true
     }
   ]
 }
