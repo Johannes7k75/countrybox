@@ -33,8 +33,8 @@ const updateSecondType = (type: GameTypes) => {
   useSettingsStore().set("selectedGame", selectedGame.value);
 };
 
-const placeholder = await $fetch(`/api/flags/de`);
-const tld = await $fetch(`/api/data/tld/de`);
+const placeholder = await $fetch(`/api/v2/flags/de`);
+const tld = await $fetch(`/api/v2/tlds/de`);
 
 function createEditableNode(label: string, ops?: {parentClass?: string, labelClass?: string, editClass?: string}) {
   return h("div", { className: `relative leading-4 ${ops?.parentClass}` }, [
