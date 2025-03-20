@@ -4,12 +4,16 @@ import { useAuthUser } from "./useAuthUser"
 export const useAuth = () => {
   const authUser = useAuthUser()
 
+  const authApi = $fetch.create({
+    baseURL: "/api/v3/auth"
+  })
+
   const setUser = (user: User | null) => {
     authUser.value = user
   }
 
   const login = async (email: string, password: string, rememberMe: boolean) => {
-    const data = await $fetch<{user: User}>("/auth/login", {
+    const data = await authApi<{user: User}>("/login", {
       method: "POST",
       body: {
         email,
@@ -24,7 +28,7 @@ export const useAuth = () => {
   }
 
   const signup = async (email: string, password: string) => {
-    const data = await $fetch<{user: User}>("/auth/signup",{
+    const data = await authApi<{user: User}>("/signup",{
       method: "POST",
       body: {
         email,
@@ -38,7 +42,7 @@ export const useAuth = () => {
   }
 
   const logout = async () => {
-    const data = await $fetch<{ user: User }>("/auth/logout", {
+    const data = await authApi<{ user: User }>("/logout", {
       method: "POST"
     })
 
@@ -48,7 +52,7 @@ export const useAuth = () => {
   const me = async () => {
     if (!authUser.value) {
       try {
-        const data = await $fetch<{ user: User }>("/auth/me", {
+        const data = await authApi<{ user: User }>("/me", {
           headers: useRequestHeaders(["cookie"])
         })
 

@@ -58,7 +58,7 @@ function validate(state: any): FormError[] {
 }
 
 async function generateAccountId() {
-  const newAccountId = await $fetch("/auth/accountId")
+  const newAccountId = await $fetch<string>("/api/v3/auth/accountId")
 
   state.email = newAccountId
 }
