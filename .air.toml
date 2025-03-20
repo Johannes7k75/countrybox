@@ -37,6 +37,7 @@ tmp_dir = "tmp"
 [log]
   main_only = false
   time = false
+  silent = true
 
 [misc]
   clean_on_exit = false
