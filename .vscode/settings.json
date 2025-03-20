@@ -6,7 +6,7 @@
                 {
                     "name": "Backend",
                     "commands": [
-                        "air"
+                        "air\n"
                     ],
                     "shouldRunCommands": false
                 },
