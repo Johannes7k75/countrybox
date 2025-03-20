@@ -36,8 +36,9 @@ type Service interface {
 
 	GetGeoJson(code string) (json.RawMessage, error)
 
-	GetUser(userId string) (User, error)
+	GetUser(userId int) (User, error)
 	GetUserByEmail(email string) (User, error)
+	CreateUser(email, password string) (User, error)
 }
 
 type service struct {
@@ -247,26 +248,70 @@ func (s *service) GetGeoJson(code string) (json.RawMessage, error) {
 
 type User = utils.User
 
-func (s *service) GetUser(userId string) (User, error) {
-	query := "SELECT * FROM users WHERE userId = ?"
-
+func queryUser(query *sqlx.Row) (User, error) {
+	var rolesData []byte
 	user := User{}
-	err := s.db.Get(&user, query, userId)
+
+	err := query.Scan(&user.Id, &user.Email, &rolesData, &user.Password)
 	if err != nil {
 		return User{}, fmt.Errorf("failed to execute query: %w", err)
+	}
+
+	err = json.Unmarshal(rolesData, &user.Roles)
+	if err != nil {
+		return User{}, fmt.Errorf("failed to unmarshal roles JSON: %w", err)
 	}
 
 	return user, nil
 }
 
-func (s *service) GetUserByEmail(email string) (User, error) {
-	query := "SELECT * FROM users WHERE email = ?"
+func (s *service) GetUser(userId int) (User, error) {
+	query := "SELECT id, email, roles, password FROM users WHERE id = ?"
 
-	user := User{}
-	err := s.db.Get(&user, query, email)
+	return queryUser(s.db.QueryRowx(query, userId))
+}
+
+func (s *service) GetUserByEmail(email string) (User, error) {
+	query := "SELECT id, email, roles, password FROM users WHERE email = ?"
+
+	return queryUser(s.db.QueryRowx(query, email))
+}
+
+func (s *service) CreateUser(email, password string) (User, error) {
+	query := "INSERT INTO users (email, password, roles) VALUES (?, ?, ?)"
+
+	var columnCount int
+
+	err := s.db.Get(&columnCount, "SELECT count(email) FROM users WHERE email = ?", email)
 	if err != nil {
 		return User{}, fmt.Errorf("failed to execute query: %w", err)
 	}
 
-	return user, nil
+	if columnCount > 0 {
+		return User{}, fmt.Errorf("Email already used")
+	}
+
+	user := User{
+		Email:    email,
+		Password: password,
+		Roles:    []utils.UserRole{utils.RoleUser},
+	}
+
+	rolesJSON, err := json.Marshal(user.Roles)
+	if err != nil {
+		return User{}, fmt.Errorf("Error marshalling JSON: %w", err)
+	}
+
+	rows, err := s.db.Exec(query, user.Email, user.Password, string(rolesJSON))
+	if err != nil {
+		return User{}, fmt.Errorf("failed to execute insert query: %w", err)
+	}
+	insertId, _ := rows.LastInsertId()
+
+	insertedUser, err := s.GetUser(int(insertId))
+	if err != nil {
+		return User{}, fmt.Errorf("failed to get inserted user: %w", err)
+	}
+
+	return insertedUser, nil
 }

@@ -6,6 +6,7 @@ import (
 	"crypto/rand"
 	"crypto/sha256"
 	"encoding/base64"
+	"encoding/hex"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -25,16 +26,16 @@ const (
 )
 
 type User struct {
-	Id       int       `json:"id"`
-	Email    string    `json:"email"`
-	Roles    *UserRole `json:"roles"`
-	Password string    `json:"password"`
+	Id       int        `json:"id"`
+	Email    string     `json:"email"`
+	Roles    []UserRole `json:"roles"`
+	Password string     `json:"password"`
 }
 
 type UserWithoutPassword struct {
-	Id    int       `json:"id"`
-	Email string    `json:"email"`
-	Roles *UserRole `json:"roles"`
+	Id    int        `json:"id"`
+	Email string     `json:"email"`
+	Roles []UserRole `json:"roles"`
 }
 
 type Session struct {
@@ -52,14 +53,12 @@ func RemovePassword(user User) UserWithoutPassword {
 
 func findUserById(userID int) *User {
 
-	role := RoleAdmin
-
 	if userID == 1 {
 		return &User{
 			Id:       1,
 			Email:    "jonas@jospace.de",
 			Password: "secret", // Normally you'd never return password in real applications.
-			Roles:    &role,
+			Roles:    []string{RoleAdmin},
 		}
 	}
 	return nil
@@ -177,21 +176,23 @@ func VerifyPassword(hashedPassword, plainPassword string) bool {
 		return false
 	}
 
-	salt, err := base64.RawStdEncoding.DecodeString(parts[4])
+	salt, err := base64.RawURLEncoding.DecodeString(parts[4])
 	if err != nil {
 		return false
 	}
 
-	hash, err := base64.RawStdEncoding.DecodeString(parts[5])
+	hash, err := base64.RawURLEncoding.DecodeString(parts[5])
 	if err != nil {
 		return false
 	}
 
-	rehashed := argon2.IDKey([]byte(plainPassword), salt, 3, 32*1024, 4, 32)
-
-	fmt.Println(plainPassword, string(hash))
+	rehashed := hashPassword(plainPassword, salt)
 
 	return bytes.Equal(hash, rehashed)
+}
+
+func hashPassword(password string, salt []byte) []byte {
+	return argon2.IDKey([]byte(password), salt, 2, 1<<15, 1, 32)
 }
 
 func HashPassword(password string) string {
@@ -201,7 +202,7 @@ func HashPassword(password string) string {
 		panic(err)
 	}
 
-	hash := argon2.IDKey([]byte(password), salt, 2, 1<<15, 1, 32)
+	hash := hashPassword(password, salt)
 
 	encodedSalt := base64.RawURLEncoding.EncodeToString(salt)
 	encodedHash := base64.RawURLEncoding.EncodeToString(hash)
@@ -215,4 +216,10 @@ func GetCookieExpiration(rememberMe bool) time.Duration {
 	} else {
 		return time.Hour * 24 * 7
 	}
+}
+
+func GenerateAccountNumber(length int) string {
+	accountId := make([]byte, length/2)
+	rand.Read(accountId)
+	return hex.EncodeToString(accountId)
 }
