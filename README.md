@@ -1,13 +1,81 @@
-# Project country-box
+# Country Box
 
-One Paragraph of project description goes here
+## 🛠️ Tech Stack
+- **Go** (Backend)
+- **Nuxt** (Frontend)
+- **Goose** (Database Migration)
+- **MySQL** (Database)
 
-## Getting Started
+## 📦 Installation
+1. Clone the repository:
+```bash
+git clone https://gitea.jospace.de/Freddy/country-box
+cd country-box
+```
 
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
+2. Install backend dependencies:
+```bash
+go mod tidy
+```
 
-## MakeFile
+3. Install frontend dependencies:
+```bash
+cd frontend
+pnpm install
+```
 
+4. Configure enviroment variables:
+Create a `.env file` based on `.env.example` and set database credentials for the backend.  
+Create a `frontend/.env` file based on `frontend/.env.example` for frontend-specific configurations.
+
+5. Install Goose:
+```bash
+go install github.com/pressly/goose/v3/cmd/goose@latest
+```
+
+## 🏗️ Database Migrations
+1. Create a new migration:
+```bash
+goose create add_users_table sql
+```
+This generates an up/down migration file in the migrations/ folder.
+
+2. Run migrations:
+```bash
+goose up
+```
+
+3. Rollback migrations:
+```bash
+goose down
+```
+
+## 🚀 Running the Project
+
+Run Backend Locally:
+```bash
+go run cmd/api/main.go
+```
+
+Run Frontend Locally:
+```bash
+cd frontend
+pnpm dev
+```
+
+## 📜 Deployment
+Deploy using Systemd:
+1. Copy the `scripts/systemd/countryBox.server` file to `/etc/systemd/system`
+2. Start the servíce:
+```bash
+sudo systemctl start countryBox
+sudo systemctl enable countryBox
+```
+
+## 📜 License
+MIT License. See `LICENSE` for details.
+
+<!-- ## MakeFile
 Run build make command with tests
 ```bash
 make all
@@ -50,4 +118,4 @@ make test
 Clean up binary from the last build:
 ```bash
 make clean
-```
+``` -->
