@@ -1,127 +1,67 @@
 package server
 
 import (
-	"country-box/internal/server/routes"
-	"country-box/internal/server/utils"
+	"country-box/internal/server/api"
+	"country-box/internal/server/controller"
+	"country-box/internal/server/controller/user"
+	"country-box/internal/server/repo"
 	"encoding/json"
-	"fmt"
-	"log"
 	"net/http"
 
-	"github.com/go-chi/chi/v5"
-	"github.com/go-chi/chi/v5/middleware"
-	"github.com/go-chi/cors"
+	"github.com/gin-contrib/cors"
+	"github.com/gin-gonic/gin"
 )
 
 func (s *Server) RegisterRoutes() http.Handler {
-	r := chi.NewRouter()
-	r.Use(middleware.Logger)
 
-	r.Use(cors.Handler(cors.Options{
-		AllowedOrigins:   []string{"https://*", "http://*"},
-		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"},
-		AllowedHeaders:   []string{"Accept", "Authorization", "Content-Type"},
+	s.r.Use(cors.New(cors.Config{
+		AllowOrigins:     []string{"https://*", "http://*"},
+		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"},
+		AllowHeaders:     []string{"Accept", "Authorization", "Content-Type"},
 		AllowCredentials: true,
 		MaxAge:           300,
 	}))
 
-	r.Route("/api/v3", func(r chi.Router) {
-		r.Route("/tlds", func(r chi.Router) {
-			r.Get("/", s.tldsHandler)
-			r.Get("/{tld}", s.tldHandler)
+	tldRepository := repo.NewTldRepository(s.db)
+	userRepository := repo.NewUserRepository(s.db)
+	countryRepository := repo.NewCountryRepository(s.db)
+	geoJsonRepository := repo.NewGeoJsonRepository(s.db)
 
-		})
+	tldController := controller.NewTldController(tldRepository)
+	userController := user.NewUserController(userRepository)
+	countryController := controller.NewCountriesController(countryRepository)
+	geoJsonController := controller.NewGeoJsonController(geoJsonRepository)
 
-		r.Route("/countries", func(r chi.Router) {
-			r.Get("/", s.countriesHandler)
-			r.Get("/{code}", s.countryHandler)
-			r.Get("/names", s.countryNamesHandler)
-		})
-
-		r.Route("/geojson", func(r chi.Router) {
-			r.Get("/{code}", s.geoJsonHandler)
-		})
-
-		r.Mount("/auth", routes.AuthRoutes(s.db))
-	})
-
-	r.Get("/", s.HelloWorldHandler)
-
-	r.Get("/health", s.healthHandler)
-
-	return r
-}
-
-func (s *Server) HelloWorldHandler(w http.ResponseWriter, r *http.Request) {
-	resp := make(map[string]string)
-	resp["message"] = "Hello World"
-
-	jsonResp, err := json.Marshal(resp)
-	if err != nil {
-		log.Fatalf("error handling JSON marshal. Err: %v", err)
+	authRoute := &api.AuthHandler{
+		UserController: userController,
 	}
 
-	_, _ = w.Write(jsonResp)
-}
-
-func (s *Server) healthHandler(w http.ResponseWriter, r *http.Request) {
-	jsonResp, _ := json.Marshal(s.db.Health())
-	_, _ = w.Write(jsonResp)
-}
-
-func (s *Server) tldsHandler(w http.ResponseWriter, r *http.Request) {
-	resp, err := s.db.GetTlds()
-	if err != nil {
-		http.Error(w, fmt.Sprintf("Error fetching TLDs: %v", err), http.StatusInternalServerError)
-		return
+	tldRoute := &api.TldsHandler{
+		TldController: tldController,
 	}
-	utils.WriteJSONResponse(w, resp, http.StatusOK)
+
+	countryRoute := &api.CountriesHandler{
+		ContriesController: countryController,
+	}
+
+	geoJsonRoute := &api.GeoJsonHandler{
+		GeoJsonController: geoJsonController,
+	}
+
+	apiGroup := s.r.Group("/api/v3")
+	{
+		authRoute.AuthRoutes(apiGroup)
+		tldRoute.TldRoutes(apiGroup)
+		countryRoute.CountryRoutes(apiGroup)
+		geoJsonRoute.GeoJsonRoutes(apiGroup)
+	}
+
+	s.r.GET("/health", s.healthHandler)
+
+	return s.r
 }
 
-func (s *Server) tldHandler(w http.ResponseWriter, r *http.Request) {
-	tld := chi.URLParam(r, "tld")
-	resp, err := s.db.GetTld(tld)
-	if err != nil {
-		http.Error(w, fmt.Sprintf("Error fetching TLD: %v", err), http.StatusInternalServerError)
-		return
-	}
-	utils.WriteJSONResponse(w, resp, http.StatusOK)
-}
-
-func (s *Server) countriesHandler(w http.ResponseWriter, r *http.Request) {
-	resp, err := s.db.GetCountries()
-	if err != nil {
-		http.Error(w, fmt.Sprintf("Error fetching Countries: %v", err), http.StatusInternalServerError)
-		return
-	}
-	utils.WriteJSONResponse(w, resp, http.StatusOK)
-}
-
-func (s *Server) countryHandler(w http.ResponseWriter, r *http.Request) {
-	code := chi.URLParam(r, "code")
-	resp, err := s.db.GetCountry(code)
-	if err != nil {
-		http.Error(w, fmt.Sprintf("Error fetching Country: %v", err), http.StatusInternalServerError)
-		return
-	}
-	utils.WriteJSONResponse(w, resp, http.StatusOK)
-}
-
-func (s *Server) countryNamesHandler(w http.ResponseWriter, r *http.Request) {
-	resp, err := s.db.GetCountryNames()
-	if err != nil {
-		http.Error(w, fmt.Sprintf("Error fetching Country names: %v", err), http.StatusInternalServerError)
-		return
-	}
-	utils.WriteJSONResponse(w, resp, http.StatusOK)
-}
-
-func (s *Server) geoJsonHandler(w http.ResponseWriter, r *http.Request) {
-	code := chi.URLParam(r, "code")
-	resp, err := s.db.GetGeoJson(code)
-	if err != nil {
-		http.Error(w, fmt.Sprintf("Error fetching GeoJson: %v", err), http.StatusInternalServerError)
-		return
-	}
-	utils.WriteJSONResponse(w, resp, http.StatusOK)
+func (s *Server) healthHandler(c *gin.Context) {
+	jsonResp, _ := json.Marshal(s.dbHealth())
+	_, _ = c.Writer.Write(jsonResp)
 }
