@@ -13,9 +13,9 @@ async function loadLocaleFiles() {
   return locales
 }
 
-const locales = await loadLocaleFiles() as { [x: string]: DefaultLocaleMessageSchema }
 
-export default defineI18nConfig(() => {
+export default defineI18nConfig(async () => {
+  const locales = await loadLocaleFiles() as { [x: string]: DefaultLocaleMessageSchema }
   return {
     // legacy: false,
     locale: "de",
