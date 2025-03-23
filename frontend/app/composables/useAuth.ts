@@ -13,7 +13,7 @@ export const useAuth = () => {
   }
 
   const login = async (email: string, password: string, rememberMe: boolean) => {
-    const data = await authApi<{user: User}>("/login", {
+    const data = await authApi<{ user: User }>("/login", {
       method: "POST",
       body: {
         email,
@@ -28,7 +28,7 @@ export const useAuth = () => {
   }
 
   const signup = async (email: string, password: string) => {
-    const data = await authApi<{user: User}>("/signup",{
+    const data = await authApi<{ user: User }>("/signup", {
       method: "POST",
       body: {
         email,
