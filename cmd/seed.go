@@ -1,0 +1,170 @@
+//go:build ignore
+
+package main
+
+import (
+	"country-box/internal/server"
+	"country-box/internal/server/controller/user"
+	"encoding/json"
+	"io/ioutil"
+	"log"
+	"os"
+	"path/filepath"
+	"strings"
+
+	"github.com/jmoiron/sqlx"
+)
+
+var (
+	dbname   = os.Getenv("BLUEPRINT_DB_DATABASE")
+	password = os.Getenv("BLUEPRINT_DB_PASSWORD")
+	username = os.Getenv("BLUEPRINT_DB_USERNAME")
+	port     = os.Getenv("BLUEPRINT_DB_PORT")
+	host     = os.Getenv("BLUEPRINT_DB_HOST")
+)
+
+type Seeder struct {
+	db *sqlx.DB
+}
+
+func main() {
+	db := server.SetupDatabase()
+
+	seeder := &Seeder{db}
+
+	seeder.seedDatabase()
+}
+
+func (seeder *Seeder) seedDatabase() {
+	log.Println("Seeding database...")
+
+	if _, err := seeder.db.Exec("SET FOREIGN_KEY_CHECKS = 0;"); err != nil {
+		log.Printf("Failed to disable Foreign key check: %v", err)
+	}
+
+	// seeder.seedUsers()
+	seeder.seedCountries()
+	seeder.seedGeoJson()
+
+	if _, err := seeder.db.Exec("SET FOREIGN_KEY_CHECKS = 1;"); err != nil {
+		log.Printf("Failed to enable Foreign key check: %v", err)
+	}
+}
+
+func (seeder *Seeder) seedUsers() {
+	log.Println("Seeding users...")
+	email := "jonas@jospace.de"
+	password := user.Hashpassword("TestPassword")
+
+	if _, err := seeder.db.Exec("DELETE FROM users"); err != nil {
+		log.Println("Failed to clear users:", err)
+		return
+	}
+
+	query := `INSERT INTO users (email, password) VALUES (?, ?)`
+	if _, err := seeder.db.Exec(query, email, password); err != nil {
+		log.Println("Failed to seed users:", err)
+		return
+	}
+
+	log.Println("Successfully completed seeding users")
+}
+
+type Country struct {
+	Name        string   `json:"name"`
+	Cca3        string   `json:"cca3"`
+	Cca2        string   `json:"cca2"`
+	Capital     string   `json:"capital"`
+	Independent bool     `json:"independent"`
+	Region      string   `json:"region"`
+	Subregion   string   `json:"subregion"`
+	CallingCode string   `json:"callingCode"`
+	UnMember    bool     `json:"unMember"`
+	Tlds        []string `json:"tlds"`
+}
+
+func (seeder *Seeder) seedCountries() {
+	log.Println("Seeding countries...")
+
+	var countries []Country
+
+	if _, err := seeder.db.Exec("DELETE FROM countries"); err != nil {
+		log.Println("Failed to clear countries:", err)
+		return
+	}
+
+	countryFile, err := os.ReadFile("./data/countries.json")
+	if err != nil {
+		log.Printf("Failed to load countries.json file: %v", err)
+		return
+	}
+
+	if err := json.Unmarshal(countryFile, &countries); err != nil {
+		log.Printf("Failed to unmarshall countries.json: %v", err)
+		return
+	}
+
+	query := `INSERT INTO countries (name, capital, unMember, region, subregion, cca3, cca2, callingCode) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`
+
+	for _, country := range countries {
+		if _, err := seeder.db.Exec(query, country.Name, country.Capital, country.UnMember, country.Region, country.Subregion, country.Cca3, country.Cca2, country.CallingCode); err != nil {
+			log.Printf("Failed to seed geoJson: %v", err)
+			return
+		}
+	}
+
+	log.Println("Successfully completed seeding countries")
+}
+
+func (seeder *Seeder) seedGeoJson() {
+	log.Println("Seeding geoJson...")
+
+	geoJson := loadGeoJson("./data/geojson")
+
+	if _, err := seeder.db.Exec("DELETE FROM geoJson"); err != nil {
+		log.Println("Failed to clear geoJson:", err)
+		return
+	}
+
+	for file, content := range geoJson {
+		name := strings.ToLower(strings.Split(filepath.Base(file), ".")[0])
+		if len(name) > 2 {
+			continue
+		}
+
+		if _, err := seeder.db.Exec("INSERT INTO geoJson (countryCode, geoJson) VALUES (?, ?)", name, content); err != nil {
+			log.Printf("Failed to seed geoJson: %v", err)
+			return
+		}
+
+	}
+
+	log.Println("Successfully completed seeding geoJson")
+}
+
+func loadGeoJson(path string) map[string][]byte {
+	geoJSONFiles := make(map[string][]byte)
+
+	files, err := os.ReadDir(path)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	for _, file := range files {
+		if !file.IsDir() && filepath.Ext(file.Name()) == ".json" {
+			filePath := filepath.Join(path, file.Name())
+
+			content, err := ioutil.ReadFile(filePath)
+			if err != nil {
+				log.Printf("Error reading file %s: %v", file.Name(), err)
+				continue
+			}
+
+			geoJSONFiles[file.Name()] = content
+
+			// fmt.Printf("Loaded file: %s, Size: %d bytes\n", file.Name(), len(content))
+		}
+	}
+
+	return geoJSONFiles
+}
