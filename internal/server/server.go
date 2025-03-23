@@ -34,7 +34,7 @@ var (
 func NewServer() *http.Server {
 	port, _ := strconv.Atoi(os.Getenv("PORT"))
 
-	db := setupDatabase()
+	db := SetupDatabase()
 	defer db.Close()
 
 	NewServer := &Server{
@@ -58,7 +58,7 @@ func NewServer() *http.Server {
 //go:embed migrations/*.sql
 var embedMigrations embed.FS
 
-func setupDatabase() *sqlx.DB {
+func SetupDatabase() *sqlx.DB {
 	log.Println("Setting up db")
 
 	db, err := sqlx.Open("mysql", fmt.Sprintf("%s:%s@tcp(%s:%s)/%s", username, password, host, port, dbname))
