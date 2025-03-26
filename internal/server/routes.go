@@ -5,7 +5,6 @@ import (
 	"country-box/internal/server/controller"
 	"country-box/internal/server/controller/user"
 	"country-box/internal/server/repo"
-	"encoding/json"
 	"net/http"
 
 	"github.com/gin-contrib/cors"
@@ -26,11 +25,13 @@ func (s *Server) RegisterRoutes() http.Handler {
 	userRepository := repo.NewUserRepository(s.db)
 	countryRepository := repo.NewCountryRepository(s.db)
 	geoJsonRepository := repo.NewGeoJsonRepository(s.db)
+	boxRepository := repo.NewBoxRepository(s.db)
 
 	tldController := controller.NewTldController(tldRepository)
 	userController := user.NewUserController(userRepository)
 	countryController := controller.NewCountriesController(countryRepository)
 	geoJsonController := controller.NewGeoJsonController(geoJsonRepository)
+	boxController := controller.NewBoxController(boxRepository)
 
 	authRoute := &api.AuthHandler{
 		UserController: userController,
@@ -48,12 +49,18 @@ func (s *Server) RegisterRoutes() http.Handler {
 		GeoJsonController: geoJsonController,
 	}
 
+	boxRoute := &api.BoxHandler{
+		BoxController: boxController,
+		AuthHandler:   authRoute,
+	}
+
 	apiGroup := s.r.Group("/api/v3")
 	{
 		authRoute.AuthRoutes(apiGroup)
 		tldRoute.TldRoutes(apiGroup)
 		countryRoute.CountryRoutes(apiGroup)
 		geoJsonRoute.GeoJsonRoutes(apiGroup)
+		boxRoute.BoxRoutes(apiGroup)
 	}
 
 	s.r.GET("/health", s.healthHandler)
@@ -62,6 +69,6 @@ func (s *Server) RegisterRoutes() http.Handler {
 }
 
 func (s *Server) healthHandler(c *gin.Context) {
-	jsonResp, _ := json.Marshal(s.dbHealth())
-	_, _ = c.Writer.Write(jsonResp)
+	dbHealth := s.dbHealth()
+	c.JSON(http.StatusOK, dbHealth)
 }

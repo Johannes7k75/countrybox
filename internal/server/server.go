@@ -35,7 +35,7 @@ func NewServer() *http.Server {
 	port, _ := strconv.Atoi(os.Getenv("PORT"))
 
 	db := SetupDatabase()
-	defer db.Close()
+	// defer db.Close()
 
 	NewServer := &Server{
 		port: port,
@@ -52,6 +52,8 @@ func NewServer() *http.Server {
 		WriteTimeout: 30 * time.Second,
 	}
 
+	log.Printf("Server started: 127.0.0.1%s", server.Addr)
+
 	return server
 }
 
@@ -61,7 +63,9 @@ var embedMigrations embed.FS
 func SetupDatabase() *sqlx.DB {
 	log.Println("Setting up db")
 
-	db, err := sqlx.Open("mysql", fmt.Sprintf("%s:%s@tcp(%s:%s)/%s", username, password, host, port, dbname))
+	DSN := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s", username, password, host, port, dbname)
+
+	db, err := OpenLoop("mysql", DSN, 1*time.Minute)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -92,6 +96,27 @@ func SetupDatabase() *sqlx.DB {
 	return db
 }
 
+func OpenLoop(driver, DSN string, timeout time.Duration) (*sqlx.DB, error) {
+	ticker := time.NewTicker(1 * time.Second)
+	defer ticker.Stop()
+
+	timeoutExceeded := time.After(timeout)
+	for {
+		select {
+		case <-timeoutExceeded:
+			return nil, fmt.Errorf("db connection failed after %s timeout", timeout)
+
+		case <-ticker.C:
+			db, err := sqlx.Open(driver, DSN)
+			if err == nil {
+				return db, nil
+			}
+			log.Println(fmt.Sprintf("failed to connect to db %s: %s", DSN, err))
+		}
+	}
+
+}
+
 func (s *Server) dbHealth() map[string]string {
 	ctx, cancel := context.WithTimeout(context.Background(), 1*time.Second)
 	defer cancel()
@@ -102,7 +127,7 @@ func (s *Server) dbHealth() map[string]string {
 	if err != nil {
 		stats["status"] = "down"
 		stats["error"] = fmt.Sprintf("db down: %v", err)
-		log.Fatalf("db down: %v", err)
+		log.Printf("db down: %v", err)
 		return stats
 	}
 

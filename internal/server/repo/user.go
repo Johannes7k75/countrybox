@@ -60,14 +60,19 @@ func (repo *UserRepository) GetUserByEmail(email string) (User, error) {
 	var user User
 	var rolesData []byte
 
-	err := repo.db.Get(user, "SELECT id, email, roles, password FROM users WHERE email = $1", email)
+	err := repo.db.QueryRowx("SELECT id, email, roles, password FROM users WHERE email = ?", email).
+		Scan(&user.Id, &user.Email, &rolesData, &user.Password)
 	if err != nil {
 		return User{}, fmt.Errorf("failed to execute query: %w", err)
 	}
 
-	err = json.Unmarshal(rolesData, &user.Roles)
-	if err != nil {
-		return User{}, fmt.Errorf("failed to unmarschal roles JSON: %w", err)
+	if len(rolesData) == 0 {
+		user.Roles = []UserRole{}
+	} else {
+		err = json.Unmarshal(rolesData, &user.Roles)
+		if err != nil {
+			return User{}, fmt.Errorf("failed to unmarschal roles JSON: %w", err)
+		}
 	}
 
 	return user, nil

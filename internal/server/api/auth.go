@@ -2,6 +2,8 @@ package api
 
 import (
 	"country-box/internal/server/controller/user"
+	"fmt"
+	"log"
 	"net/http"
 	"os"
 
@@ -24,7 +26,7 @@ var (
 func (h *AuthHandler) AuthRoutes(R *gin.RouterGroup) {
 	authGroup := R.Group("/auth")
 	{
-		authGroup.GET("/me", h.userAuthHandler, h.meHandler)
+		authGroup.GET("/me", h.UserAuthMiddleware, h.meHandler)
 		authGroup.GET("/accountId", h.accountIdHandler)
 
 		authGroup.POST("/login", h.loginHandler)
@@ -33,8 +35,11 @@ func (h *AuthHandler) AuthRoutes(R *gin.RouterGroup) {
 	}
 }
 
-func (h *AuthHandler) userAuthHandler(c *gin.Context) {
+func (h *AuthHandler) UserAuthMiddleware(c *gin.Context) {
+	log.Println("User Auth Handler")
 	user, err := h.UserController.GetUserFromSession(c, cookieName, cookieSecret)
+
+	fmt.Println(user)
 
 	if err != nil {
 		http.Error(c.Writer, "Internal Server Error", http.StatusInternalServerError)
@@ -84,12 +89,12 @@ func (h *AuthHandler) loginHandler(c *gin.Context) {
 
 	passwordUser, err := h.UserController.UserRepo.GetUserByEmail(body.Email)
 	if err != nil {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "Bad credentials"})
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Bad credentials", "debug": fmt.Sprintf("Getting user: %s", err)})
 		return
 	}
 
-	if user.VerifyPassword(passwordUser.Password, body.Password) {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "Bad credentials"})
+	if !user.VerifyPassword(passwordUser.Password, body.Password) {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Bad credentials", "debug": "Verify password"})
 		return
 	}
 

@@ -129,6 +129,8 @@ func Unsign(cookieValue, secret string) ([]byte, error) {
 		return nil, err
 	}
 
+	fmt.Println(cookieValue, expectedSignature)
+
 	if cookieValue != expectedSignature {
 		return nil, fmt.Errorf("invalid cookie signature")
 	}
@@ -163,7 +165,7 @@ func (c *UserController) Login(ctx *gin.Context, user repo.User, rememberMe bool
 }
 
 func (c *UserController) GetUserFromContext(ctx *gin.Context) *repo.User {
-	fmt.Printf("User Context %s\n", ctx.Request.Context().Value(userContextKey))
+	fmt.Printf("User Context %v\n", ctx.Request.Context().Value(userContextKey))
 	user, _ := ctx.Request.Context().Value(userContextKey).(*repo.User)
 	return user
 }

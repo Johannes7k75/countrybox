@@ -3,6 +3,8 @@ package api
 import (
 	"country-box/internal/server/controller"
 	"country-box/internal/server/repo"
+	"fmt"
+	"log"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -19,6 +21,12 @@ func (h *CountriesHandler) CountryRoutes(R *gin.RouterGroup) {
 		countryGroup.GET("/:code", h.countryRoute)
 		countryGroup.GET("/names", h.countryNamesRoute)
 	}
+
+	countries, err := h.ContriesController.CountriesRepo.GetCountries()
+	if err != nil {
+		fmt.Println(err)
+	}
+	fmt.Printf("Countries: %d\n", len(countries))
 }
 
 func (h *CountriesHandler) countryRoute(c *gin.Context) {
@@ -34,6 +42,7 @@ func (h *CountriesHandler) countryRoute(c *gin.Context) {
 func (h *CountriesHandler) countriesRoute(c *gin.Context) {
 	countries, err := h.ContriesController.CountriesRepo.GetCountries()
 	if err != nil {
+		log.Println(err)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Internal Server Error"})
 		return
 	}
