@@ -6,7 +6,6 @@ import (
 	"country-box/internal/server"
 	"country-box/internal/server/controller/user"
 	"encoding/json"
-	"io/ioutil"
 	"log"
 	"os"
 	"path/filepath"
@@ -42,7 +41,7 @@ func (seeder *Seeder) seedDatabase() {
 		log.Printf("Failed to disable Foreign key check: %v", err)
 	}
 
-	// seeder.seedUsers()
+	seeder.seedUsers()
 	seeder.seedCountries()
 	seeder.seedGeoJson()
 
@@ -154,7 +153,7 @@ func loadGeoJson(path string) map[string][]byte {
 		if !file.IsDir() && filepath.Ext(file.Name()) == ".json" {
 			filePath := filepath.Join(path, file.Name())
 
-			content, err := ioutil.ReadFile(filePath)
+			content, err := os.ReadFile(filePath)
 			if err != nil {
 				log.Printf("Error reading file %s: %v", file.Name(), err)
 				continue
