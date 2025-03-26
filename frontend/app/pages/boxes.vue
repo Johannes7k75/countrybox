@@ -4,12 +4,12 @@ definePageMeta({
 });
 
 const {data: countryNames} = await useLazyAsyncData("country:names", async()=>{
-  const names = await $fetch("/api/v2/flags/names")
+  const names = await useApi().fetch<{cca3: string, name: string}[]>("/flags/names")
   return new Map(names.map(({cca3, name})=>([cca3, name])))
 })
 
 const {data: countryTlds} = await useLazyAsyncData("country:tlds", async()=>{
-  const tlds = await $fetch("/api/v2/tlds/")
+  const tlds = await useApi().fetch<{countryId: number, tld: string}[]>("/tlds")
   return new Map(tlds.map(({countryId, tld})=>([countryId.toString(),tld])))
 })
 
