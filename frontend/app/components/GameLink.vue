@@ -26,7 +26,6 @@ const props = defineProps<LinkProps>();
   </UButton>
 
   <template #content v-if="locked">
-    {{ locked }}
     <span>Youre not signed in!</span>
   </template>
   </LazyUTooltip>
