@@ -16,7 +16,16 @@ jobs:
     steps:
       - name: 📥 Check out repository
         uses: actions/checkout@v4
-      - uses: actions/setup-go@v5
+      
+      - name: 📦 Install go
+        uses: actions/setup-go@v5
         with:
           go-version-file: 'go.mod'
-      - run: go version
+      
+      - name: 🏗 Build Backend
+        run: go build -o main cmd/api/main.go
+
+      - name: ☁️ Upload artifact
+        uses: christopherhx/gitea-upload-artifact@v4
+        with:
+          path: main
