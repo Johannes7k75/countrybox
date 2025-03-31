@@ -1,0 +1,43 @@
+services:
+  web:
+    build:
+      context: frontend
+      dockerfile: Dockerfile
+    ports: 
+      - 8080:3000
+    environment:
+      NUXT_SESSION_PASSWORD: ""
+      DB_URL: mysql://country:Country!Box@database:3306/countryBox
+    networks:
+      default:
+    depends_on:
+      - database 
+
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      BLUEPRINT_DB_HOST: database
+      BLUEPRINT_DB_PORT: 3306
+      BLUEPRINT_DB_DATABASE: countryBox
+      BLUEPRINT_DB_USERNAME: country
+      BLUEPRINT_DB_PASSWORD: Country!Box
+      BLUEPRINT_DB_ROOT_PASSWORD: root
+    networks:
+        default:  
+    depends_on:
+      - database 
+
+  database:
+    image: mysql:8.2
+    environment:
+      MYSQL_DATABASE: countryBox
+      MYSQL_USER: country
+      MYSQL_PASSWORD: Country!Box
+      MYSQL_ROOT_PASSWORD: root
+    networks:
+      default:  
+
+networks:
+  default:
