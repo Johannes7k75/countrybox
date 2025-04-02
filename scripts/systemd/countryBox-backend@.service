@@ -1,0 +1,17 @@
+[Unit]
+Description=CountryBox Backend Service %i
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+ExecStart=/home/deploy/production/countryBox/backend/main
+WorkingDirectory=/home/deploy/production/countryBox/backend
+User=deploy
+Group=deploy
+Environment="PORT=%i"
+EnvironmentFile=/home/deploy/production/countryBox/backend.env
+Restart=on-failure
+TimeoutSec=30
+
+[Install]
+WantedBy=multi-user.target

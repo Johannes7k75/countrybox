@@ -4,96 +4,75 @@
 set -e
 
 # Check if commit hash is passed as an argument
-if [ -z "$1" ]; then
-  echo "Usage: $0 <commit-hash>"
+if [ -z "$2" ]; then
+  echo "Usage: $0 <backend|frontend> <commit-hash>"
   exit 1
 fi
 
-COMMIT_HASH=$1
-RELEASES_DIR="/home/deploy/releases"
-DEPLOY_BIN="/home/deploy/production/countryBox"
-SERVICE_NAME="countryBox"
-BINARY_NAME="countryBox-${COMMIT_HASH}"
-declare -a PORTS=("3280") # PORTS=("3000" "3001" "3002")
+DEPLOY_TYPE=$1
+COMMIT_HASH=$2
+RELEASES_DIR="/home/deploy/releases/countryBox/${COMMIT_HASH}"
+DEPLOY_DIR="/home/deploy/production/countryBox/${DEPLOY_TYPE}"
+SERVICE_NAME="countryBox-${DEPLOY_TYPE}"
 
-if [ ! -d "$DEPLOY_BIN" ]; then
-    echo "Deploy dir ${DEPLOY_BIN} doesnt exists, it gets created."
-    mkdir -p "${DEPLOY_BIN}"
-fi
-
-# Check if the binary exists
-if [ ! -d "${RELEASES_DIR}/${BINARY_NAME}" ]; then
-  echo "Binary ${BINARY_NAME} not found in ${RELEASES_DIR}"
-  exit 1
-fi
-
-# Keep a reference to the previous binary from the symlink
-if [ -L "${DEPLOY_BIN}" ]; then
-  PREVIOUS=$(readlink -f $DEPLOY_BIN)
-  echo "Current binary is ${PREVIOUS}, saved for rollback."
+if [ "$DEPLOY_TYPE" == "backend" ]; then
+  DEPLOY_TARGET="${RELEASES_DIR}/backend/main"
+elif [ "$DEPLOY_TYPE" == "frontend" ]; then
+  DEPLOY_TARGET="${RELEASES_DIR}/frontend"
 else
-  echo "No symbolic link found, no previous binary to backup."
+  echo "Invalid deployment type: ${DEPLOY_TYPE}. Use 'backend' or 'frontend'."
+  exit 1
+fi
+
+# Ensure deployment target exists
+if [ ! -e "$DEPLOY_TARGET" ]; then
+  echo "Error: Deployment target ${DEPLOY_TARGET} not found."
+  exit 1
+fi
+
+# Keep a reference to the previous deployment
+if [ -L "${DEPLOY_DIR}" ]; then
+  PREVIOUS=$(readlink -f "${DEPLOY_DIR}")
+  echo "Current deployment is ${PREVIOUS}, saved for rollback."
+else
+  echo "No symbolic link found, no previous deployment to backup."
   PREVIOUS=""
 fi
 
 rollback_deployment() {
   if [ -n "$PREVIOUS" ]; then
-    echo "Rolling back to previous binary: ${PREVIOUS}"
-    ln -sfn "${PREVIOUS}" "${DEPLOY_BIN}"
+    echo "Rolling back to previous deployment: ${PREVIOUS}"
+    ln -sfn "${PREVIOUS}" "${DEPLOY_DIR}"
   else
-    echo "No previous binary to roll back to."
+    echo "No previous deployment to roll back to."
   fi
 
-  # wait to restart the services
-  sleep 10
-
-  # Restart all services with the previous binary
-  for port in "${PORTS[@]}"; do
-    SERVICE="${SERVICE_NAME}@${port}.service"
-    echo "Restarting $SERVICE..."
-    sudo systemctl restart $SERVICE
-  done
+  echo "Restarting ${SERVICE_NAME}..."
+  sudo systemctl restart "${SERVICE_NAME}"
 
   echo "Rollback completed."
 }
 
-# Copy the binary to the deployment directory
-echo "Promoting ${BINARY_NAME} to ${DEPLOY_BIN}..."
-ln -sfn "${RELEASES_DIR}/${BINARY_NAME}" "${DEPLOY_BIN}"
+# Deploy new version
+echo "Deploying ${DEPLOY_TYPE}..."
+ln -sfn "${DEPLOY_TARGET}" "${DEPLOY_DIR}"
 
-WAIT_TIME=5
-restart_service() {
-  local port=$1
-  local SERVICE="${SERVICE_NAME}@${port}.service"
-  echo "Restarting ${SERVICE}..."
+# Restart service
+echo "Restarting ${SERVICE_NAME}..."
+if ! sudo systemctl restart "${SERVICE_NAME}"; then
+  echo "Error: Failed to restart ${SERVICE_NAME}. Rolling back deployment."
+  rollback_deployment
+  exit 1
+fi
 
-  # Restart the service
-  if ! sudo systemctl restart "$SERVICE"; then
-    echo "Error: Failed to restart ${SERVICE}. Rolling back deployment."
+# Wait a few seconds for the service to start
+sleep 5
 
-    # Call the rollback function
-    rollback_deployment
-    exit 1
-  fi
+# Verify service status
+if ! systemctl is-active --quiet "${SERVICE_NAME}"; then
+  echo "Error: ${SERVICE_NAME} failed to start correctly. Rolling back deployment."
+  rollback_deployment
+  exit 1
+fi
 
-  # Wait a few seconds to allow the service to fully start
-  echo "Waiting for ${SERVICE} to fully start..."
-  sleep $WAIT_TIME
-
-  # Check the status of the service
-  if ! systemctl is-active --quiet "${SERVICE}"; then
-    echo "Error: ${SERVICE} failed to start correctly. Rolling back deployment."
-
-    # Call the rollback function
-    rollback_deployment
-    exit 1
-  fi
-
-  echo "${SERVICE}.service restarted successfully."
-}
-
-for port in "${PORTS[@]}"; do
-  restart_service $port
-done
-
-echo "Deployment completed successfully."
+echo "Deployment of ${DEPLOY_TYPE} completed successfully."

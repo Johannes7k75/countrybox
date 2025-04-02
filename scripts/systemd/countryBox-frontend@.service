@@ -1,0 +1,17 @@
+[Unit]
+Description=CountryBox Frontend Service %i
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+ExecStart=/usr/bin/node /home/deploy/production/countryBox/frontend/server/index.mjs
+WorkingDirectory=/home/deploy/production/countryBox/frontend
+User=deploy
+Group=deploy
+Environment="PORT=%i"
+EnvironmentFile=/home/deploy/production/countryBox/frontend.env
+Restart=on-failure
+TimeoutSec=30
+
+[Install]
+WantedBy=multi-user.target
