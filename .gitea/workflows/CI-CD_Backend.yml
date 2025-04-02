@@ -33,7 +33,8 @@ jobs:
           mkdir -p zip_temp/migrations
           cp main zip_temp
           cp internal/server/migrations/*.sql zip_temp/migrations
-          zip -r archive.zip zip_temp/*
+          # zip -r archive.zip zip_temp/*
+          (cd zip_temp && zip -r - .) > archive.zip
           rm -r zip_temp
 
       - name: ☁️ Upload artifact
