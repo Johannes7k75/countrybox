@@ -35,7 +35,7 @@ jobs:
           cp internal/server/migrations/*.sql zip_temp/migrations
           # zip -r archive.zip zip_temp/*
           (cd zip_temp && zip -r - .) > archive.zip
-          rm -r zip_temp
+          # rm -r zip_temp
 
       - name: ☁️ Upload artifact
         uses: christopherhx/gitea-upload-artifact@v4
