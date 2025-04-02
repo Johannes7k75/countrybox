@@ -28,12 +28,21 @@ jobs:
       - name: 🏗 Build Backend
         run: go build -o main cmd/api/main.go
 
+      - name: 🗜 Create ZIP Archive
+        run: |
+          mkdir -p zip_temp/migrations
+          cp tmp/main zip_temp
+          cp internal/server2/migartions/*.sql zip_temp/migrations
+          zip -r archive.zip -j zip_temp/*
+          rm -r zip_temp
+
       - name: ☁️ Upload artifact
         uses: christopherhx/gitea-upload-artifact@v4
         with:
           path: |
             main
             internal/server/migrations
+            archive.zip
 
       - name: 🔑 Configure SSH for Deployment
         env:
