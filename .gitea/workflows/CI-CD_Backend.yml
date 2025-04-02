@@ -7,7 +7,7 @@ on:
     paths:
       - cmd/**
       - internal/**
-      - .gitea/workflows/**
+      - .gitea/workflows/*Backend.yml
 
 jobs:
   deploy-backend:
