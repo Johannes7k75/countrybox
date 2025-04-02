@@ -41,9 +41,7 @@ jobs:
         uses: christopherhx/gitea-upload-artifact@v4
         with:
           path: |
-            main
-            internal/server/migrations
-            archive.zip
+            zip_temp
 
       - name: 🔑 Configure SSH for Deployment
         env:
