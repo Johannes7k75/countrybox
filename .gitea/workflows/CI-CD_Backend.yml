@@ -32,7 +32,7 @@ jobs:
         run: |
           mkdir -p zip_temp/migrations
           cp main zip_temp
-          cp internal/server/migartions/*.sql zip_temp/migrations
+          cp internal/server/migrations/*.sql zip_temp/migrations
           zip -r archive.zip -j zip_temp/*
           rm -r zip_temp
 
