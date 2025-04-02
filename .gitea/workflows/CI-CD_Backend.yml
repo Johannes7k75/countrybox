@@ -31,4 +31,28 @@ jobs:
       - name: ☁️ Upload artifact
         uses: christopherhx/gitea-upload-artifact@v4
         with:
-          path: main
+          path: |
+            main
+            internal/server/migrations
+
+      - name: 🔑 Configure SSH for Deployment
+        env:
+          DEPLOY_SSH_PRIVATE_KEY: ${{ secrets.DEPLOY_SSH_PRIVATE_KEY }}
+        run: |
+          mkdir -p ~/.ssh
+          echo "$DEPLOY_SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+
+          echo "Host *" > ~/.ssh/config
+          echo "  StrictHostKeyChecking no" >> ~/.ssh/config
+          echo "  UserKnownHostsFile /dev/null" >> ~/.ssh/config
+
+      - name: 📤 Deploy via SCP
+        env:
+          USER: deploy
+          HOST: jospace.de
+          DIR: /home/deploy/releases/countryBox/${{ GITHUB_SHA }}/backend
+        run: |
+          ssh -i ~/.ssh/id_rsa $USER@$HOST "mkdir -p $DIR"
+          scp -i ~/.ssh/id_rsa main $USER@$HOST:$DIR
+          ssh -i ~/.ssh/id_rsa $USER@$HOST 'bash -s' < ./scripts/deploy.sh backend $GITHUB_SHA
