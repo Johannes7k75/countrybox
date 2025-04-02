@@ -31,7 +31,7 @@ jobs:
       - name: 🗜 Create ZIP Archive
         run: |
           mkdir -p zip_temp/migrations
-          cp tmp/main zip_temp
+          cp main zip_temp
           cp internal/server2/migartions/*.sql zip_temp/migrations
           zip -r archive.zip -j zip_temp/*
           rm -r zip_temp
