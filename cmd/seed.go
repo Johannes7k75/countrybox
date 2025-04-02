@@ -14,14 +14,6 @@ import (
 	"github.com/jmoiron/sqlx"
 )
 
-var (
-	dbname   = os.Getenv("BLUEPRINT_DB_DATABASE")
-	password = os.Getenv("BLUEPRINT_DB_PASSWORD")
-	username = os.Getenv("BLUEPRINT_DB_USERNAME")
-	port     = os.Getenv("BLUEPRINT_DB_PORT")
-	host     = os.Getenv("BLUEPRINT_DB_HOST")
-)
-
 type Seeder struct {
 	db *sqlx.DB
 }
@@ -43,6 +35,7 @@ func (seeder *Seeder) seedDatabase() {
 
 	seeder.seedUsers()
 	seeder.seedCountries()
+	seeder.seedTlds()
 	seeder.seedGeoJson()
 
 	if _, err := seeder.db.Exec("SET FOREIGN_KEY_CHECKS = 1;"); err != nil {
@@ -113,6 +106,41 @@ func (seeder *Seeder) seedCountries() {
 	}
 
 	log.Println("Successfully completed seeding countries")
+}
+
+func (seeder *Seeder) seedTlds() {
+	log.Println("Seeding tlds...")
+
+	var countries []Country
+
+	if _, err := seeder.db.Exec("DELETE FROM tld"); err != nil {
+		log.Println("Failed to clear countries:", err)
+		return
+	}
+
+	countryFile, err := os.ReadFile("./data/countries.json")
+	if err != nil {
+		log.Printf("Failed to load countries.json file: %v", err)
+		return
+	}
+
+	if err := json.Unmarshal(countryFile, &countries); err != nil {
+		log.Printf("Failed to unmarshall countries.json: %v", err)
+		return
+	}
+
+	query := `INSERT INTO tld (tld, countryCode) VALUES (?, ?)`
+
+	for _, country := range countries {
+		for _, tld := range country.Tlds {
+			if _, err := seeder.db.Exec(query, tld, country.Cca2); err != nil {
+				log.Printf("Failed to seed tld: %v", err)
+				return
+			}
+		}
+	}
+
+	log.Println("Successfully completed seeding tlds")
 }
 
 func (seeder *Seeder) seedGeoJson() {
