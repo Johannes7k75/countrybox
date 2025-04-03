@@ -59,7 +59,7 @@ ln -sfn "${DEPLOY_TARGET}" "${DEPLOY_DIR}"
 
 # Restart service
 echo "Restarting ${SERVICE_NAME}..."
-if ! sudo systemctl restart "${SERVICE_NAME}"; then
+if ! sudo systemctl restart "${SERVICE_NAME}.service"; then
   echo "Error: Failed to restart ${SERVICE_NAME}. Rolling back deployment."
   rollback_deployment
   exit 1
