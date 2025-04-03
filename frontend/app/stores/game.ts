@@ -142,14 +142,17 @@ export const useGameStore = defineStore("gameStore", {
     },
 
     async getRoundOptions() {
-      const roundData = await $fetch("/api/game", { method: "POST", body: { roundId: this.roundId } });
+      const roundData = await useApi().fetch("/game/options",{query: {
+        roundId: this.roundId
+      }})
+      // const roundData = await $fetch("/api/game", { method: "POST", body: { roundId: this.roundId } });
 
       const options: GameOption[] = roundData!.map((r) => ({
         name: r.name,
         capital: r.capital,
         callCode: r.callCode,
-        cca2: r.cca2,
-        cca3: r.cca3,
+        cca2: r.cca2.toLowerCase(),
+        cca3: r.cca3.toLowerCase(),
         tld: r.tld,
         correct: false,
       }));
