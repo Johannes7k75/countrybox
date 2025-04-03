@@ -7,11 +7,11 @@ defineRouteRules({
 });
 
 const { data: countryTlds } = await useLazyAsyncData("country:tlds", async () => {
-  const tlds = await $fetch("/api/v2/tlds/");
+  const tlds = await useApi().fetch("/tlds/")
   return new Map(tlds.map(({ countryId, tld }) => [countryId, tld]));
 });
 
-const { data: flagCodes, status } = await useLazyAsyncData("flagCodes", () => $fetch("/api/v2/flags"));
+const { data: flagCodes, status } = await useLazyAsyncData("flagCodes", () => useApi().fetch("/flags"));
 const isPending = computed(() => status.value === "pending");
 
 const filter = reactive({
