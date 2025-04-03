@@ -59,7 +59,7 @@ jobs:
         env:
           USER: deploy
           HOST: jospace.de
-          DIR: "/home/deploy/releases/countryBox/"
+          DIR: "/home/deploy/releases/countryBox/${{ GITHUB_SHA }}"
         run: |
           echo $DIR
           echo $DIR/$GITHUB_SHA/backend
