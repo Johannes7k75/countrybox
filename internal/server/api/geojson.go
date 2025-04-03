@@ -2,6 +2,7 @@ package api
 
 import (
 	"country-box/internal/server/controller"
+	"log"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -22,6 +23,7 @@ func (h *GeoJsonHandler) GetGeoJsonByCode(c *gin.Context) {
 	code := c.Param("code")
 	geoJson, err := h.GeoJsonController.GeoJsonRepo.GetGeoJsonByCode(code)
 	if err != nil {
+		log.Println(err)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Internal Server Error"})
 		return
 	}
