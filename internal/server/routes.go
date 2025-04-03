@@ -32,6 +32,7 @@ func (s *Server) RegisterRoutes() http.Handler {
 	countryController := controller.NewCountriesController(countryRepository)
 	geoJsonController := controller.NewGeoJsonController(geoJsonRepository)
 	boxController := controller.NewBoxController(boxRepository)
+	gameController := controller.NewGameController(countryRepository, tldRepository)
 
 	authRoute := &api.AuthHandler{
 		UserController: userController,
@@ -54,6 +55,10 @@ func (s *Server) RegisterRoutes() http.Handler {
 		AuthHandler:   authRoute,
 	}
 
+	gameRoute := &api.GameHandler{
+		GameController: gameController,
+	}
+
 	apiGroup := s.r.Group("/api/v3")
 	{
 		authRoute.AuthRoutes(apiGroup)
@@ -61,6 +66,7 @@ func (s *Server) RegisterRoutes() http.Handler {
 		countryRoute.CountryRoutes(apiGroup)
 		geoJsonRoute.GeoJsonRoutes(apiGroup)
 		boxRoute.BoxRoutes(apiGroup)
+		gameRoute.GameRoutes(apiGroup)
 	}
 
 	s.r.GET("/health", s.healthHandler)
