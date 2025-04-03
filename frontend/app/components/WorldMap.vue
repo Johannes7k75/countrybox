@@ -23,7 +23,7 @@ const geostyler = (feature: any) => ({
   opacity: feature.properties.code / 100_000,
 });
 
-async function setGeoJson(json?: GeoJSON.GeoJSON = geojson.value) {
+async function setGeoJson(json: GeoJSON.GeoJSON = geojson.value) {
   if (map.value) {
     nextTick(() => {
       if (!json) return
@@ -34,9 +34,9 @@ async function setGeoJson(json?: GeoJSON.GeoJSON = geojson.value) {
 
 async function updateGeoJson(cca2: string) {
   enableInteraction();
-  const response = await $fetch(`/api/v3/geojson/${cca2}`);
+  const response = await useApi().fetch<{countryCode: string, geoJson:GeoJSON.GeoJSON}>(`/geojson/${cca2}`);
   setTimeout(() => {
-    geojson.value = response;
+    geojson.value = response.geoJson;
     setGeoJson();
   }, 500);
 }

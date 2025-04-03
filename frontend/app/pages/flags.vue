@@ -11,7 +11,7 @@ const { data: countryTlds } = await useLazyAsyncData("country:tlds", async () =>
   return new Map(tlds.map(({ countryId, tld }) => [countryId, tld]));
 });
 
-const { data: flagCodes, status } = await useLazyAsyncData("flagCodes", () => useApi().fetch("/flags"));
+const { data: flagCodes, status } = await useLazyAsyncData("flagCodes", () => useApi().fetch("/countries"));
 const isPending = computed(() => status.value === "pending");
 
 const filter = reactive({
@@ -110,7 +110,7 @@ onMounted(async () => {
               <div class="card-face bg-white transition-transform duration-[700ms]" :class="isFlipped === flag.cca2 && '[transform:rotateX(180deg)]'">
                 <!-- <img :src="flag.path" class="w-full h-full rounded-2xl object-cover" /> -->
 
-                <span :class="cn('fi h-full !w-full rounded-md', `fi-${flag.cca2}`)"></span>
+                <span :class="cn('fi h-full !w-full rounded-md', `fi-${flag.cca2.toLowerCase()}`)"></span>
               </div>
 
               <!-- Back -->
@@ -121,7 +121,7 @@ onMounted(async () => {
                 <div class="relative flex h-full w-full items-center [font-size:16px]">
                   <!-- <img :src="flag.path"
                                 class="w-10 h-[30px] object-contain absolute top-2 left-2 border border-solid border-white rounded-sm" /> -->
-                  <span :class="cn('fi !absolute top-2 left-2 [aspect-ratio:4/3] !w-10 rounded-sm border border-solid border-white', `fi-${flag.cca2}`)"></span>
+                  <span :class="cn('fi !absolute top-2 left-2 [aspect-ratio:4/3] !w-10 rounded-sm border border-solid border-white', `fi-${flag.cca2.toLowerCase()}`)"></span>
 
                   <span :class="cn('!absolute bottom-2 left-2 rounded-md bg-white/25 px-2 py-1 text-white/80')">
                     {{ countryTlds?.get(flag.id) }}
