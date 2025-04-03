@@ -27,7 +27,7 @@ func NewGeoJsonRepository(db *sqlx.DB) *GeoJsonRepo {
 func (repo *GeoJsonRepo) GetGeoJsonByCode(code string) (GeoJson, error) {
 	var geoJson GeoJson
 
-	err := repo.db.Select(&geoJson, "SELECT countryCode, geoJson FROM geoJson WHERE countryCode = ?", code)
+	err := repo.db.Get(&geoJson, "SELECT countryCode, geoJson FROM geoJson WHERE countryCode = ?", code)
 	if err != nil {
 		return GeoJson{}, fmt.Errorf("failed to execute query: %w", err)
 	}
