@@ -76,3 +76,51 @@ func (repo *CountriesRepo) GetCountryNames() ([]CountryName, error) {
 	}
 	return countries, nil
 }
+
+func (repo *CountriesRepo) GetRandomCountry(selectedCountries []string) (Country, error) {
+	var country Country
+
+	query, args, err := sqlx.In(`
+		SELECT name, capital, unMember, region, subregion, cca3, cca2, callingCode 
+		FROM countries 
+		WHERE cca2 NOT IN (?) 
+		ORDER BY RAND() 
+		LIMIT 1`, selectedCountries)
+
+	if err != nil {
+		return Country{}, fmt.Errorf("failed to construct query: %w", err)
+	}
+
+	query = repo.db.Rebind(query)
+
+	err = repo.db.Get(&country, query, args...)
+	if err != nil {
+		return Country{}, fmt.Errorf("failed to execute query: %w", err)
+	}
+
+	return country, nil
+}
+
+func (repo *CountriesRepo) GetRandomIndependentCountry(selectedCountries []string, independent bool) (Country, error) {
+	var country Country
+
+	query, args, err := sqlx.In(`
+		SELECT name, capital, unMember, region, subregion, cca3, cca2, callingCode 
+		FROM countries 
+		WHERE cca2 NOT IN (?) AND unMember = ? 
+		ORDER BY RAND() 
+		LIMIT 1`, selectedCountries, independent)
+
+	if err != nil {
+		return Country{}, fmt.Errorf("failed to construct query: %w", err)
+	}
+
+	query = repo.db.Rebind(query)
+
+	err = repo.db.Get(&country, query, args...)
+	if err != nil {
+		return Country{}, fmt.Errorf("failed to execute query: %w", err)
+	}
+
+	return country, nil
+}
