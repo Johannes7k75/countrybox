@@ -16,7 +16,7 @@ DEPLOY_DIR="/home/deploy/production/countryBox/${DEPLOY_TYPE}"
 SERVICE_NAME="countryBox-${DEPLOY_TYPE}"
 
 if [ "$DEPLOY_TYPE" == "backend" ]; then
-  DEPLOY_TARGET="${RELEASES_DIR}/backend/main"
+  DEPLOY_TARGET="${RELEASES_DIR}/backend"
 elif [ "$DEPLOY_TYPE" == "frontend" ]; then
   DEPLOY_TARGET="${RELEASES_DIR}/frontend"
 else
