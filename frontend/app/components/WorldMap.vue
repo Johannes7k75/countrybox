@@ -5,6 +5,7 @@ import { cn } from "~~/lib/utils";
 interface WorldMapProps {
   hide?: boolean;
   cca2?: string;
+  zoomIn?: boolean;
 }
 
 const props = defineProps<WorldMapProps>();
@@ -23,7 +24,12 @@ const geostyler = (feature: any) => ({
   opacity: feature.properties.code / 100_000,
 });
 
-async function setGeoJson(json: GeoJSON.GeoJSON = geojson.value) {
+async function setGeoJson(json = geojson.value) {
+  if (!props.zoomIn) {
+    map.value?.leafletObject?.panInsideBounds(L.geoJSON(json).getBounds())
+    return
+  }
+
   if (map.value) {
     nextTick(() => {
       if (!json) return
