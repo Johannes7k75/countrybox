@@ -2,6 +2,8 @@
 import { UButton, UIcon } from "#components";
 import "flag-icons/css/flag-icons.min.css";
 
+import * as db from "~~/shared/database"
+
 const { selectedGame } = storeToRefs(useSettingsStore());
 
 const firstType = computed({
@@ -33,8 +35,8 @@ const updateSecondType = (type: GameTypes) => {
   useSettingsStore().set("selectedGame", selectedGame.value);
 };
 
-const placeholder = await $fetch(`/api/v2/flags/de`);
-const tld = await $fetch(`/api/v2/tlds/de`);
+const placeholder = await useApi().fetch<db.Country>("/countries/de")
+const tld = await useApi().fetch<db.Tld>("/tlds/de")
 
 function createEditableNode(label: string, ops?: {parentClass?: string, labelClass?: string, editClass?: string}) {
   return h("div", { className: `relative leading-4 ${ops?.parentClass}` }, [
@@ -52,7 +54,7 @@ function displayNode(type: GameTypes) {
     case "capital":
       return createEditableNode(placeholder.capital);
     case "tld":
-      return createEditableNode(tld?.[0]?.tld ?? "");
+      return createEditableNode(tld.tld ?? "");
     case "callCode":
       return createEditableNode(`+${placeholder.callingCode}`);
     case "flag":

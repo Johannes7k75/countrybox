@@ -1,4 +1,6 @@
 <script lang="ts" setup>
+import * as db from "~~/shared/database"
+
 definePageMeta({
   middleware: ["user-only"],
 });
@@ -15,15 +17,27 @@ const {data: countryTlds} = await useLazyAsyncData("country:tlds", async()=>{
 
 
 // const boxes = await $fetch("/api/v2/boxes", { method: "GET",  });
-const { data: boxes, status } = await useLazyAsyncData('boxes', () => $fetch("/api/v2/boxes", { method: "GET", }))
+const { data: boxes, status } = await useLazyAsyncData('boxes', () => useApi().fetch<db.Box[]>("/boxes"))
+
 
 const isPending = computed(() => status.value === "pending")
-
-const allFlagsCount = computed(() => (boxes.value ?? []).reduce((p, box) => p + box.flagIds.length, 0))
-
+const allFlagsCount = computed(() => boxes.value?.length ?? 0)
 const modalOpen = reactive<Record<string, boolean>>({})
 
-console.log(boxes, useCountry().getName("deu"));
+const mappedBoxes = computed(()=> {
+  
+  const phases = new Set<number>()
+  boxes.value?.forEach(box=>phases.add(box.phase))
+  
+  const phaseNumbers = Array.of(phases)
+
+  console.log(phaseNumbers)
+
+
+  return boxes
+})
+
+console.log(boxes, useCountry().getName("de"));
 </script>
 
 <template>

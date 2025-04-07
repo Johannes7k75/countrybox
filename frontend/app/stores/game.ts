@@ -1,4 +1,5 @@
 import EventEmitter from "~~/lib/EventEmitter"
+import * as db from "~~/shared/database"
 
 export interface GameOption {
   name: string;
@@ -142,7 +143,7 @@ export const useGameStore = defineStore("gameStore", {
     },
 
     async getRoundOptions() {
-      const roundData = await useApi().fetch("/game/options",{query: {
+      const roundData = await useApi().fetch<(db.Country & {tld: string})[]>("/game/options",{query: {
         roundId: this.roundId
       }})
       // const roundData = await $fetch("/api/game", { method: "POST", body: { roundId: this.roundId } });
@@ -150,7 +151,7 @@ export const useGameStore = defineStore("gameStore", {
       const options: GameOption[] = roundData!.map((r) => ({
         name: r.name,
         capital: r.capital,
-        callCode: r.callCode,
+        callCode: r.callingCode,
         cca2: r.cca2.toLowerCase(),
         cca3: r.cca3.toLowerCase(),
         tld: r.tld,

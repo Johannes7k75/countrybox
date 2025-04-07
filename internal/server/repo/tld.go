@@ -29,7 +29,7 @@ func NewTldRepository(db *sqlx.DB) *TldRepository {
 func (repo *TldRepository) Get(tldID string) (Tld, error) {
 	var tld Tld
 
-	err := repo.db.Get(tld, "SELECT id, tld, countryCode FROM tld WHERE id = $1", tldID)
+	err := repo.db.Get(&tld, "SELECT id, tld, countryCode FROM tld WHERE id = ?", tldID)
 	if err != nil {
 		return Tld{}, fmt.Errorf("failed to execute query: %w", err)
 	}
@@ -40,8 +40,11 @@ func (repo *TldRepository) Get(tldID string) (Tld, error) {
 func (repo *TldRepository) GetByTld(tldStr string) (Tld, error) {
 	var tld Tld
 
-	err := repo.db.Get(tld, "SELECT id, tld, countryCode FROM tld WHERE tld = $1", tldStr)
+	err := repo.db.Get(&tld, "SELECT id, tld, countryCode FROM tld WHERE tld = ?", tldStr)
 	if err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			return Tld{}, fmt.Errorf("No row found with this tld")
+		}
 		return Tld{}, fmt.Errorf("failed to execute query: %w", err)
 	}
 
