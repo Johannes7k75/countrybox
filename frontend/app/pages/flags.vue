@@ -8,6 +8,8 @@ defineRouteRules({
   prerender: true,
 });
 
+const worldMap = useTemplateRef("worldMapRef")
+
 const { data: countryTlds } = await useLazyAsyncData("country:tlds", async () => {
   const tlds = await useApi().fetch<db.Tld[]>("/tlds/")
   return new Map(tlds.map(({ countryCode, tld }) => [countryCode, tld]));
@@ -19,6 +21,8 @@ const isPending = computed(() => status.value === "pending");
 const filter = reactive({
   onlyUN: false,
 });
+
+const showMap = ref(false)
 
 function updateQuery() {
   console.log("Update params");
@@ -51,15 +55,33 @@ const flags = computed(() => {
   const filtered = flagCodes
     .value!.filter((flag) =>
       query.value != ""
-        ? searchFor(flag.capital, query.value) || searchFor(flag.name, query.value) || searchFor(countryTlds.value?.get(flag.cca2)!, query.value) || searchFor(`+${flag.callingCode}`, query.value)
+        ? searchFor(flag.capital, query.value)
+        || searchFor(flag.name, query.value)
+        || searchFor(countryTlds.value?.get(flag.cca2)!, query.value)
+        || searchFor(`+${flag.callingCode}`, query.value)
         : // || searchFor(flag.callCode, query.value)
-          true,
+        true,
     )
     .filter((flag) => (filter.onlyUN ? flag.unMember : true));
   return filtered;
 });
 
-const isFlipped = ref<string>();
+const isFlipped = ref<string | undefined>();
+
+function flipCard(event: MouseEvent, flag: { cca2: string }) {
+  if (!(event.target instanceof HTMLElement)) return
+  if (event.target.dataset.turncard !== "") return
+
+  if (isFlipped.value === flag.cca2) {
+    isFlipped.value = undefined
+  } else {
+    isFlipped.value = flag.cca2
+  }
+}
+
+function showCountryOnMap(cca2: string) {
+  worldMap.value!.updateGeoJson(cca2)
+}
 
 onMounted(async () => {
   (Object.keys(filter) as (keyof typeof filter)[]).forEach((f) => {
@@ -68,11 +90,19 @@ onMounted(async () => {
     }
   });
 });
+
 </script>
 
 <template>
+  <WorldMap ref="worldMapRef" class="h-100 w-100 left-0 top-1/2 transform -translate-y-1/2 absolute z-100"
+    :class="cn(!showMap && 'transform -translate-x-full')" :hide="!false" />
+
+  <UButton class="absolute left-0 top-1/2 transform -translate-y-1/2 z-[1000]" label="Map"
+    @click="showMap = !showMap" />
+
   <div class="no-scrollbar mx-auto mt-0 mb-auto max-h-full w-full overflow-y-scroll p-2 pb-16 lg:max-w-[70rem]">
-    <UButton variant="subtle" label="Home" icon="mdi:home" to="/" view-transition class="rounded-sm text-(--text)" size="xl" />
+    <UButton variant="subtle" label="Home" icon="mdi:home" to="/" view-transition class="rounded-sm text-(--text)"
+      size="xl" />
 
     <div class="flex flex-col items-center">
       <div class="flex w-max flex-col">
@@ -96,44 +126,48 @@ onMounted(async () => {
         </div>
       </div>
 
-      <div class="mx-auto grid w-max grid-cols-2 gap-8 max-sm:w-full max-sm:max-w-[100vw] max-sm:overflow-x-hidden max-sm:p-4 lg:grid-cols-4">
+      <div
+        class="mx-auto grid w-max grid-cols-2 gap-8 max-sm:w-full max-sm:max-w-[100vw] max-sm:overflow-x-hidden max-sm:p-4 lg:grid-cols-4">
         <template v-if="isPending">
           <USkeleton v-for="flag of 4" class="[aspect-ratio:4/3] sm:w-[240px]" />
         </template>
         <template v-else>
-          <div
-            v-for="flag in flags"
-            :key="flag.cca2"
+          <div v-for="flag in flags" :key="flag.cca2"
             class="inline-block [aspect-ratio:4/3] cursor-pointer [perspective:1000px] sm:w-[240px]"
-            @click="isFlipped === flag.cca2 ? (isFlipped = undefined) : (isFlipped = flag.cca2)"
-          >
-            <div class="group relative h-full w-full [transform-style:preserve-3d]">
+            @click="(e) => flipCard(e, flag)">
+            <div class="group relative h-full w-full [transform-style:preserve-3d]" data-turnCard>
               <!-- Front -->
-              <div class="card-face bg-white transition-transform duration-[700ms]" :class="isFlipped === flag.cca2 && '[transform:rotateX(180deg)]'">
+              <div class="card-face bg-white transition-transform duration-[700ms]"
+                :class="isFlipped === flag.cca2 && '[transform:rotateX(180deg)]'">
                 <!-- <img :src="flag.path" class="w-full h-full rounded-2xl object-cover" /> -->
-
-                <span :class="cn('fi h-full !w-full rounded-md', `fi-${flag.cca2.toLowerCase()}`)"></span>
+                <span :class="cn('fi h-full !w-full rounded-md', `fi-${flag.cca2.toLowerCase()}`)" data-turnCard></span>
               </div>
 
               <!-- Back -->
               <div
                 class="card-face relative [transform:rotateX(180deg)] bg-[#1a202c] text-center text-white transition-transform duration-[700ms]"
-                :class="isFlipped === flag.cca2 && '[transform:rotateX(360deg)]'"
-              >
-                <div class="relative flex h-full w-full items-center [font-size:16px]">
+                :class="isFlipped === flag.cca2 && '[transform:rotateX(360deg)]'" data-turnCard>
+                <!-- @click="(e)=>flipCard(e, flag)" -->
+                <div class="relative flex h-full w-full items-center [font-size:16px]" data-turnCard>
                   <!-- <img :src="flag.path"
                                 class="w-10 h-[30px] object-contain absolute top-2 left-2 border border-solid border-white rounded-sm" /> -->
-                  <span :class="cn('fi !absolute top-2 left-2 [aspect-ratio:4/3] !w-10 rounded-sm border border-solid border-white', `fi-${flag.cca2.toLowerCase()}`)"></span>
+                  <span
+                    :class="cn('fi !absolute top-2 left-2 [aspect-ratio:4/3] !w-10 rounded-sm border border-solid border-white', `fi-${flag.cca2.toLowerCase()}`)"></span>
 
                   <span :class="cn('!absolute bottom-2 left-2 rounded-md bg-white/25 px-2 py-1 text-white/80')">
                     {{ countryTlds?.get(flag.cca2) }}
                   </span>
 
-                  <span :class="cn('!absolute right-2 bottom-2 rounded-md bg-white/25 px-2 py-1 text-white/80')" v-show="flag.callingCode && flag.callingCode != ''"> +{{ flag.callingCode }} </span>
+                  <span :class="cn('!absolute right-2 bottom-2 rounded-md bg-white/25 px-2 py-1 text-white/80')"
+                    v-show="flag.callingCode && flag.callingCode != ''"> +{{ flag.callingCode }} </span>
 
-                  <div class="mx-auto my-auto">
-                    <h3>{{ flag.name }}</h3>
-                    <p>{{ flag.capital }}</p>
+                  <div class="mx-auto my-auto" data-turnCard>
+                    <h3 data-turnCard>{{ flag.name }}</h3>
+                    <p data-turnCard>{{ flag.capital }}</p>
+                  </div>
+
+                  <div class="absolute top-2 right-2" data-showMapButton>
+                    <UButton icon="mdi:globe" @click="showCountryOnMap(flag.cca2)" />
                   </div>
                 </div>
               </div>
@@ -145,6 +179,8 @@ onMounted(async () => {
       </div>
     </div>
   </div>
+
+
 </template>
 
 <style>
