@@ -3,7 +3,9 @@ package api
 import (
 	"country-box/internal/server/controller"
 	"country-box/internal/server/repo"
+	"log"
 	"net/http"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 )
@@ -22,9 +24,17 @@ func (h *TldsHandler) TldRoutes(R *gin.RouterGroup) {
 
 func (h *TldsHandler) TldRoute(c *gin.Context) {
 	tld := c.Param("tld")
-	tldData, err := h.TldController.TldRepo.GetByTld(tld)
+
+	cleanedTld := tld
+	if !strings.HasPrefix(tld, ".") {
+		cleanedTld, _ = strings.CutPrefix(tld, ".")
+	}
+
+	log.Println(tld, cleanedTld)
+
+	tldData, err := h.TldController.TldRepo.GetByTld(cleanedTld)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Internal Server Error"})
+		c.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
 		return
 	}
 

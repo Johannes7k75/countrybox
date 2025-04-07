@@ -33,7 +33,7 @@ export default defineNuxtConfig({
     },
     routeRules: {
       "/api/v3/**": {
-        proxy: "http://127.0.0.1:2354/api/v3/**",
+        proxy: "http://127.0.0.1:8080/api/v3/**",
         cache: {
           swr: true, 
           maxAge: 60

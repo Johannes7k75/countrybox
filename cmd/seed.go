@@ -133,7 +133,9 @@ func (seeder *Seeder) seedTlds() {
 
 	for _, country := range countries {
 		for _, tld := range country.Tlds {
-			if _, err := seeder.db.Exec(query, tld, country.Cca2); err != nil {
+			cleanedUrl, _ := strings.CutPrefix(tld, ".")
+
+			if _, err := seeder.db.Exec(query, strings.ToLower(cleanedUrl), country.Cca2); err != nil {
 				log.Printf("Failed to seed tld: %v", err)
 				return
 			}

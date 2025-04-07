@@ -4,7 +4,7 @@ import { useAuthUser } from "./useAuthUser"
 export const useAuth = () => {
   const authUser = useAuthUser()
 
-  const authApi = $fetch.create({
+  const authApi =  useApi().fetch.create({
     baseURL: "/api/v3/auth"
   })
 

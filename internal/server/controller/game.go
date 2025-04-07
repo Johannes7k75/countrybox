@@ -17,7 +17,12 @@ func NewGameController(countriesRepo *repo.CountriesRepo, tldRepo *repo.TldRepos
 	}
 }
 
-func (c *GameController) GetIndependentOptions(options int, independent bool) []repo.Country {
+type CountriesWithTld struct {
+	repo.Country
+	Tld string `json:"tld"`
+}
+
+func (c *GameController) GetIndependentOptions(options int, independent bool) []CountriesWithTld {
 	var countries []repo.Country
 
 	for i := 0; i < options; i++ {
@@ -43,10 +48,26 @@ func (c *GameController) GetIndependentOptions(options int, independent bool) []
 		countries = append(countries, country)
 	}
 
-	return countries
+	var countriesWithTld []CountriesWithTld
+	for _, country := range countries {
+		tldValue := ""
+		tld, err := c.TldRepo.GetByTld(country.Cca2)
+		if err == nil {
+			tldValue = tld.Tld
+		}
+
+		tldCountry := CountriesWithTld{
+			Country: country,
+			Tld:     tldValue,
+		}
+
+		countriesWithTld = append(countriesWithTld, tldCountry)
+	}
+
+	return countriesWithTld
 }
 
-func (c *GameController) GetOptions(options int) []repo.Country {
+func (c *GameController) GetOptions(options int) []CountriesWithTld {
 	return c.GetIndependentOptions(options, true)
 }
 

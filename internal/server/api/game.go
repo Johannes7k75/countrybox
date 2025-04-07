@@ -2,7 +2,6 @@ package api
 
 import (
 	"country-box/internal/server/controller"
-	"fmt"
 	"log"
 	"net/http"
 	"strconv"
@@ -32,8 +31,6 @@ func (h *GameHandler) gameRoute(c *gin.Context) {
 			count = parsedCount
 		}
 	}
-
-	fmt.Println(countStr)
 
 	c.JSON(http.StatusOK, h.GameController.GetIndependentOptions(count, independent))
 }

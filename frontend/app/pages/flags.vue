@@ -2,13 +2,15 @@
 import "flag-icons/css/flag-icons.min.css";
 import { cn } from "~~/lib/utils";
 
+import * as db from "~~/shared/database"
+
 defineRouteRules({
   prerender: true,
 });
 
 const { data: countryTlds } = await useLazyAsyncData("country:tlds", async () => {
-  const tlds = await useApi().fetch("/tlds/")
-  return new Map(tlds.map(({ countryId, tld }) => [countryId, tld]));
+  const tlds = await useApi().fetch<db.Tld[]>("/tlds/")
+  return new Map(tlds.map(({ countryCode, tld }) => [countryCode, tld]));
 });
 
 const { data: flagCodes, status } = await useLazyAsyncData("flagCodes", () => useApi().fetch("/countries"));
@@ -49,7 +51,7 @@ const flags = computed(() => {
   const filtered = flagCodes
     .value!.filter((flag) =>
       query.value != ""
-        ? searchFor(flag.capital, query.value) || searchFor(flag.name, query.value) || searchFor(countryTlds.value?.get(flag.id)!, query.value) || searchFor(`+${flag.callingCode}`, query.value)
+        ? searchFor(flag.capital, query.value) || searchFor(flag.name, query.value) || searchFor(countryTlds.value?.get(flag.cca2)!, query.value) || searchFor(`+${flag.callingCode}`, query.value)
         : // || searchFor(flag.callCode, query.value)
           true,
     )
@@ -124,7 +126,7 @@ onMounted(async () => {
                   <span :class="cn('fi !absolute top-2 left-2 [aspect-ratio:4/3] !w-10 rounded-sm border border-solid border-white', `fi-${flag.cca2.toLowerCase()}`)"></span>
 
                   <span :class="cn('!absolute bottom-2 left-2 rounded-md bg-white/25 px-2 py-1 text-white/80')">
-                    {{ countryTlds?.get(flag.id) }}
+                    {{ countryTlds?.get(flag.cca2) }}
                   </span>
 
                   <span :class="cn('!absolute right-2 bottom-2 rounded-md bg-white/25 px-2 py-1 text-white/80')" v-show="flag.callingCode && flag.callingCode != ''"> +{{ flag.callingCode }} </span>
