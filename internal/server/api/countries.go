@@ -33,7 +33,7 @@ func (h *CountriesHandler) countryRoute(c *gin.Context) {
 	code := c.Param("code")
 	country, err := h.ContriesController.CountriesRepo.GetCountryByCode(code)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Internal Server Error"})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 
