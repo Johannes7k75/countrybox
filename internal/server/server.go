@@ -65,7 +65,7 @@ func SetupDatabase() *sqlx.DB {
 
 	DSN := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s", username, password, host, port, dbname)
 
-	db, err := OpenLoop("mysql", DSN, 1*time.Minute)
+	db, err := OpenLoop("mysql", DSN, 0*time.Second)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -97,24 +97,33 @@ func SetupDatabase() *sqlx.DB {
 }
 
 func OpenLoop(driver, DSN string, timeout time.Duration) (*sqlx.DB, error) {
-	ticker := time.NewTicker(1 * time.Second)
-	defer ticker.Stop()
+	start := time.Now()
+	backoff := 1 * time.Second // Initial backoff
+	maxBackoff := 10 * time.Second
 
-	timeoutExceeded := time.After(timeout)
 	for {
-		select {
-		case <-timeoutExceeded:
-			return nil, fmt.Errorf("db connection failed after %s timeout", timeout)
-
-		case <-ticker.C:
-			db, err := sqlx.Open(driver, DSN)
-			if err == nil {
-				return db, nil
+		db, err := sqlx.Open(driver, DSN)
+		if err == nil {
+			if err = db.Ping(); err == nil {
+				return db, nil // Success
 			}
-			log.Println(fmt.Sprintf("failed to connect to db %s: %s", DSN, err))
+			db.Close() // Clean up if Ping fails
+		}
+
+		// Check timeout (if timeout > 0)
+		if timeout > 0 && time.Since(start) >= timeout {
+			return nil, fmt.Errorf("db connection failed after %s timeout", timeout)
+		}
+
+		log.Printf("connection attempt failed: %v (retrying in %v)", err, backoff)
+		time.Sleep(backoff)
+
+		// Exponential backoff with cap
+		backoff *= 2
+		if backoff > maxBackoff {
+			backoff = maxBackoff // Stay at maxBackoff indefinitely
 		}
 	}
-
 }
 
 func (s *Server) dbHealth() map[string]string {
