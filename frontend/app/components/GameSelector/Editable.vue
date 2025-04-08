@@ -7,8 +7,8 @@ const props = defineProps<{ type: GameTypes; secondType: GameTypes, update:(newT
 const firstType = toRef(()=>props.type)
 const secondType = toRef(()=>props.secondType)
 
-const placeholder = await $fetch("/api/v2/flags/de");
-const tld = await $fetch("/api/v2/tlds/de");
+const placeholder = await useApi().fetch("/countries/de");
+const tld = await useApi().fetch("/tlds/de");
 
 const isFlag = computed(() => props.type === "flag");
 
