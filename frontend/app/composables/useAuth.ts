@@ -13,8 +13,9 @@ export const useAuth = () => {
   }
 
   const login = async (email: string, password: string, rememberMe: boolean) => {
-    const data = await authApi<{ user: User }>("/login", {
+    const data = await authApi<User>("/login", {
       method: "POST",
+      credentials: 'include',
       body: {
         email,
         password,
@@ -22,13 +23,13 @@ export const useAuth = () => {
       }
     })
 
-    setUser(data.user)
+    setUser(data)
 
     return authUser
   }
 
   const signup = async (email: string, password: string) => {
-    const data = await authApi<{ user: User }>("/signup", {
+    const data = await authApi<User>("/signup", {
       method: "POST",
       body: {
         email,
@@ -36,27 +37,27 @@ export const useAuth = () => {
       }
     })
 
-    setUser(data.user)
+    setUser(data)
 
     return authUser
   }
 
   const logout = async () => {
-    const data = await authApi<{ user: User }>("/logout", {
+    const data = await authApi<User>("/logout", {
       method: "POST"
     })
 
-    setUser(data.user)
+    setUser(data)
   }
 
   const me = async () => {
     if (!authUser.value) {
       try {
-        const data = await authApi<{ user: User }>("/me", {
+        const data = await authApi<User>("/me", {
           headers: useRequestHeaders(["cookie"])
         })
 
-        setUser(data.user)
+        setUser(data)
       } catch {
         setUser(null)
       }
