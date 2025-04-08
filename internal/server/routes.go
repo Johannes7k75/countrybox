@@ -6,6 +6,7 @@ import (
 	"country-box/internal/server/controller/user"
 	"country-box/internal/server/repo"
 	"net/http"
+	"time"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
@@ -14,7 +15,7 @@ import (
 func (s *Server) RegisterRoutes() http.Handler {
 
 	s.r.Use(cors.New(cors.Config{
-		AllowOrigins:     []string{"https://*", "http://*"},
+		AllowOrigins:     []string{"http://localhost:3000"},
 		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"},
 		AllowHeaders:     []string{"Accept", "Authorization", "Content-Type"},
 		AllowCredentials: true,
@@ -58,6 +59,15 @@ func (s *Server) RegisterRoutes() http.Handler {
 	gameRoute := &api.GameHandler{
 		GameController: gameController,
 	}
+
+	s.r.Use(cors.New(cors.Config{
+		AllowOrigins:     []string{"http://localhost:3000", "http://127.0.0.1:3000"},
+		AllowMethods:     []string{"GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"},
+		AllowHeaders:     []string{"Origin", "Content-Type", "Authorization"},
+		ExposeHeaders:    []string{"Content-Length"},
+		AllowCredentials: true,
+		MaxAge:           12 * time.Hour,
+	}))
 
 	apiGroup := s.r.Group("/api/v3")
 	{
