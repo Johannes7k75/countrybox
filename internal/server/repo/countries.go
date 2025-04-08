@@ -52,9 +52,9 @@ func (repo *CountriesRepo) GetCountries() ([]Country, error) {
 func (repo *CountriesRepo) GetCountryByCode(code string) (Country, error) {
 	var country Country
 
-	whereClause := "WHERE cca2 = $1"
+	whereClause := "WHERE cca2 = ?"
 	if len(code) == 3 {
-		whereClause = "WHERE cca3 = $1"
+		whereClause = "WHERE cca3 = ?"
 	}
 
 	err := repo.db.Get(&country, "SELECT name, capital, unMember, region, subregion, cca3, cca2, callingCode FROM countries "+whereClause, code)
