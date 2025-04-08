@@ -6,7 +6,7 @@ import "~/assets/css/tailwind.css";
 <template>
   <UApp>
     <NuxtLoadingIndicator />
-    <div class="h-screen max-h-dvh w-screen max-w-[300rem]">
+    <div class="h-screen sm:max-h-dvh w-screen max-w-[300rem]">
       <slot />
     </div>
   </UApp>
