@@ -99,7 +99,7 @@ func (seeder *Seeder) seedCountries() {
 	query := `INSERT INTO countries (name, capital, unMember, region, subregion, cca3, cca2, callingCode) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`
 
 	for _, country := range countries {
-		if _, err := seeder.db.Exec(query, country.Name, country.Capital, country.UnMember, country.Region, country.Subregion, country.Cca3, country.Cca2, country.CallingCode); err != nil {
+		if _, err := seeder.db.Exec(query, country.Name, country.Capital, country.UnMember, country.Region, country.Subregion, strings.ToLower(country.Cca3), strings.ToLower(country.Cca2), country.CallingCode); err != nil {
 			log.Printf("Failed to seed geoJson: %v", err)
 			return
 		}
