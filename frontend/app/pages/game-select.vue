@@ -88,7 +88,7 @@ function startGame() {
 </script>
 
 <template>
-  <div class="mx-auto w-max p-4">
+  <div class="mx-auto w-max sm:p-4">
     <!-- <GameTypeSelector
       :selectedType="firstType"
       :disabledType="secondType"
