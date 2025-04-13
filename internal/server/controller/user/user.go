@@ -7,12 +7,14 @@ import (
 )
 
 type UserController struct {
-	UserRepo *repo.UserRepository
+	UserRepo     *repo.UserRepository
+	SettingsRepo *repo.SettingsRepository
 }
 
-func NewUserController(userRepo *repo.UserRepository) *UserController {
+func NewUserController(userRepo *repo.UserRepository, settingsRepo *repo.SettingsRepository) *UserController {
 	return &UserController{
-		UserRepo: userRepo,
+		UserRepo:     userRepo,
+		SettingsRepo: settingsRepo,
 	}
 }
 
@@ -33,8 +35,14 @@ func (c *UserController) GenerateAccountNumber(length int) string {
 func (c *UserController) CreateUser(email, password string) (int, error) {
 	hashedPassword := Hashpassword(password)
 
-	userID, err := c.CreateUser(email, hashedPassword)
+	userID, err := c.UserRepo.Create(email, hashedPassword, []repo.UserRole{repo.RoleUser})
 	if err != nil {
+		return -1, err
+	}
+
+	_, err = c.SettingsRepo.Create(userID)
+	if err != nil {
+		c.UserRepo.Delete(userID)
 		return -1, err
 	}
 

@@ -27,13 +27,15 @@ func (s *Server) RegisterRoutes() http.Handler {
 	countryRepository := repo.NewCountryRepository(s.db)
 	geoJsonRepository := repo.NewGeoJsonRepository(s.db)
 	boxRepository := repo.NewBoxRepository(s.db)
+	settingsRepository := repo.NewSettingsRepository(s.db)
 
 	tldController := controller.NewTldController(tldRepository)
-	userController := user.NewUserController(userRepository)
+	userController := user.NewUserController(userRepository, settingsRepository)
 	countryController := controller.NewCountriesController(countryRepository)
 	geoJsonController := controller.NewGeoJsonController(geoJsonRepository)
 	boxController := controller.NewBoxController(boxRepository)
 	gameController := controller.NewGameController(countryRepository, tldRepository)
+	settingsController := controller.NewSettingsController(settingsRepository)
 
 	authRoute := &api.AuthHandler{
 		UserController: userController,
@@ -52,8 +54,9 @@ func (s *Server) RegisterRoutes() http.Handler {
 	}
 
 	boxRoute := &api.BoxHandler{
-		BoxController: boxController,
-		AuthHandler:   authRoute,
+		BoxController:      boxController,
+		AuthHandler:        authRoute,
+		SettingsController: settingsController,
 	}
 
 	gameRoute := &api.GameHandler{
