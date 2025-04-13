@@ -1,12 +1,14 @@
 package controller
 
-import "country-box/internal/server/repo"
+import (
+	"country-box/internal/database/repo"
+)
 
 type SettingsController struct {
-	SettingsRepo *repo.SettingsRepository
+	SettingsRepo *repo.SettingsRepo
 }
 
-func NewSettingsController(settingsRepo *repo.SettingsRepository) *SettingsController {
+func NewSettingsController(settingsRepo *repo.SettingsRepo) *SettingsController {
 	return &SettingsController{
 		SettingsRepo: settingsRepo,
 	}
