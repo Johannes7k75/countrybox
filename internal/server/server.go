@@ -10,8 +10,6 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
-	_ "github.com/go-sql-driver/mysql"
-	_ "github.com/joho/godotenv/autoload"
 )
 
 type Server struct {
@@ -19,14 +17,6 @@ type Server struct {
 	db   *database.Service
 	r    *gin.Engine
 }
-
-var (
-	dbname   = os.Getenv("BLUEPRINT_DB_DATABASE")
-	password = os.Getenv("BLUEPRINT_DB_PASSWORD")
-	username = os.Getenv("BLUEPRINT_DB_USERNAME")
-	port     = os.Getenv("BLUEPRINT_DB_PORT")
-	host     = os.Getenv("BLUEPRINT_DB_HOST")
-)
 
 func NewServer() *http.Server {
 	port, _ := strconv.Atoi(os.Getenv("PORT"))

@@ -10,8 +10,10 @@ import (
 	"strconv"
 	"time"
 
+	_ "github.com/go-sql-driver/mysql"
 	"github.com/jmoiron/sqlx"
 	_ "github.com/joho/godotenv/autoload"
+
 	"github.com/pressly/goose/v3"
 )
 
@@ -22,6 +24,7 @@ type Service struct {
 	GeoJson   *repo.GeoJsonRepo
 	Tld       *repo.TldRepo
 	User      *repo.UserRepo
+	Settings  *repo.SettingsRepo
 }
 
 var (
@@ -47,6 +50,7 @@ func New() *Service {
 		GeoJson:   repo.NewGeoJsonRepository(db),
 		Tld:       repo.NewTldRepository(db),
 		User:      repo.NewUserRepository(db),
+		Settings:  repo.NewSettingsRepository(db),
 	}
 
 	return dbInstance
