@@ -7,6 +7,8 @@ defineRouteRules({
 
 const currentUser = useAuthUser()
 
+const isSignedIn = computed(()=>currentUser.value != null)
+
 </script>
 
 <template>
@@ -31,7 +33,7 @@ const currentUser = useAuthUser()
       />
       <GameLink
         to="/boxes"
-        :locked="true"
+        :locked="!isSignedIn"
         :name="$t('main.titles.flagBox')"
         :sub-name="$t('main.types.learn')"
       />
