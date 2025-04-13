@@ -18,6 +18,7 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
+	_ "github.com/joho/godotenv/autoload"
 	"golang.org/x/crypto/argon2"
 )
 
@@ -64,13 +65,13 @@ func Hashpassword(password string) string {
 }
 
 func convertBytesToString(b []byte) string {
-	return base64.RawURLEncoding.EncodeToString(b)
+	return base64.StdEncoding.EncodeToString(b)
 }
 
 func convertStringToBytes(s string) []byte {
 	b, err := base64.StdEncoding.DecodeString(s)
-	log.Println(s)
 	if err != nil {
+		log.Printf("Could not decode string: %s with %s", err, s)
 		log.Fatal(err)
 	}
 	return b
@@ -124,18 +125,31 @@ func Unsign(cookieValue, secret string) ([]byte, error) {
 		return nil, fmt.Errorf("invalid cookie format")
 	}
 	signedData := parts[0]
+	receivedSignature, err := url.PathUnescape(parts[1])
+	if err != nil {
+		log.Println(err)
+		return nil, err
+	}
 
-	expectedSignature, err := Sign(signedData, secret)
+	expectedSignedValue, err := Sign(signedData, secret)
 	if err != nil {
 		return nil, err
 	}
 
-	if cookieValue != expectedSignature {
+	expectedParts := strings.Split(expectedSignedValue, ".")
+	if len(expectedParts) != 2 {
+		return nil, fmt.Errorf("invalid expected signature format")
+	}
+	expectedSignature := expectedParts[1]
+
+	receivedSignature, _ = url.PathUnescape(receivedSignature)
+	expectedSignature, _ = url.PathUnescape(expectedSignature)
+	if !hmac.Equal([]byte(receivedSignature), []byte(expectedSignature)) {
+		log.Println("Signature mismatch:", receivedSignature, "!=", expectedSignature)
 		return nil, fmt.Errorf("invalid cookie signature")
 	}
-	decodedData := convertStringToBytes(signedData)
 
-	return decodedData, nil
+	return convertStringToBytes(signedData), nil
 }
 
 func (c *UserController) Login(ctx *gin.Context, user repo.User, rememberMe bool) {
