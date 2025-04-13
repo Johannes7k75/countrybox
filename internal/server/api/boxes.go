@@ -1,8 +1,8 @@
 package api
 
 import (
+	"country-box/internal/database/repo"
 	"country-box/internal/server/controller"
-	"country-box/internal/server/repo"
 	"encoding/json"
 	"fmt"
 	"log"
@@ -55,6 +55,9 @@ func (h *BoxHandler) boxRoutes(c *gin.Context) {
 	}
 
 	response.Boxes = boxes
+	if len(response.Boxes) == 0 {
+		response.Boxes = []repo.CountryBox{}
+	}
 
 	c.JSON(http.StatusOK, response)
 }
