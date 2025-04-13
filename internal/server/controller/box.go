@@ -41,3 +41,33 @@ func (c *BoxController) TrainCountry(userId int, code string) error {
 
 	return nil
 }
+
+type MappedBoxes struct {
+	Id        int      `json:"id"`
+	Phase     int      `json:"phase"`
+	Countries []string `json:"countries"`
+}
+
+func (c *BoxController) MapBoxes(boxes []repo.CountryBox) []MappedBoxes {
+
+	phaseMap := make(map[int][]string)
+	var mappedBoxes []MappedBoxes
+
+	for _, box := range boxes {
+		if _, exists := phaseMap[box.Phase]; !exists {
+			phaseMap[box.Phase] = []string{}
+		}
+
+		phaseMap[box.Phase] = append(phaseMap[box.Phase], box.CountryCode)
+	}
+
+	for phase, countries := range phaseMap {
+		mappedBoxes = append(mappedBoxes, MappedBoxes{
+			Id:        phase,
+			Phase:     phase,
+			Countries: countries,
+		})
+	}
+
+	return mappedBoxes
+}
