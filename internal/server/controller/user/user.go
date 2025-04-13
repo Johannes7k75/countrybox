@@ -1,16 +1,16 @@
 package user
 
 import (
-	"country-box/internal/server/repo"
+	"country-box/internal/database/repo"
 	"crypto/rand"
 	"encoding/hex"
 )
 
 type UserController struct {
-	UserRepo *repo.UserRepository
+	UserRepo *repo.UserRepo
 }
 
-func NewUserController(userRepo *repo.UserRepository) *UserController {
+func NewUserController(userRepo *repo.UserRepo) *UserController {
 	return &UserController{
 		UserRepo: userRepo,
 	}

@@ -1,16 +1,16 @@
 package controller
 
 import (
-	"country-box/internal/server/repo"
+	"country-box/internal/database/repo"
 	"log"
 )
 
 type GameController struct {
 	CountriesRepo *repo.CountriesRepo
-	TldRepo       *repo.TldRepository
+	TldRepo       *repo.TldRepo
 }
 
-func NewGameController(countriesRepo *repo.CountriesRepo, tldRepo *repo.TldRepository) *GameController {
+func NewGameController(countriesRepo *repo.CountriesRepo, tldRepo *repo.TldRepo) *GameController {
 	return &GameController{
 		CountriesRepo: countriesRepo,
 		TldRepo:       tldRepo,

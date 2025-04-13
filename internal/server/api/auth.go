@@ -39,7 +39,10 @@ func (h *AuthHandler) UserAuthMiddleware(c *gin.Context) {
 	log.Println("User Auth Handler")
 	user, err := h.UserController.GetUserFromSession(c, cookieName, cookieSecret)
 
-	fmt.Println(user)
+	if user == nil && err == nil {
+		http.Error(c.Writer, "Unauthorized", http.StatusUnauthorized)
+		return
+	}
 
 	if err != nil {
 		http.Error(c.Writer, "Internal Server Error", http.StatusInternalServerError)

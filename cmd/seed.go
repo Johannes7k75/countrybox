@@ -3,7 +3,7 @@
 package main
 
 import (
-	"country-box/internal/server"
+	"country-box/internal/database"
 	"country-box/internal/server/controller/user"
 	"encoding/json"
 	"log"
@@ -19,7 +19,7 @@ type Seeder struct {
 }
 
 func main() {
-	db := server.SetupDatabase()
+	db := database.SetupDatabase()
 
 	seeder := &Seeder{db}
 

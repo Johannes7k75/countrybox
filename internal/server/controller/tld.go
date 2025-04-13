@@ -1,12 +1,12 @@
 package controller
 
-import "country-box/internal/server/repo"
+import "country-box/internal/database/repo"
 
 type TldController struct {
-	TldRepo *repo.TldRepository
+	TldRepo *repo.TldRepo
 }
 
-func NewTldController(tldRepo *repo.TldRepository) *TldController {
+func NewTldController(tldRepo *repo.TldRepo) *TldController {
 	return &TldController{
 		TldRepo: tldRepo,
 	}

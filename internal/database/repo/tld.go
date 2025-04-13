@@ -9,7 +9,7 @@ import (
 	"github.com/jmoiron/sqlx"
 )
 
-type TldRepository struct {
+type TldRepo struct {
 	db *sqlx.DB
 }
 
@@ -19,14 +19,14 @@ type Tld struct {
 	CountryCode string `json:"countryCode" db:"countryCode"`
 }
 
-func NewTldRepository(db *sqlx.DB) *TldRepository {
+func NewTldRepository(db *sqlx.DB) *TldRepo {
 	if db == nil {
 		log.Fatal("Database connection is nil")
 	}
-	return &TldRepository{db: db}
+	return &TldRepo{db: db}
 }
 
-func (repo *TldRepository) Get(tldID string) (Tld, error) {
+func (repo *TldRepo) Get(tldID string) (Tld, error) {
 	var tld Tld
 
 	err := repo.db.Get(&tld, "SELECT id, tld, countryCode FROM tld WHERE id = ?", tldID)
@@ -37,7 +37,7 @@ func (repo *TldRepository) Get(tldID string) (Tld, error) {
 	return tld, nil
 }
 
-func (repo *TldRepository) GetByTld(tldStr string) (Tld, error) {
+func (repo *TldRepo) GetByTld(tldStr string) (Tld, error) {
 	var tld Tld
 
 	err := repo.db.Get(&tld, "SELECT id, tld, countryCode FROM tld WHERE tld = ?", tldStr)
@@ -51,7 +51,7 @@ func (repo *TldRepository) GetByTld(tldStr string) (Tld, error) {
 	return tld, nil
 }
 
-func (repo *TldRepository) GetTlds() ([]Tld, error) {
+func (repo *TldRepo) GetTlds() ([]Tld, error) {
 	var tlds []Tld
 
 	err := repo.db.Select(&tlds, "SELECT id, tld, countryCode FROM tld")

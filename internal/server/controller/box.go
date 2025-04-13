@@ -1,7 +1,7 @@
 package controller
 
 import (
-	"country-box/internal/server/repo"
+	"country-box/internal/database/repo"
 	"fmt"
 	"log"
 )

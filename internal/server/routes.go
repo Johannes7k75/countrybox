@@ -4,7 +4,6 @@ import (
 	"country-box/internal/server/api"
 	"country-box/internal/server/controller"
 	"country-box/internal/server/controller/user"
-	"country-box/internal/server/repo"
 	"net/http"
 	"time"
 
@@ -22,18 +21,12 @@ func (s *Server) RegisterRoutes() http.Handler {
 		MaxAge:           300,
 	}))
 
-	tldRepository := repo.NewTldRepository(s.db)
-	userRepository := repo.NewUserRepository(s.db)
-	countryRepository := repo.NewCountryRepository(s.db)
-	geoJsonRepository := repo.NewGeoJsonRepository(s.db)
-	boxRepository := repo.NewBoxRepository(s.db)
-
-	tldController := controller.NewTldController(tldRepository)
-	userController := user.NewUserController(userRepository)
-	countryController := controller.NewCountriesController(countryRepository)
-	geoJsonController := controller.NewGeoJsonController(geoJsonRepository)
-	boxController := controller.NewBoxController(boxRepository)
-	gameController := controller.NewGameController(countryRepository, tldRepository)
+	tldController := controller.NewTldController(s.db.Tld)
+	userController := user.NewUserController(s.db.User)
+	countryController := controller.NewCountriesController(s.db.Countries)
+	geoJsonController := controller.NewGeoJsonController(s.db.GeoJson)
+	boxController := controller.NewBoxController(s.db.Box)
+	gameController := controller.NewGameController(s.db.Countries, s.db.Tld)
 
 	authRoute := &api.AuthHandler{
 		UserController: userController,
@@ -85,6 +78,6 @@ func (s *Server) RegisterRoutes() http.Handler {
 }
 
 func (s *Server) healthHandler(c *gin.Context) {
-	dbHealth := s.dbHealth()
+	dbHealth := s.db.Health()
 	c.JSON(http.StatusOK, dbHealth)
 }

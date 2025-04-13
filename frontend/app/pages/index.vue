@@ -31,7 +31,7 @@ const currentUser = useAuthUser()
       />
       <GameLink
         to="/boxes"
-        :locked="true"
+        :locked="!currentUser"
         :name="$t('main.titles.flagBox')"
         :sub-name="$t('main.types.learn')"
       />

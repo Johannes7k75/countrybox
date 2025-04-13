@@ -2,7 +2,7 @@ package user
 
 import (
 	"bytes"
-	"country-box/internal/server/repo"
+	"country-box/internal/database/repo"
 	"crypto/hmac"
 	"crypto/rand"
 	"crypto/sha256"

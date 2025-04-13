@@ -8,7 +8,7 @@ import (
 	"github.com/jmoiron/sqlx"
 )
 
-type UserRepository struct {
+type UserRepo struct {
 	db *sqlx.DB
 }
 
@@ -32,14 +32,14 @@ type PasswordLessUser struct {
 	Roles []UserRole `json:"roles"`
 }
 
-func NewUserRepository(db *sqlx.DB) *UserRepository {
+func NewUserRepository(db *sqlx.DB) *UserRepo {
 	if db == nil {
-		log.Fatal("Database connection is nil")
+		log.Fatal("Database connections is nil")
 	}
-	return &UserRepository{db: db}
+	return &UserRepo{db: db}
 }
 
-func (repo *UserRepository) Get(userID int) (User, error) {
+func (repo *UserRepo) Get(userID int) (User, error) {
 	var user User
 	var rolesData []byte
 
@@ -56,7 +56,7 @@ func (repo *UserRepository) Get(userID int) (User, error) {
 	return user, nil
 }
 
-func (repo *UserRepository) GetUserByEmail(email string) (User, error) {
+func (repo *UserRepo) GetUserByEmail(email string) (User, error) {
 	var user User
 	var rolesData []byte
 
@@ -78,12 +78,12 @@ func (repo *UserRepository) GetUserByEmail(email string) (User, error) {
 	return user, nil
 }
 
-func (repo *UserRepository) Delete(userID int) error {
+func (repo *UserRepo) Delete(userID int) error {
 	_, err := repo.db.Exec("DELETE FROM users WHERE id = $1", userID)
 	return fmt.Errorf("failed to delete user: %w", err)
 }
 
-func (repo *UserRepository) Create(email string, password string, roles []UserRole) (int, error) {
+func (repo *UserRepo) Create(email string, password string, roles []UserRole) (int, error) {
 	var userID int
 
 	rolesJSON, err := json.Marshal(roles)
