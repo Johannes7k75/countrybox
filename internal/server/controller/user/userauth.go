@@ -68,7 +68,8 @@ func convertBytesToString(b []byte) string {
 }
 
 func convertStringToBytes(s string) []byte {
-	b, err := base64.RawURLEncoding.DecodeString(s)
+	b, err := base64.StdEncoding.DecodeString(s)
+	log.Println(s)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -113,7 +114,7 @@ func Sign(value, secret string) (string, error) {
 	digest := h.Sum(nil)
 
 	encodedSignature := base64.StdEncoding.EncodeToString(digest)
-	encodedSignature = url.QueryEscape(encodedSignature)
+	encodedSignature = url.PathEscape(encodedSignature)
 	return value + "." + encodedSignature, nil
 }
 
@@ -129,8 +130,6 @@ func Unsign(cookieValue, secret string) ([]byte, error) {
 		return nil, err
 	}
 
-	fmt.Println(cookieValue, expectedSignature)
-
 	if cookieValue != expectedSignature {
 		return nil, fmt.Errorf("invalid cookie signature")
 	}
@@ -142,6 +141,10 @@ func Unsign(cookieValue, secret string) ([]byte, error) {
 func (c *UserController) Login(ctx *gin.Context, user repo.User, rememberMe bool) {
 	sessionData := map[string]interface{}{
 		"userId": user.Id,
+	}
+
+	response := map[string]interface{}{
+		"user": c.RemovePassword(&user),
 	}
 
 	session, err := Serialize(sessionData)
@@ -161,12 +164,20 @@ func (c *UserController) Login(ctx *gin.Context, user repo.User, rememberMe bool
 
 	ctx.SetCookie(cookieName, signedSession, int(expiration.Unix()), "/", "", secure, true)
 
-	ctx.JSON(http.StatusOK, c.RemovePassword(&user))
+	ctx.JSON(http.StatusOK, response)
 }
 
 func (c *UserController) GetUserFromContext(ctx *gin.Context) *repo.User {
-	fmt.Printf("User Context %v\n", ctx.Request.Context().Value(userContextKey))
-	user, _ := ctx.Request.Context().Value(userContextKey).(*repo.User)
+	val, exists := ctx.Get(string(userContextKey))
+	if !exists {
+		return nil
+	}
+
+	user, ok := val.(*repo.User)
+	if !ok {
+		return nil
+	}
+
 	return user
 }
 
@@ -182,10 +193,14 @@ func (c *UserController) GetUserFromSession(ctx *gin.Context, cookieName, cookie
 		return nil, nil
 	}
 
-	unsignedSession, err := Unsign(cookie.Value, cookieSecret)
-	fmt.Printf("Unsigned Session: %s, Error: %s\n", &unsignedSession, err)
+	unescapedCookieValue, err := url.PathUnescape(cookie.Value)
 	if err != nil {
-		return nil, nil
+		return nil, fmt.Errorf("could not unescape cookie value")
+	}
+
+	unsignedSession, err := Unsign(unescapedCookieValue, cookieSecret)
+	if err != nil {
+		return nil, err
 	}
 
 	session, err := Deserialize(unsignedSession)
