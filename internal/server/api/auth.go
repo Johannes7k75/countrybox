@@ -2,6 +2,8 @@ package api
 
 import (
 	"country-box/internal/server/controller/user"
+	"database/sql"
+	"errors"
 	"fmt"
 	"log"
 	"net/http"
@@ -39,8 +41,15 @@ func (h *AuthHandler) UserAuthMiddleware(c *gin.Context) {
 	user, err := h.UserController.GetUserFromSession(c, cookieName, cookieSecret)
 
 	if err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			http.Error(c.Writer, "User not found", http.StatusForbidden)
+			c.Abort()
+			return
+		}
+
 		log.Println("Error getting user from session:", err)
 		http.Error(c.Writer, "Internal Server Error", http.StatusInternalServerError)
+		c.Abort()
 		return
 	}
 
