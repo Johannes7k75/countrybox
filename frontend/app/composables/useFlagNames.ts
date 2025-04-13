@@ -2,7 +2,10 @@ export const useFlagNames = () => {
 
     const flagNames = useState("flagNames", () => {
         const mappedFlagNames = new Map<string, string>()
-        $fetch('/api/v2/flags/names').then(flags => flags.forEach(flag => mappedFlagNames.set(flag.cca3, flag.name)))
+
+        useApi().fetch<{ name: string, cca2: string }[]>("/countries/names")
+            .then((flagNames) => flagNames.forEach((flag) => mappedFlagNames.set(flag.cca2, flag.name)))
+
         return mappedFlagNames;
     })
 

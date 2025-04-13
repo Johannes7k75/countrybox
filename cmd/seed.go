@@ -52,10 +52,33 @@ func (seeder *Seeder) seedUsers() {
 		log.Println("Failed to clear users:", err)
 		return
 	}
+	if _, err := seeder.db.Exec("DELETE FROM settings"); err != nil {
+		log.Println("Failed to clear settings:", err)
+		return
+	}
 
 	query := `INSERT INTO users (email, password) VALUES (?, ?)`
-	if _, err := seeder.db.Exec(query, email, password); err != nil {
+	res, err := seeder.db.Exec(query, email, password)
+	if err != nil {
 		log.Println("Failed to seed users:", err)
+		return
+	}
+
+	phasesJSON, err := json.Marshal([]int{1, 3, 5, 7, 14})
+	if err != nil {
+		log.Println("Failed to marshal phases JSON:", err)
+		return
+	}
+
+	userId, err := res.LastInsertId()
+	if err != nil {
+		log.Println("Failed to get last insert id:", err)
+		return
+	}
+
+	query = `INSERT INTO settings (user, phases) VALUES (?, ?)`
+	if _, err := seeder.db.Exec(query, userId, phasesJSON); err != nil {
+		log.Println("Failed to seed settings for user 0:", err)
 		return
 	}
 

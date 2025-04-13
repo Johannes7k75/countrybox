@@ -36,15 +36,10 @@ func (h *AuthHandler) AuthRoutes(R *gin.RouterGroup) {
 }
 
 func (h *AuthHandler) UserAuthMiddleware(c *gin.Context) {
-	log.Println("User Auth Handler")
 	user, err := h.UserController.GetUserFromSession(c, cookieName, cookieSecret)
 
-	if user == nil && err == nil {
-		http.Error(c.Writer, "Unauthorized", http.StatusUnauthorized)
-		return
-	}
-
 	if err != nil {
+		log.Println("Error getting user from session:", err)
 		http.Error(c.Writer, "Internal Server Error", http.StatusInternalServerError)
 		return
 	}

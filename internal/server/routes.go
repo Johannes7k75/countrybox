@@ -22,11 +22,12 @@ func (s *Server) RegisterRoutes() http.Handler {
 	}))
 
 	tldController := controller.NewTldController(s.db.Tld)
-	userController := user.NewUserController(s.db.User)
+	userController := user.NewUserController(s.db.User, s.db.Settings)
 	countryController := controller.NewCountriesController(s.db.Countries)
 	geoJsonController := controller.NewGeoJsonController(s.db.GeoJson)
 	boxController := controller.NewBoxController(s.db.Box)
 	gameController := controller.NewGameController(s.db.Countries, s.db.Tld)
+	settingsController := controller.NewSettingsController(s.db.Settings)
 
 	authRoute := &api.AuthHandler{
 		UserController: userController,
@@ -45,8 +46,9 @@ func (s *Server) RegisterRoutes() http.Handler {
 	}
 
 	boxRoute := &api.BoxHandler{
-		BoxController: boxController,
-		AuthHandler:   authRoute,
+		BoxController:      boxController,
+		AuthHandler:        authRoute,
+		SettingsController: settingsController,
 	}
 
 	gameRoute := &api.GameHandler{

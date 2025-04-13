@@ -2,6 +2,8 @@ package api
 
 import (
 	"country-box/internal/server/controller"
+	"country-box/internal/server/repo"
+	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
@@ -10,8 +12,9 @@ import (
 )
 
 type BoxHandler struct {
-	BoxController *controller.BoxController
-	AuthHandler   *AuthHandler
+	BoxController      *controller.BoxController
+	SettingsController *controller.SettingsController
+	AuthHandler        *AuthHandler
 }
 
 func (h *BoxHandler) BoxRoutes(R *gin.RouterGroup) {
@@ -27,13 +30,33 @@ func (h *BoxHandler) BoxRoutes(R *gin.RouterGroup) {
 func (h *BoxHandler) boxRoutes(c *gin.Context) {
 	userWithPassword := h.AuthHandler.UserController.GetUserFromContext(c)
 
+	var response struct {
+		Boxes  []repo.CountryBox `json:"boxes"`
+		Phases []int             `json:"phases"`
+	}
+
+	settings, err := h.SettingsController.SettingsRepo.GetSettingByUserID(userWithPassword.Id)
+	if err != nil {
+		log.Println(err)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Could not get settings for user"})
+		return
+	}
+
+	err = json.Unmarshal(settings.Phases, &response.Phases)
+	if err != nil {
+		log.Println(err)
+		return
+	}
+
 	boxes, err := h.BoxController.BoxRepo.GetBoxesByUserId(userWithPassword.Id)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Internal Server Error"})
 		return
 	}
 
-	c.JSON(http.StatusOK, boxes)
+	response.Boxes = boxes
+
+	c.JSON(http.StatusOK, response)
 }
 
 func (h *BoxHandler) boxRoute(c *gin.Context) {

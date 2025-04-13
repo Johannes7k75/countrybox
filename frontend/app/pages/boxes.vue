@@ -6,7 +6,7 @@ definePageMeta({
 });
 
 const {data: countryNames} = await useLazyAsyncData("country:names", async()=>{
-  const names = await useApi().fetch<{cca3: string, name: string}[]>("/flags/names")
+  const names = await useApi().fetch<{cca3: string, name: string}[]>("/countries/names")
   return new Map(names.map(({cca3, name})=>([cca3, name])))
 })
 
@@ -26,6 +26,8 @@ const modalOpen = reactive<Record<string, boolean>>({})
 
 const mappedBoxes = computed(()=> {
   
+  console.log(boxes)
+
   const phases = new Set<number>()
   boxes.value?.forEach(box=>phases.add(box.phase))
   
@@ -34,10 +36,17 @@ const mappedBoxes = computed(()=> {
   console.log(phaseNumbers)
 
 
-  return boxes
+  return [{
+    id: 0,
+    phase: 1,
+    days: 1,
+    countryIds: ["de"]
+  }]
 })
 
 console.log(boxes, useCountry().getName("de"));
+
+console.log("Mapped boxes", mappedBoxes.value)
 </script>
 
 <template>
@@ -55,13 +64,13 @@ console.log(boxes, useCountry().getName("de"));
       </div>
     </template>
     <template v-else>
-      <div class="flex w-max flex-col items-center" v-for="box of boxes" :key="box.phase">
-        <UModal v-model:open="modalOpen[box.id]">
+      <div class="flex w-max flex-col items-center" v-for="box of mappedBoxes" :key="box.phase">
+        <UModal v-model:open="modalOpen[box.phase]">
           <div
             class="relative flex h-20 w-12 items-center justify-center rounded-xl bg-gray-700 [font-size:32px] cursor-pointer">
             <span class="z-[5]">{{ box.id + 1 }}</span>
             <div class="absolute bottom-0 z-[3] w-full rounded-[inherit] rounded-t-[0] bg-green-500"
-              :style="{ height: `${Math.round((box.flagIds.length / allFlagsCount) * 100)}%` }"></div>
+              :style="{ height: `${Math.round((box.countryIds.length / allFlagsCount) * 100)}%` }"></div>
           </div>
 
           <template #content>
@@ -73,7 +82,7 @@ console.log(boxes, useCountry().getName("de"));
               </template>
 
               <div class="flex flex-col overflow-y-scroll max-h-100">
-                <span v-for="flagId of box.flagIds">{{ useFlagNames().value.get(flagId) }}</span>
+                <span v-for="flagId of box.countryIds">{{ useFlagNames().value.get(flagId) }}</span>
               </div>
 
               <template #footer>
@@ -87,7 +96,7 @@ console.log(boxes, useCountry().getName("de"));
           </template>
         </UModal>
 
-        <span>{{ box!.flagIds.length }}</span>
+        <span>{{ box!.countryIds.length }}</span>
       </div>
     </template>
   </div>

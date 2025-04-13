@@ -43,14 +43,19 @@ func (repo *UserRepo) Get(userID int) (User, error) {
 	var user User
 	var rolesData []byte
 
-	err := repo.db.Get(user, "SELECT id, email, roles, password FROM users WHERE id = $1", userID)
+	err := repo.db.QueryRowx("SELECT id, email, roles, password FROM users WHERE id = ?", userID).
+		Scan(&user.Id, &user.Email, &rolesData, &user.Password)
 	if err != nil {
 		return User{}, fmt.Errorf("failed to execute query: %w", err)
 	}
 
-	err = json.Unmarshal(rolesData, &user.Roles)
-	if err != nil {
-		return User{}, fmt.Errorf("failed to unmarshal roles JSON: %w", err)
+	if len(rolesData) == 0 {
+		user.Roles = []UserRole{}
+	} else {
+		err = json.Unmarshal(rolesData, &user.Roles)
+		if err != nil {
+			return User{}, fmt.Errorf("failed to unmarshal roles JSON: %w", err)
+		}
 	}
 
 	return user, nil
@@ -79,7 +84,7 @@ func (repo *UserRepo) GetUserByEmail(email string) (User, error) {
 }
 
 func (repo *UserRepo) Delete(userID int) error {
-	_, err := repo.db.Exec("DELETE FROM users WHERE id = $1", userID)
+	_, err := repo.db.Exec("DELETE FROM users WHERE id = ?", userID)
 	return fmt.Errorf("failed to delete user: %w", err)
 }
 
@@ -91,7 +96,7 @@ func (repo *UserRepo) Create(email string, password string, roles []UserRole) (i
 		return -1, fmt.Errorf("failed to unmarshall user roles: %w", err)
 	}
 
-	err = repo.db.QueryRow("INSERT INTO users (email, password, roles) VALUES ($1, $2, $2) RETURNING id", email, password, rolesJSON).Scan(&userID)
+	err = repo.db.QueryRow("INSERT INTO users (email, password, roles) VALUES (?, ?, ?) RETURNING id", email, password, rolesJSON).Scan(&userID)
 	if err != nil {
 		return -1, fmt.Errorf("failed to create user: %w", err)
 	}

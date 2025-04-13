@@ -43,7 +43,7 @@ func (repo *TldRepo) GetByTld(tldStr string) (Tld, error) {
 	err := repo.db.Get(&tld, "SELECT id, tld, countryCode FROM tld WHERE tld = ?", tldStr)
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
-			return Tld{}, fmt.Errorf("No row found with this tld")
+			return Tld{}, fmt.Errorf("no row found with this tld")
 		}
 		return Tld{}, fmt.Errorf("failed to execute query: %w", err)
 	}

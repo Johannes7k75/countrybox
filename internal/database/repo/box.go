@@ -45,7 +45,7 @@ func (repo *BoxRepo) GetBoxes() ([]CountryBox, error) {
 func (repo *BoxRepo) GetBoxesByUserId(userID int) ([]CountryBox, error) {
 	var boxes []CountryBox
 
-	err := repo.db.Select(&boxes, "SELECT id, userId, countryCode, trainedAt, phase FROM boxes WHERE userId = $1", userID)
+	err := repo.db.Select(&boxes, "SELECT id, userId, countryCode, trainedAt, phase FROM boxes WHERE userId = ?", userID)
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
 			return []CountryBox{}, nil
@@ -58,7 +58,7 @@ func (repo *BoxRepo) GetBoxesByUserId(userID int) ([]CountryBox, error) {
 func (repo *BoxRepo) GetBoxCountryByUserIdAndCode(userId int, code string) (CountryBox, error) {
 	var box CountryBox
 
-	err := repo.db.Select(&box, "SELECT id, userId, countryCode, trainedAt, phase FROM boxes WHERE userId = $1 AND countryCode = $2", userId, code)
+	err := repo.db.Select(&box, "SELECT id, userId, countryCode, trainedAt, phase FROM boxes WHERE userId = ? AND countryCode = ?", userId, code)
 	if err != nil {
 		return CountryBox{}, fmt.Errorf("failed to execute query: %w", err)
 	}

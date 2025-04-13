@@ -1,2 +1,0 @@
-ALTER TABLE `games` MODIFY COLUMN `startedAt` datetime NOT NULL DEFAULT '2025-03-12 09:09:37.445';--> statement-breakpoint
-ALTER TABLE `guessedFlags` MODIFY COLUMN `guessedAt` datetime DEFAULT '2025-03-12 09:09:37.446';
