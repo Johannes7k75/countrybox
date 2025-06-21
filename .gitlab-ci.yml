@@ -16,7 +16,6 @@ default:
   services:
     - docker:24-dind
 
-
 before_script:
   - apk add --no-cache openssh-client curl bash
   - echo "$SSH_KEY_DEPLOY_B64" | base64 -d > id_rsa && chmod 600 id_rsa
