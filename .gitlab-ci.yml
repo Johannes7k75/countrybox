@@ -18,7 +18,7 @@ default:
 
 
 before_script:
-  - apk add --no-cache openssh-client curl
+  - apk add --no-cache openssh-client curl bash
   - echo "$SSH_KEY_DEPLOY_B64" | base64 -d > id_rsa && chmod 600 id_rsa
   - eval $(ssh-agent -s)
   - ssh-add id_rsa
@@ -51,7 +51,7 @@ push_images:
   stage: push
   needs: [build_backend, build_frontend]
   before_script:
-    - apk add --no-cache openssh-client curl
+    - apk add --no-cache openssh-client curl bash
     - echo "$SSH_KEY_DEPLOY_B64" | base64 -d > id_rsa && chmod 600 id_rsa
     - eval $(ssh-agent -s)
     - ssh-add id_rsa
