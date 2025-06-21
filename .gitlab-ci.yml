@@ -56,8 +56,8 @@ push_images:
     - eval $(ssh-agent -s)
     - ssh-add id_rsa
     - mkdir -p ~/.docker/cli-plugins
-    - curl -sSL https://raw.githubusercontent.com/psviderski/unregistry/main/docker-pussh -o /usr/local/bin/docker-pussh
-    - chmod +x /usr/local/bin/docker-pussh
+    - curl -sSL https://raw.githubusercontent.com/psviderski/unregistry/main/docker-pussh -o ~/.docker/cli-plugins/docker-pussh
+    - chmod +x ~/.docker/cli-plugins/docker-pussh
   script:
     - docker pussh $IMAGE_BACKEND $REMOTE_USER@$REMOTE_HOST
     - docker pussh $IMAGE_FRONTEND $REMOTE_USER@$REMOTE_HOST
