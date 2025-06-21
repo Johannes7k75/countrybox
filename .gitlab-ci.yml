@@ -17,7 +17,7 @@ default:
     - docker:24-dind
 
 before_script:
-  - echo "$CI_JOB_TOKEN" | docker login $REGISTRY -u gitlab-ci-token --password-stdin $REGISTRY
+  - echo "$CI_JOB_TOKEN" | docker login -u gitlab-ci-token --password-stdin $REGISTRY
 
 # === BUILD BACKEND ===
 build_backend:
