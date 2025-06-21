@@ -1,0 +1,70 @@
+stages:
+  - build
+  - push
+  - generate-compose
+
+variables:
+  REGISTRY: registry.home.jospace.de
+  PROJECT_PATH: $CI_PROJECT_PATH
+  IMAGE_BACKEND: $REGISTRY/$PROJECT_PATH/backend
+  IMAGE_FRONTEND: $REGISTRY/$PROJECT_PATH/frontend
+  DOCKER_DRIVER: overlay2
+
+# Docker-in-Docker
+default:
+  image: docker:24
+  services:
+    - docker:24-dind
+
+before_script:
+  - echo "$CI_JOB_TOKEN" | docker login -u gitlab-ci-token --password-stdin $REGISTRY
+
+# === BUILD BACKEND ===
+build_backend:
+  stage: build
+  script:
+    - docker build -f Dockerfile -t $IMAGE_BACKEND:latest -t $IMAGE_BACKEND:$CI_COMMIT_SHORT_SHA .
+
+# === BUILD FRONTEND ===
+build_frontend:
+  stage: build
+  script:
+    - docker build -f frontend/Dockerfile -t $IMAGE_FRONTEND:latest -t $IMAGE_FRONTEND:$CI_COMMIT_SHORT_SHA frontend/
+
+# === PUSH BOTH IMAGES ===
+push_images:
+  stage: push
+  needs: [build_backend, build_frontend]
+  script:
+    - docker push $IMAGE_BACKEND:latest
+    - docker push $IMAGE_BACKEND:$CI_COMMIT_SHORT_SHA
+    - docker push $IMAGE_FRONTEND:latest
+    - docker push $IMAGE_FRONTEND:$CI_COMMIT_SHORT_SHA
+
+# === GENERATE COMPOSE ===
+generate_compose:
+  stage: generate-compose
+  needs: [push_images]
+  script:
+    - |
+      cat <<EOF > compose.generated.yml
+      version: '3.8'
+
+      services:
+        backend:
+          image: $IMAGE_BACKEND:$CI_COMMIT_SHORT_SHA
+          ports:
+            - "8080:8080"
+          environment:
+            - ENV=production
+
+        frontend:
+          image: $IMAGE_FRONTEND:$CI_COMMIT_SHORT_SHA
+          ports:
+            - "3000:3000"
+          environment:
+            - NODE_ENV=production
+      EOF
+  artifacts:
+    paths:
+      - compose.generated.yml
