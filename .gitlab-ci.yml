@@ -8,13 +8,13 @@ variables:
   IMAGE_FRONTEND: frontend:${CI_COMMIT_SHORT_SHA}
   REMOTE_HOST: jospace.de
   REMOTE_USER: deploy
+  DOCKER_HOST: tcp://docker:2375
+  DOCKER_TLS_CERTDIR: ""
 
 default:
   image: docker:24
   services:
     - docker:24-dind
-  before_script:
-    - docker info
 
 
 before_script:
@@ -26,6 +26,7 @@ before_script:
   - chmod +x /usr/local/bin/docker-pussh
   - mkdir -p ~/.docker/cli-plugins
   - ln -sf /usr/local/bin/docker-pussh ~/.docker/cli-plugins/docker-pussh
+  - docker info
 
 # 1. Build Backend Docker image
 build_backend:
