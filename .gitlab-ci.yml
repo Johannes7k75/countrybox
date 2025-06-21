@@ -22,10 +22,10 @@ before_script:
   - echo "$SSH_KEY_DEPLOY_B64" | base64 -d > id_rsa && chmod 600 id_rsa
   - eval $(ssh-agent -s)
   - ssh-add id_rsa
+  - mkdir -p ~/.docker/cli-plugins
   - curl -sSL https://raw.githubusercontent.com/psviderski/unregistry/main/docker-pussh -o /usr/local/bin/docker-pussh
   - chmod +x /usr/local/bin/docker-pussh
-  - mkdir -p ~/.docker/cli-plugins
-  - ln -sf /usr/local/bin/docker-pussh ~/.docker/cli-plugins/docker-pussh
+  # - ln -sf /usr/local/bin/docker-pussh ~/.docker/cli-plugins/docker-pussh
   - docker info
 
 # 1. Build Backend Docker image
