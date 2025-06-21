@@ -6,8 +6,8 @@ stages:
 variables:
   IMAGE_BACKEND: backend:${CI_COMMIT_SHORT_SHA}
   IMAGE_FRONTEND: frontend:${CI_COMMIT_SHORT_SHA}
-  REMOTE_HOST: jospace.de
-  REMOTE_USER: deploy
+  REMOTE_HOST: docker.home.jospace.de
+  REMOTE_USER: ci-deploy
   DOCKER_HOST: tcp://docker:2375
   DOCKER_TLS_CERTDIR: ""
 
@@ -50,9 +50,17 @@ build_frontend:
 push_images:
   stage: push
   needs: [build_backend, build_frontend]
+  before_script:
+    - apk add --no-cache openssh-client curl
+    - echo "$SSH_KEY_DEPLOY_B64" | base64 -d > id_rsa && chmod 600 id_rsa
+    - eval $(ssh-agent -s)
+    - ssh-add id_rsa
+    - mkdir -p ~/.docker/cli-plugins
+    - curl -sSL https://raw.githubusercontent.com/psviderski/unregistry/main/docker-pussh -o /usr/local/bin/docker-pussh
+    - chmod +x /usr/local/bin/docker-pussh
   script:
-    - docker pussh $IMAGE_BACKEND $REMOTE_USER@$REMOTE_HOST -i $SSH_KEY_PATH
-    - docker pussh $IMAGE_FRONTEND $REMOTE_USER@$REMOTE_HOST -i $SSH_KEY_PATH
+    - docker pussh $IMAGE_BACKEND $REMOTE_USER@$REMOTE_HOST
+    - docker pussh $IMAGE_FRONTEND $REMOTE_USER@$REMOTE_HOST
 
 # 4. Generate Compose file for remote deployment
 generate_compose:
