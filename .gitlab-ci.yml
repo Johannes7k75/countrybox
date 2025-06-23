@@ -1,15 +1,26 @@
 stages:
   - build
   - push
-  - generate-compose
+  - deploy
 
 variables:
-  IMAGE_BACKEND: backend:${CI_COMMIT_SHORT_SHA}
-  IMAGE_FRONTEND: frontend:${CI_COMMIT_SHORT_SHA}
+  # Use your GitLab registry URL
+  CI_REGISTRY: registry.home.jospace.de
+  # Project path in GitLab (e.g., 'mygroup/myproject')
+  CI_REGISTRY_IMAGE: $CI_REGISTRY/<your-project-path>
+  # GitLab CI will provide these automatically (or use a PAT)
+  CI_REGISTRY_USER: $CI_REGISTRY_USER  # GitLab CI variable
+  CI_REGISTRY_PASSWORD: $CI_REGISTRY_PASSWORD  # GitLab CI variable
+
+  # Image tags
+  IMAGE_BACKEND: $CI_REGISTRY_IMAGE/backend
+  IMAGE_BACKEND_SHA: ${IMAGE_BACKEND}:${CI_COMMIT_SHORT_SHA}
+  IMAGE_FRONTEND: $CI_REGISTRY_IMAGE/frontend
+  IMAGE_FRONTEND_SHA: ${IMAGE_FRONTEND}:${CI_COMMIT_SHORT_SHA}
+
+  # Remote server details (for deployment)
   REMOTE_HOST: srv-2.home.jospace.de
   REMOTE_USER: ci-deploy
-  DOCKER_HOST: tcp://docker:2375
-  DOCKER_TLS_CERTDIR: ""
 
 default:
   image: docker:24
@@ -21,69 +32,45 @@ before_script:
   - echo "$SSH_KEY_DEPLOY" > id_rsa && chmod 600 id_rsa
   - eval $(ssh-agent -s)
   - ssh-add id_rsa
-  - mkdir -p ~/.docker/cli-plugins
-  - curl -sSL https://raw.githubusercontent.com/psviderski/unregistry/main/docker-pussh -o /usr/local/bin/docker-pussh
-  - chmod +x /usr/local/bin/docker-pussh
-  # - ln -sf /usr/local/bin/docker-pussh ~/.docker/cli-plugins/docker-pussh
-  - docker info
 
-# 1. Build Backend Docker image
+# 1. Build Backend
 build_backend:
   stage: build
-  variables:
-    DOCKER_HOST: tcp://docker:2375
-    DOCKER_TLS_CERTDIR: ""
   script:
     - docker build -t $IMAGE_BACKEND -f Dockerfile .
 
-# 2. Build Frontend Docker image
+# 2. Build Frontend
 build_frontend:
   stage: build
-  variables:
-    DOCKER_HOST: tcp://docker:2375
-    DOCKER_TLS_CERTDIR: ""
   script:
     - docker build -t $IMAGE_FRONTEND -f frontend/Dockerfile frontend/
 
-# 3. Push both using docker pussh over SSH
+# 3. Push to GitLab Registry
 push_images:
   stage: push
   needs: [build_backend, build_frontend]
-  before_script:
-    - apk add --no-cache openssh-client curl bash
-    - echo "$SSH_KEY_DEPLOY"  > id_rsa && chmod 600 id_rsa
-    - eval $(ssh-agent -s)
-    - ssh-add id_rsa
-    - mkdir -p ~/.docker/cli-plugins
-    - curl -sSL https://raw.githubusercontent.com/psviderski/unregistry/main/docker-pussh -o ~/.docker/cli-plugins/docker-pussh
-    - chmod +x ~/.docker/cli-plugins/docker-pussh
   script:
-    - ~/.docker/cli-plugins/docker-pussh $IMAGE_BACKEND $REMOTE_USER@$REMOTE_HOST
-    - ~/.docker/cli-plugins/docker-pussh $IMAGE_FRONTEND $REMOTE_USER@$REMOTE_HOST
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker push $IMAGE_BACKEND_SHA
+    - docker push $IMAGE_BACKEND:latest
+    - docker push $IMAGE_FRONTEND_SHA
+    - docker push $IMAGE_FRONTEND:latest
 
-# 4. Generate Compose file for remote deployment
-generate_compose:
-  stage: generate-compose
+# 4. Deploy to Remote Server
+deploy:
+  stage: deploy
   needs: [push_images]
   script:
+    # SSH into the server and pull/run the images
     - |
-      cat <<EOF > docker-compose.generated.yml
-      version: '3.8'
-      services:
-        backend:
-          image: $IMAGE_BACKEND
-          ports:
-            - "8080:8080"
-          environment:
-            - ENV=production
-
-        frontend:
-          image: $IMAGE_FRONTEND
-          ports:
-            - "3000:3000"
-          environment:
-            - NODE_ENV=production
+      ssh -o StrictHostKeyChecking=no $REMOTE_USER@$REMOTE_HOST << 'EOF'
+      docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+      docker pull $IMAGE_BACKEND
+      docker pull $IMAGE_FRONTEND
+      # Stop/remove old containers and start new ones
+      docker compose down || true
+      docker compose up -d
       EOF
   artifacts:
     paths:
-      - docker-compose.generated.yml
+      - compose.generated.yml
