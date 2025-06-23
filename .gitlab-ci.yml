@@ -7,7 +7,7 @@ variables:
   # Use your GitLab registry URL
   CI_REGISTRY: registry.home.jospace.de
   # Project path in GitLab (e.g., 'mygroup/myproject')
-  CI_REGISTRY_IMAGE: $CI_REGISTRY/<your-project-path>
+  CI_REGISTRY_IMAGE: $CI_REGISTRY/apps/countrybox
   # GitLab CI will provide these automatically (or use a PAT)
   CI_REGISTRY_USER: $CI_REGISTRY_USER  # GitLab CI variable
   CI_REGISTRY_PASSWORD: $CI_REGISTRY_PASSWORD  # GitLab CI variable
@@ -17,6 +17,9 @@ variables:
   IMAGE_BACKEND_SHA: ${IMAGE_BACKEND}:${CI_COMMIT_SHORT_SHA}
   IMAGE_FRONTEND: $CI_REGISTRY_IMAGE/frontend
   IMAGE_FRONTEND_SHA: ${IMAGE_FRONTEND}:${CI_COMMIT_SHORT_SHA}
+
+  DOCKER_HOST: tcp://docker:2375
+  DOCKER_TLS_CERTDIR: ""
 
   # Remote server details (for deployment)
   REMOTE_HOST: srv-2.home.jospace.de
