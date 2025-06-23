@@ -24,6 +24,7 @@ variables:
   # Remote server details (for deployment)
   REMOTE_HOST: srv-2.home.jospace.de
   REMOTE_USER: ci-deploy
+  REMOTE_DIR: /home/ci-deploy/countrybox
 
 default:
   image: docker:24
@@ -40,35 +41,33 @@ before_script:
 build_backend:
   stage: build
   script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - docker build -t $IMAGE_BACKEND:latest -f Dockerfile .
+    - docker tag $IMAGE_BACKEND:latest $IMAGE_BACKEND_SHA
+    - docker push $IMAGE_BACKEND_SHA
+    - docker push $IMAGE_BACKEND:latest
 
 # 2. Build Frontend
 build_frontend:
   stage: build
   script:
-    - docker build -t $IMAGE_FRONTEND:latest -f frontend/Dockerfile frontend/
-
-# 3. Push to GitLab Registry
-push_images:
-  stage: push
-  needs: [build_backend, build_frontend]
-  script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-    - docker tag $IMAGE_BACKEND:latest $IMAGE_BACKEND_SHA
+    - docker build -t $IMAGE_FRONTEND:latest -f frontend/Dockerfile frontend/
     - docker tag $IMAGE_FRONTEND:latest $IMAGE_FRONTEND_SHA
-    - docker push $IMAGE_BACKEND_SHA
-    - docker push $IMAGE_BACKEND:latest
     - docker push $IMAGE_FRONTEND_SHA
     - docker push $IMAGE_FRONTEND:latest
 
 # 4. Deploy to Remote Server
 deploy:
   stage: deploy
-  needs: [push_images]
+  needs: [build_backend, build_frontend]
   script:
     # SSH into the server and pull/run the images
+    - ssh -o StrictHostKeyChecking=no $REMOTE_USER@$REMOTE_HOST "mkdir -p $REMOTE_DIR"
+    - scp -o StrictHostKeyChecking=no compose.yml $REMOTE_USER@$REMOTE_HOST:$REMOTE_DIR/compose.yml
     - |
       ssh -o StrictHostKeyChecking=no $REMOTE_USER@$REMOTE_HOST << 'EOF'
+      cd $REMOTE_DIR
       docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
       docker pull $IMAGE_BACKEND
       docker pull $IMAGE_FRONTEND
@@ -76,6 +75,3 @@ deploy:
       docker compose down || true
       docker compose up -d
       EOF
-  artifacts:
-    paths:
-      - compose.generated.yml

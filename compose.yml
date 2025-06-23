@@ -1,0 +1,32 @@
+---
+services:
+  app:
+    image: registry.home.jospace.de/apps/countrybox/frontend:lates
+    expose:
+      - 3000
+    environment:
+      NUXT_SESSION_PASSWORD: "fMB8qRrr7F9^2nhuA6Jz!a3Rgcne5h7h"
+
+  backend:
+    image: registry.home.jospace.de/apps/countrybox/backend:latest
+    environment:
+      BLUEPRINT_DB_HOST: database
+      BLUEPRINT_DB_PORT: 3306
+      BLUEPRINT_DB_DATABASE: country-box
+      BLUEPRINT_DB_USERNAME: countryBox
+      BLUEPRINT_DB_PASSWORD: ctrue*J3zp7N^1w4tCwyv1rvbOps3hNI
+      BLUEPRINT_DB_ROOT_PASSWORD: root
+      COOKIE_NAME: __session
+      COOKIE_SECRET: secret
+
+  database:
+    image: mysql:9.2
+    container_name: country-db
+    restart: unless-stopped
+    expose:
+      - 3306
+    environment:
+      MYSQL_ROOT_PASSWORD: secret
+      MYSQL_DATABASE: country-box
+      MYSQL_USER: countryBox
+      MYSQL_PASSWORD: ctrue*J3zp7N^1w4tCwyv1rvbOps3hNI
