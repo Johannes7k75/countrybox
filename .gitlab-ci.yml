@@ -40,13 +40,13 @@ before_script:
 build_backend:
   stage: build
   script:
-    - docker build -t $IMAGE_BACKEND -f Dockerfile .
+    - docker build -t $IMAGE_BACKEND_SHA -t $IMAGE_BACKEND:latest -f Dockerfile .
 
 # 2. Build Frontend
 build_frontend:
   stage: build
   script:
-    - docker build -t $IMAGE_FRONTEND -f frontend/Dockerfile frontend/
+    - docker build -t $IMAGE_FRONTEND_SHA -t $IMAGE_FRONTEND:latest -f frontend/Dockerfile frontend/
 
 # 3. Push to GitLab Registry
 push_images:
