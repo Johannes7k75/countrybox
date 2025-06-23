@@ -6,7 +6,7 @@ stages:
 variables:
   IMAGE_BACKEND: backend:${CI_COMMIT_SHORT_SHA}
   IMAGE_FRONTEND: frontend:${CI_COMMIT_SHORT_SHA}
-  REMOTE_HOST: docker.home.jospace.de
+  REMOTE_HOST: srv-2.home.jospace.de
   REMOTE_USER: ci-deploy
   DOCKER_HOST: tcp://docker:2375
   DOCKER_TLS_CERTDIR: ""
