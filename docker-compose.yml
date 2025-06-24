@@ -4,10 +4,11 @@ services:
       context: frontend
       dockerfile: Dockerfile
     ports: 
-      - 8080:3000
+      - 8043:3000
     environment:
       NUXT_SESSION_PASSWORD: ""
       DB_URL: mysql://country:Country!Box@database:3306/countryBox
+      API_HOST: http://127.0.0.1:8044
     networks:
       default:
     depends_on:
@@ -17,7 +18,10 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    ports:
+      - 8044:3000
     environment:
+      PORT: 3000
       BLUEPRINT_DB_HOST: database
       BLUEPRINT_DB_PORT: 3306
       BLUEPRINT_DB_DATABASE: countryBox

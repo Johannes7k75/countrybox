@@ -21,3 +21,7 @@ services:
     environment:
       PMA_HOST: db
       PMA_PORT: 3306
+  
+networks:
+  default:
+    name: country-net
