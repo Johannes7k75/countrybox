@@ -90,9 +90,37 @@ func SetupDatabase() *sqlx.DB {
 	db.SetMaxIdleConns(6)
 	db.SetMaxOpenConns(30)
 
+	seeder := &Seeder{db: db}
+
+	if isTableEmpty(db, "countries") {
+		log.Println("Countries table is empty. Seeding...")
+		seeder.SeedCountries()
+	}
+
+	if isTableEmpty(db, "tld") {
+		log.Println("TLDs table is empty. Seeding...")
+		seeder.SeedTlds()
+	}
+
+	if isTableEmpty(db, "geoJson") {
+		log.Println("GeoJSON table is empty. Seeding...")
+		seeder.SeedGeoJson()
+	}
+
 	log.Println("Database was configured successfully.")
 
 	return db
+}
+
+func isTableEmpty(db *sqlx.DB, tableName string) bool {
+	var count int
+	query := fmt.Sprintf("SELECT COUNT(*) FROM %s", tableName)
+	err := db.Get(&count, query)
+	if err != nil {
+		log.Printf("Error checking table %s: %v", tableName, err)
+		return false
+	}
+	return count == 0
 }
 
 func OpenLoop(driver, DSN string, timeout time.Duration) (*sqlx.DB, error) {

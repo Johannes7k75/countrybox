@@ -1,13 +1,10 @@
-//go:build ignore
-
-package main
+package database
 
 import (
-	"country-box/internal/database"
 	"country-box/internal/server/controller/user"
+	"embed"
 	"encoding/json"
 	"log"
-	"os"
 	"path/filepath"
 	"strings"
 
@@ -18,13 +15,11 @@ type Seeder struct {
 	db *sqlx.DB
 }
 
-func main() {
-	db := database.SetupDatabase()
+//go:embed data/countries.json
+var countriesJSON []byte
 
-	seeder := &Seeder{db}
-
-	seeder.seedDatabase()
-}
+//go:embed data/geojson/*.json
+var geoJsonFiles embed.FS
 
 func (seeder *Seeder) seedDatabase() {
 	log.Println("Seeding database...")
@@ -34,9 +29,9 @@ func (seeder *Seeder) seedDatabase() {
 	}
 
 	seeder.seedUsers()
-	seeder.seedCountries()
-	seeder.seedTlds()
-	seeder.seedGeoJson()
+	seeder.SeedCountries()
+	seeder.SeedTlds()
+	seeder.SeedGeoJson()
 
 	if _, err := seeder.db.Exec("SET FOREIGN_KEY_CHECKS = 1;"); err != nil {
 		log.Printf("Failed to enable Foreign key check: %v", err)
@@ -98,7 +93,7 @@ type Country struct {
 	Tlds        []string `json:"tlds"`
 }
 
-func (seeder *Seeder) seedCountries() {
+func (seeder *Seeder) SeedCountries() {
 	log.Println("Seeding countries...")
 
 	var countries []Country
@@ -108,13 +103,7 @@ func (seeder *Seeder) seedCountries() {
 		return
 	}
 
-	countryFile, err := os.ReadFile("./data/countries.json")
-	if err != nil {
-		log.Printf("Failed to load countries.json file: %v", err)
-		return
-	}
-
-	if err := json.Unmarshal(countryFile, &countries); err != nil {
+	if err := json.Unmarshal(countriesJSON, &countries); err != nil {
 		log.Printf("Failed to unmarshall countries.json: %v", err)
 		return
 	}
@@ -131,7 +120,7 @@ func (seeder *Seeder) seedCountries() {
 	log.Println("Successfully completed seeding countries")
 }
 
-func (seeder *Seeder) seedTlds() {
+func (seeder *Seeder) SeedTlds() {
 	log.Println("Seeding tlds...")
 
 	var countries []Country
@@ -141,13 +130,7 @@ func (seeder *Seeder) seedTlds() {
 		return
 	}
 
-	countryFile, err := os.ReadFile("./data/countries.json")
-	if err != nil {
-		log.Printf("Failed to load countries.json file: %v", err)
-		return
-	}
-
-	if err := json.Unmarshal(countryFile, &countries); err != nil {
+	if err := json.Unmarshal(countriesJSON, &countries); err != nil {
 		log.Printf("Failed to unmarshall countries.json: %v", err)
 		return
 	}
@@ -168,10 +151,10 @@ func (seeder *Seeder) seedTlds() {
 	log.Println("Successfully completed seeding tlds")
 }
 
-func (seeder *Seeder) seedGeoJson() {
+func (seeder *Seeder) SeedGeoJson() {
 	log.Println("Seeding geoJson...")
 
-	geoJson := loadGeoJson("./data/geojson")
+	geoJson := loadGeoJson()
 
 	if _, err := seeder.db.Exec("DELETE FROM geoJson"); err != nil {
 		log.Println("Failed to clear geoJson:", err)
@@ -194,29 +177,28 @@ func (seeder *Seeder) seedGeoJson() {
 	log.Println("Successfully completed seeding geoJson")
 }
 
-func loadGeoJson(path string) map[string][]byte {
-	geoJSONFiles := make(map[string][]byte)
+func loadGeoJson() map[string][]byte {
+	geoJSONMap := make(map[string][]byte)
 
-	files, err := os.ReadDir(path)
+	entries, err := geoJsonFiles.ReadDir("data/geojson")
 	if err != nil {
-		log.Fatal(err)
+		log.Printf("Error reading geoJson dir: %v", err)
+		return geoJSONMap
 	}
 
-	for _, file := range files {
-		if !file.IsDir() && filepath.Ext(file.Name()) == ".json" {
-			filePath := filepath.Join(path, file.Name())
-
-			content, err := os.ReadFile(filePath)
-			if err != nil {
-				log.Printf("Error reading file %s: %v", file.Name(), err)
-				continue
-			}
-
-			geoJSONFiles[file.Name()] = content
-
-			// fmt.Printf("Loaded file: %s, Size: %d bytes\n", file.Name(), len(content))
+	for _, entry := range entries {
+		if entry.IsDir() || !strings.HasSuffix(entry.Name(), ".json") {
+			continue
 		}
+
+		content, err := geoJsonFiles.ReadFile("data/geojson/" + entry.Name())
+		if err != nil {
+			log.Printf("Error reading geoJson file %s: %v", entry.Name(), err)
+			continue
+		}
+
+		geoJSONMap[entry.Name()] = content
 	}
 
-	return geoJSONFiles
+	return geoJSONMap
 }
