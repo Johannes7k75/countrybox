@@ -31,12 +31,12 @@ const isSignedIn = computed(()=>currentUser.value != null)
         :name="$t('main.titles.click&learn')"
         :sub-name="$t('main.types.train')"
       />
-      <GameLink
+      <!-- <GameLink
         to="/boxes"
         :locked="!isSignedIn"
         :name="$t('main.titles.flagBox')"
         :sub-name="$t('main.types.learn')"
-      />
+      /> -->
     </ul>
   </div>
 </template>
