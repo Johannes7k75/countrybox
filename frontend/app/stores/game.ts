@@ -146,6 +146,8 @@ export const useGameStore = defineStore("gameStore", {
       const roundData = await useApi().fetch<(db.Country & {tld: string})[]>("/game/options",{query: {
         roundId: this.roundId
       }})
+
+      console.log("Round Data:", roundData);
       // const roundData = await $fetch("/api/game", { method: "POST", body: { roundId: this.roundId } });
 
       const options: GameOption[] = roundData!.map((r) => ({

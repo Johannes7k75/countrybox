@@ -1,14 +1,15 @@
 <script setup lang="ts">
 import type { DropdownMenuItem } from "@nuxt/ui";
 import { cn } from "~~/lib/utils";
+import type { Country, Tld } from "~~/shared/database";
 
 const props = defineProps<{ type: GameTypes; secondType: GameTypes, update:(newType: GameTypes)=>void }>();
 
 const firstType = toRef(()=>props.type)
 const secondType = toRef(()=>props.secondType)
 
-const placeholder = await useApi().fetch("/countries/de");
-const tld = await useApi().fetch("/tlds/de");
+const placeholder = await useApi().fetch<Country>("/countries/de");
+const tld = await useApi().fetch<Tld>("/tlds/de");
 
 const isFlag = computed(() => props.type === "flag");
 
@@ -19,7 +20,7 @@ const label = computed(() => {
     case "capital":
       return placeholder?.capital;
     case "tld":
-      return tld[0]?.tld ?? "";
+      return tld?.tld ?? "";
     case "callCode":
       return `+${placeholder?.callingCode}`;
     case "flag":

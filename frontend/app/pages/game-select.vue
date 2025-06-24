@@ -54,7 +54,8 @@ function displayNode(type: GameTypes) {
     case "capital":
       return createEditableNode(placeholder.capital);
     case "tld":
-      return createEditableNode(tld.tld ?? "");
+      console.log(tld);
+      return createEditableNode(tld.tld ?? "de");
     case "callCode":
       return createEditableNode(`+${placeholder.callingCode}`);
     case "flag":

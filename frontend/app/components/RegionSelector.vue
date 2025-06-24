@@ -1,5 +1,7 @@
 <script lang="ts" setup>
-const props = defineProps<{ countries: (typeof tables.Countries.$inferSelect)[] }>();
+import type { Country } from '~~/shared/database';
+
+const props = defineProps<{ countries: Country[] }>();
 
 // Use reactive instead of ref to ensure reactivity
 const subregionsTree = ref(new Map<string, Map<string, Map<string, boolean>>>())
