@@ -1,0 +1,25 @@
+{
+  "name": "@countrybox/similarity-tool",
+  "private": true,
+  "type": "module",
+  "exports": {
+    "./features": "./src/features.ts"
+  },
+  "scripts": {
+    "build": "tsx src/build.ts",
+    "export-png": "tsx src/export-png.ts",
+    "typecheck": "tsc --noEmit -p .",
+    "test": "vitest run",
+    "evaluate": "tsx src/evaluate.ts"
+  },
+  "dependencies": {
+    "@countrybox/catalog": "workspace:*",
+    "@resvg/resvg-js": "^2.6.2"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "tsx": "^4.23.15",
+    "typescript": "~5.9.3",
+    "vitest": "^5.1.0"
+  }
+}

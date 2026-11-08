@@ -1,0 +1,1684 @@
+{
+ "$source": {
+  "name": "GeoNames cities500",
+  "url": "https://download.geonames.org/export/dump/cities500.zip",
+  "license": "CC BY 4.0 (https://www.geonames.org/)",
+  "retrievedAt": "2026-11-07",
+  "sha256": "bf2516f404ceefd24e099e48c8cd91730c9b1ab85158dd77eb9d943275d6b072"
+ },
+ "capitals": {
+  "ad": {
+   "name": "Andorra la Vella",
+   "lat": 42.5078,
+   "lon": 1.5211,
+   "geonameId": 3041563,
+   "featureCode": "PPLC"
+  },
+  "ae": {
+   "name": "Abu Dhabi",
+   "lat": 24.4512,
+   "lon": 54.397,
+   "geonameId": 292968,
+   "featureCode": "PPLC"
+  },
+  "af": {
+   "name": "Kabul",
+   "lat": 34.5281,
+   "lon": 69.1723,
+   "geonameId": 1138958,
+   "featureCode": "PPLC"
+  },
+  "ag": {
+   "name": "Saint John’s",
+   "lat": 17.121,
+   "lon": -61.8433,
+   "geonameId": 3576022,
+   "featureCode": "PPLC"
+  },
+  "ai": {
+   "name": "The Valley",
+   "lat": 18.217,
+   "lon": -63.0578,
+   "geonameId": 3573374,
+   "featureCode": "PPLC"
+  },
+  "al": {
+   "name": "Tirana",
+   "lat": 41.3274,
+   "lon": 19.8187,
+   "geonameId": 3183875,
+   "featureCode": "PPLC"
+  },
+  "am": {
+   "name": "Yerevan",
+   "lat": 40.1776,
+   "lon": 44.5126,
+   "geonameId": 616052,
+   "featureCode": "PPLC"
+  },
+  "ao": {
+   "name": "Luanda",
+   "lat": -8.8368,
+   "lon": 13.2343,
+   "geonameId": 2240449,
+   "featureCode": "PPLC"
+  },
+  "ar": {
+   "name": "Buenos Aires",
+   "lat": -34.6131,
+   "lon": -58.3772,
+   "geonameId": 3435910,
+   "featureCode": "PPLC"
+  },
+  "as": {
+   "name": "Pago Pago",
+   "lat": -14.2781,
+   "lon": -170.7025,
+   "geonameId": 5881576,
+   "featureCode": "PPLC"
+  },
+  "at": {
+   "name": "Vienna",
+   "lat": 48.2085,
+   "lon": 16.3721,
+   "geonameId": 2761369,
+   "featureCode": "PPLC"
+  },
+  "au": {
+   "name": "Canberra",
+   "lat": -35.2835,
+   "lon": 149.1281,
+   "geonameId": 2172517,
+   "featureCode": "PPLC"
+  },
+  "aw": {
+   "name": "Oranjestad",
+   "lat": 12.524,
+   "lon": -70.027,
+   "geonameId": 3577154,
+   "featureCode": "PPLC"
+  },
+  "ax": {
+   "name": "Mariehamn",
+   "lat": 60.0973,
+   "lon": 19.9348,
+   "geonameId": 3041732,
+   "featureCode": "PPLC"
+  },
+  "az": {
+   "name": "Baku",
+   "lat": 40.3777,
+   "lon": 49.892,
+   "geonameId": 587084,
+   "featureCode": "PPLC"
+  },
+  "ba": {
+   "name": "Sarajevo",
+   "lat": 43.8486,
+   "lon": 18.3564,
+   "geonameId": 3191281,
+   "featureCode": "PPLC"
+  },
+  "bb": {
+   "name": "Bridgetown",
+   "lat": 13.1073,
+   "lon": -59.6202,
+   "geonameId": 3374036,
+   "featureCode": "PPLC"
+  },
+  "bd": {
+   "name": "Dhaka",
+   "lat": 23.7104,
+   "lon": 90.4074,
+   "geonameId": 1185241,
+   "featureCode": "PPLC"
+  },
+  "be": {
+   "name": "Brussels",
+   "lat": 50.8505,
+   "lon": 4.3488,
+   "geonameId": 2800866,
+   "featureCode": "PPLC"
+  },
+  "bf": {
+   "name": "Ouagadougou",
+   "lat": 12.3657,
+   "lon": -1.5339,
+   "geonameId": 2357048,
+   "featureCode": "PPLC"
+  },
+  "bg": {
+   "name": "Sofia",
+   "lat": 42.6975,
+   "lon": 23.3241,
+   "geonameId": 727011,
+   "featureCode": "PPLC"
+  },
+  "bh": {
+   "name": "Manama",
+   "lat": 26.2279,
+   "lon": 50.5857,
+   "geonameId": 290340,
+   "featureCode": "PPLC"
+  },
+  "bi": {
+   "name": "Gitega",
+   "lat": -3.4271,
+   "lon": 29.9246,
+   "geonameId": 426272,
+   "featureCode": "PPLC"
+  },
+  "bj": {
+   "name": "Porto-Novo",
+   "lat": 6.4965,
+   "lon": 2.6036,
+   "geonameId": 2392087,
+   "featureCode": "PPLC"
+  },
+  "bl": {
+   "name": "Gustavia",
+   "lat": 17.8962,
+   "lon": -62.8498,
+   "geonameId": 3579132,
+   "featureCode": "PPLC"
+  },
+  "bm": {
+   "name": "Hamilton",
+   "lat": 32.2949,
+   "lon": -64.783,
+   "geonameId": 3573197,
+   "featureCode": "PPLC"
+  },
+  "bn": {
+   "name": "Bandar Seri Begawan",
+   "lat": 4.8903,
+   "lon": 114.9401,
+   "geonameId": 1820906,
+   "featureCode": "PPLC"
+  },
+  "bo": {
+   "name": "Sucre",
+   "lat": -19.0333,
+   "lon": -65.2627,
+   "geonameId": 3903987,
+   "featureCode": "PPLC"
+  },
+  "bq": {
+   "name": "Kralendijk",
+   "lat": 12.15,
+   "lon": -68.2667,
+   "geonameId": 3513563,
+   "featureCode": "PPLC"
+  },
+  "br": {
+   "name": "Brasília",
+   "lat": -15.7797,
+   "lon": -47.9297,
+   "geonameId": 3469058,
+   "featureCode": "PPLC"
+  },
+  "bs": {
+   "name": "Nassau",
+   "lat": 25.0582,
+   "lon": -77.3431,
+   "geonameId": 3571824,
+   "featureCode": "PPLC"
+  },
+  "bt": {
+   "name": "Thimphu",
+   "lat": 27.4661,
+   "lon": 89.6419,
+   "geonameId": 1252416,
+   "featureCode": "PPLC"
+  },
+  "bw": {
+   "name": "Gaborone",
+   "lat": -24.6545,
+   "lon": 25.9086,
+   "geonameId": 933773,
+   "featureCode": "PPLC"
+  },
+  "by": {
+   "name": "Minsk",
+   "lat": 53.9002,
+   "lon": 27.5665,
+   "geonameId": 625144,
+   "featureCode": "PPLC"
+  },
+  "bz": {
+   "name": "Belmopan",
+   "lat": 17.2538,
+   "lon": -88.764,
+   "geonameId": 3582672,
+   "featureCode": "PPLC"
+  },
+  "ca": {
+   "name": "Ottawa",
+   "lat": 45.4112,
+   "lon": -75.6981,
+   "geonameId": 6094817,
+   "featureCode": "PPLC"
+  },
+  "cc": {
+   "name": "West Island",
+   "lat": -12.1568,
+   "lon": 96.8225,
+   "geonameId": 7304591,
+   "featureCode": "PPLC"
+  },
+  "cd": {
+   "name": "Kinshasa",
+   "lat": -4.3276,
+   "lon": 15.3136,
+   "geonameId": 2314302,
+   "featureCode": "PPLC"
+  },
+  "cf": {
+   "name": "Bangui",
+   "lat": 4.3612,
+   "lon": 18.555,
+   "geonameId": 2389853,
+   "featureCode": "PPLC"
+  },
+  "cg": {
+   "name": "Brazzaville",
+   "lat": -4.2661,
+   "lon": 15.2832,
+   "geonameId": 2260535,
+   "featureCode": "PPLC"
+  },
+  "ch": {
+   "name": "Bern",
+   "lat": 46.9481,
+   "lon": 7.4474,
+   "geonameId": 2661552,
+   "featureCode": "PPLC"
+  },
+  "ci": {
+   "name": "Yamoussoukro",
+   "lat": 6.8205,
+   "lon": -5.2767,
+   "geonameId": 2279755,
+   "featureCode": "PPLC"
+  },
+  "ck": {
+   "name": "Avarua",
+   "lat": -21.2075,
+   "lon": -159.7755,
+   "geonameId": 4035715,
+   "featureCode": "PPLC"
+  },
+  "cl": {
+   "name": "Santiago",
+   "lat": -33.4569,
+   "lon": -70.6483,
+   "geonameId": 3871336,
+   "featureCode": "PPLC"
+  },
+  "cm": {
+   "name": "Yaoundé",
+   "lat": 3.8667,
+   "lon": 11.5167,
+   "geonameId": 2220957,
+   "featureCode": "PPLC"
+  },
+  "cn": {
+   "name": "Beijing",
+   "lat": 39.9075,
+   "lon": 116.3972,
+   "geonameId": 1816670,
+   "featureCode": "PPLC"
+  },
+  "co": {
+   "name": "Bogotá",
+   "lat": 4.6097,
+   "lon": -74.0817,
+   "geonameId": 3688689,
+   "featureCode": "PPLC"
+  },
+  "cr": {
+   "name": "San José",
+   "lat": 9.9339,
+   "lon": -84.0849,
+   "geonameId": 3621849,
+   "featureCode": "PPLC"
+  },
+  "cu": {
+   "name": "Havana",
+   "lat": 23.133,
+   "lon": -82.383,
+   "geonameId": 3553478,
+   "featureCode": "PPLC"
+  },
+  "cv": {
+   "name": "Praia",
+   "lat": 14.9315,
+   "lon": -23.5125,
+   "geonameId": 3374333,
+   "featureCode": "PPLC"
+  },
+  "cw": {
+   "name": "Willemstad",
+   "lat": 12.1225,
+   "lon": -68.8864,
+   "geonameId": 3513090,
+   "featureCode": "PPLC"
+  },
+  "cx": {
+   "name": "Flying Fish Cove",
+   "lat": -10.4217,
+   "lon": 105.6791,
+   "geonameId": 2078127,
+   "featureCode": "PPLC"
+  },
+  "cy": {
+   "name": "Nicosia",
+   "lat": 35.1728,
+   "lon": 33.354,
+   "geonameId": 146268,
+   "featureCode": "PPLC"
+  },
+  "cz": {
+   "name": "Prague",
+   "lat": 50.088,
+   "lon": 14.4208,
+   "geonameId": 3067696,
+   "featureCode": "PPLC"
+  },
+  "de": {
+   "name": "Berlin",
+   "lat": 52.5244,
+   "lon": 13.4105,
+   "geonameId": 2950159,
+   "featureCode": "PPLC"
+  },
+  "dj": {
+   "name": "Djibouti",
+   "lat": 11.589,
+   "lon": 43.145,
+   "geonameId": 223817,
+   "featureCode": "PPLC"
+  },
+  "dk": {
+   "name": "Copenhagen",
+   "lat": 55.6759,
+   "lon": 12.5655,
+   "geonameId": 2618425,
+   "featureCode": "PPLC"
+  },
+  "dm": {
+   "name": "Roseau",
+   "lat": 15.3017,
+   "lon": -61.3881,
+   "geonameId": 3575635,
+   "featureCode": "PPLC"
+  },
+  "do": {
+   "name": "Santo Domingo",
+   "lat": 18.4719,
+   "lon": -69.8923,
+   "geonameId": 3492908,
+   "featureCode": "PPLC"
+  },
+  "dz": {
+   "name": "Algiers",
+   "lat": 36.7323,
+   "lon": 3.0875,
+   "geonameId": 2507480,
+   "featureCode": "PPLC"
+  },
+  "ec": {
+   "name": "Quito",
+   "lat": -0.2298,
+   "lon": -78.525,
+   "geonameId": 3652462,
+   "featureCode": "PPLC"
+  },
+  "ee": {
+   "name": "Tallinn",
+   "lat": 59.437,
+   "lon": 24.7535,
+   "geonameId": 588409,
+   "featureCode": "PPLC"
+  },
+  "eg": {
+   "name": "Cairo",
+   "lat": 30.0626,
+   "lon": 31.2497,
+   "geonameId": 360630,
+   "featureCode": "PPLC"
+  },
+  "er": {
+   "name": "Asmara",
+   "lat": 15.3381,
+   "lon": 38.9318,
+   "geonameId": 343300,
+   "featureCode": "PPLC"
+  },
+  "es": {
+   "name": "Madrid",
+   "lat": 40.4165,
+   "lon": -3.7026,
+   "geonameId": 3117735,
+   "featureCode": "PPLC"
+  },
+  "et": {
+   "name": "Addis Ababa",
+   "lat": 9.025,
+   "lon": 38.7469,
+   "geonameId": 344979,
+   "featureCode": "PPLC"
+  },
+  "fi": {
+   "name": "Helsinki",
+   "lat": 60.1695,
+   "lon": 24.9354,
+   "geonameId": 658225,
+   "featureCode": "PPLC"
+  },
+  "fj": {
+   "name": "Suva",
+   "lat": -18.1368,
+   "lon": 178.4253,
+   "geonameId": 2198148,
+   "featureCode": "PPLC"
+  },
+  "fk": {
+   "name": "Stanley",
+   "lat": -51.6938,
+   "lon": -57.857,
+   "geonameId": 3426691,
+   "featureCode": "PPLC"
+  },
+  "fm": {
+   "name": "Palikir",
+   "lat": 6.9248,
+   "lon": 158.1611,
+   "geonameId": 2081986,
+   "featureCode": "PPLC"
+  },
+  "fo": {
+   "name": "Tórshavn",
+   "lat": 62.0097,
+   "lon": -6.7716,
+   "geonameId": 2611396,
+   "featureCode": "PPLC"
+  },
+  "fr": {
+   "name": "Paris",
+   "lat": 48.8534,
+   "lon": 2.3488,
+   "geonameId": 2988507,
+   "featureCode": "PPLC"
+  },
+  "ga": {
+   "name": "Libreville",
+   "lat": 0.3924,
+   "lon": 9.4536,
+   "geonameId": 2399697,
+   "featureCode": "PPLC"
+  },
+  "gb": {
+   "name": "London",
+   "lat": 51.5085,
+   "lon": -0.1257,
+   "geonameId": 2643743,
+   "featureCode": "PPLC"
+  },
+  "gd": {
+   "name": "Saint George's",
+   "lat": 12.0529,
+   "lon": -61.7523,
+   "geonameId": 3579925,
+   "featureCode": "PPLC"
+  },
+  "ge": {
+   "name": "Tbilisi",
+   "lat": 41.6914,
+   "lon": 44.8341,
+   "geonameId": 611717,
+   "featureCode": "PPLC"
+  },
+  "gf": {
+   "name": "Cayenne",
+   "lat": 4.9381,
+   "lon": -52.3346,
+   "geonameId": 3382160,
+   "featureCode": "PPLC"
+  },
+  "gg": {
+   "name": "Saint Peter Port",
+   "lat": 49.4598,
+   "lon": -2.5353,
+   "geonameId": 3042287,
+   "featureCode": "PPLC"
+  },
+  "gh": {
+   "name": "Accra",
+   "lat": 5.556,
+   "lon": -0.1969,
+   "geonameId": 2306104,
+   "featureCode": "PPLC"
+  },
+  "gi": {
+   "name": "Gibraltar",
+   "lat": 36.1447,
+   "lon": -5.3526,
+   "geonameId": 2411585,
+   "featureCode": "PPLC"
+  },
+  "gl": {
+   "name": "Nuuk",
+   "lat": 64.1835,
+   "lon": -51.7216,
+   "geonameId": 3421319,
+   "featureCode": "PPLC"
+  },
+  "gm": {
+   "name": "Banjul",
+   "lat": 13.4527,
+   "lon": -16.578,
+   "geonameId": 2413876,
+   "featureCode": "PPLC"
+  },
+  "gn": {
+   "name": "Conakry",
+   "lat": 9.538,
+   "lon": -13.6773,
+   "geonameId": 2422465,
+   "featureCode": "PPLC"
+  },
+  "gp": {
+   "name": "Basse-Terre",
+   "lat": 15.9971,
+   "lon": -61.7321,
+   "geonameId": 3579732,
+   "featureCode": "PPLC"
+  },
+  "gq": {
+   "name": "Ciudad de la Paz",
+   "lat": 1.5925,
+   "lon": 10.8236,
+   "geonameId": 12226438,
+   "featureCode": "PPLC"
+  },
+  "gr": {
+   "name": "Athens",
+   "lat": 37.9838,
+   "lon": 23.7278,
+   "geonameId": 264371,
+   "featureCode": "PPLC"
+  },
+  "gt": {
+   "name": "Guatemala City",
+   "lat": 14.6407,
+   "lon": -90.5133,
+   "geonameId": 3598132,
+   "featureCode": "PPLC"
+  },
+  "gu": {
+   "name": "Hagåtña",
+   "lat": 13.4757,
+   "lon": 144.7489,
+   "geonameId": 4044012,
+   "featureCode": "PPLC"
+  },
+  "gw": {
+   "name": "Bissau",
+   "lat": 11.8636,
+   "lon": -15.5977,
+   "geonameId": 2374775,
+   "featureCode": "PPLC"
+  },
+  "gy": {
+   "name": "Georgetown",
+   "lat": 6.8045,
+   "lon": -58.1553,
+   "geonameId": 3378644,
+   "featureCode": "PPLC"
+  },
+  "hk": {
+   "name": "Hong Kong",
+   "lat": 22.2783,
+   "lon": 114.1747,
+   "geonameId": 1819729,
+   "featureCode": "PPLC"
+  },
+  "hn": {
+   "name": "Tegucigalpa",
+   "lat": 14.0818,
+   "lon": -87.2068,
+   "geonameId": 3600949,
+   "featureCode": "PPLC"
+  },
+  "hr": {
+   "name": "Zagreb",
+   "lat": 45.8144,
+   "lon": 15.978,
+   "geonameId": 3186886,
+   "featureCode": "PPLC"
+  },
+  "ht": {
+   "name": "Port-au-Prince",
+   "lat": 18.5435,
+   "lon": -72.3388,
+   "geonameId": 3718426,
+   "featureCode": "PPLC"
+  },
+  "hu": {
+   "name": "Budapest",
+   "lat": 47.4984,
+   "lon": 19.0404,
+   "geonameId": 3054643,
+   "featureCode": "PPLC"
+  },
+  "id": {
+   "name": "Jakarta",
+   "lat": -6.2146,
+   "lon": 106.8451,
+   "geonameId": 1642911,
+   "featureCode": "PPLC"
+  },
+  "ie": {
+   "name": "Dublin",
+   "lat": 53.3331,
+   "lon": -6.2489,
+   "geonameId": 2964574,
+   "featureCode": "PPLC"
+  },
+  "im": {
+   "name": "Douglas",
+   "lat": 54.15,
+   "lon": -4.4833,
+   "geonameId": 3042237,
+   "featureCode": "PPLC"
+  },
+  "in": {
+   "name": "New Delhi",
+   "lat": 28.6214,
+   "lon": 77.2148,
+   "geonameId": 1261481,
+   "featureCode": "PPLC"
+  },
+  "iq": {
+   "name": "Baghdad",
+   "lat": 33.3406,
+   "lon": 44.4009,
+   "geonameId": 98182,
+   "featureCode": "PPLC"
+  },
+  "ir": {
+   "name": "Tehran",
+   "lat": 35.6944,
+   "lon": 51.4215,
+   "geonameId": 112931,
+   "featureCode": "PPLC"
+  },
+  "is": {
+   "name": "Reykjavík",
+   "lat": 64.1355,
+   "lon": -21.8954,
+   "geonameId": 3413829,
+   "featureCode": "PPLC"
+  },
+  "it": {
+   "name": "Rome",
+   "lat": 41.8919,
+   "lon": 12.5113,
+   "geonameId": 3169070,
+   "featureCode": "PPLC"
+  },
+  "je": {
+   "name": "Saint Helier",
+   "lat": 49.188,
+   "lon": -2.1049,
+   "geonameId": 3042091,
+   "featureCode": "PPLC"
+  },
+  "jm": {
+   "name": "Kingston",
+   "lat": 17.997,
+   "lon": -76.7936,
+   "geonameId": 3489854,
+   "featureCode": "PPLC"
+  },
+  "jo": {
+   "name": "Amman",
+   "lat": 31.9552,
+   "lon": 35.945,
+   "geonameId": 250441,
+   "featureCode": "PPLC"
+  },
+  "jp": {
+   "name": "Tokyo",
+   "lat": 35.6895,
+   "lon": 139.6917,
+   "geonameId": 1850147,
+   "featureCode": "PPLC"
+  },
+  "ke": {
+   "name": "Nairobi",
+   "lat": -1.2833,
+   "lon": 36.8167,
+   "geonameId": 184745,
+   "featureCode": "PPLC"
+  },
+  "kg": {
+   "name": "Bishkek",
+   "lat": 42.87,
+   "lon": 74.59,
+   "geonameId": 1528675,
+   "featureCode": "PPLC"
+  },
+  "kh": {
+   "name": "Phnom Penh",
+   "lat": 11.5625,
+   "lon": 104.916,
+   "geonameId": 1821306,
+   "featureCode": "PPLC"
+  },
+  "ki": {
+   "name": "Tarawa",
+   "lat": 1.3278,
+   "lon": 172.977,
+   "geonameId": 2110257,
+   "featureCode": "PPLC"
+  },
+  "km": {
+   "name": "Moroni",
+   "lat": -11.7022,
+   "lon": 43.2551,
+   "geonameId": 921772,
+   "featureCode": "PPLC"
+  },
+  "kn": {
+   "name": "Basseterre",
+   "lat": 17.2955,
+   "lon": -62.725,
+   "geonameId": 3575551,
+   "featureCode": "PPLC"
+  },
+  "kp": {
+   "name": "Pyongyang",
+   "lat": 39.0339,
+   "lon": 125.7543,
+   "geonameId": 1871859,
+   "featureCode": "PPLC"
+  },
+  "kr": {
+   "name": "Seoul",
+   "lat": 37.566,
+   "lon": 126.9784,
+   "geonameId": 1835848,
+   "featureCode": "PPLC"
+  },
+  "kw": {
+   "name": "Kuwait City",
+   "lat": 29.367,
+   "lon": 47.9743,
+   "geonameId": 285787,
+   "featureCode": "PPLC"
+  },
+  "ky": {
+   "name": "George Town",
+   "lat": 19.2866,
+   "lon": -81.3744,
+   "geonameId": 3580661,
+   "featureCode": "PPLC"
+  },
+  "kz": {
+   "name": "Astana",
+   "lat": 51.1801,
+   "lon": 71.446,
+   "geonameId": 1526273,
+   "featureCode": "PPLC"
+  },
+  "la": {
+   "name": "Vientiane",
+   "lat": 17.9667,
+   "lon": 102.6,
+   "geonameId": 1651944,
+   "featureCode": "PPLC"
+  },
+  "lb": {
+   "name": "Beirut",
+   "lat": 33.8933,
+   "lon": 35.5016,
+   "geonameId": 276781,
+   "featureCode": "PPLC"
+  },
+  "lc": {
+   "name": "Castries",
+   "lat": 13.9957,
+   "lon": -61.0061,
+   "geonameId": 3576812,
+   "featureCode": "PPLC"
+  },
+  "li": {
+   "name": "Vaduz",
+   "lat": 47.1415,
+   "lon": 9.5215,
+   "geonameId": 3042030,
+   "featureCode": "PPLC"
+  },
+  "lk": {
+   "name": "Colombo",
+   "lat": 6.9355,
+   "lon": 79.8487,
+   "geonameId": 1248991,
+   "featureCode": "PPLC"
+  },
+  "lr": {
+   "name": "Monrovia",
+   "lat": 6.3005,
+   "lon": -10.7969,
+   "geonameId": 2274895,
+   "featureCode": "PPLC"
+  },
+  "ls": {
+   "name": "Maseru",
+   "lat": -29.3167,
+   "lon": 27.4833,
+   "geonameId": 932505,
+   "featureCode": "PPLC"
+  },
+  "lt": {
+   "name": "Vilnius",
+   "lat": 54.6892,
+   "lon": 25.2798,
+   "geonameId": 593116,
+   "featureCode": "PPLC"
+  },
+  "lu": {
+   "name": "Luxembourg",
+   "lat": 49.6098,
+   "lon": 6.1327,
+   "geonameId": 2960316,
+   "featureCode": "PPLC"
+  },
+  "lv": {
+   "name": "Riga",
+   "lat": 56.946,
+   "lon": 24.1059,
+   "geonameId": 456172,
+   "featureCode": "PPLC"
+  },
+  "ly": {
+   "name": "Tripoli",
+   "lat": 32.8874,
+   "lon": 13.1873,
+   "geonameId": 2210247,
+   "featureCode": "PPLC"
+  },
+  "ma": {
+   "name": "Rabat",
+   "lat": 34.0132,
+   "lon": -6.8326,
+   "geonameId": 2538475,
+   "featureCode": "PPLC"
+  },
+  "mc": {
+   "name": "Monaco",
+   "lat": 43.7372,
+   "lon": 7.4215,
+   "geonameId": 2993458,
+   "featureCode": "PPLC"
+  },
+  "md": {
+   "name": "Chisinau",
+   "lat": 47.009,
+   "lon": 28.8594,
+   "geonameId": 618426,
+   "featureCode": "PPLC"
+  },
+  "me": {
+   "name": "Podgorica",
+   "lat": 42.4412,
+   "lon": 19.2631,
+   "geonameId": 3193044,
+   "featureCode": "PPLC"
+  },
+  "mf": {
+   "name": "Marigot",
+   "lat": 18.0682,
+   "lon": -63.083,
+   "geonameId": 3578851,
+   "featureCode": "PPLC"
+  },
+  "mg": {
+   "name": "Antananarivo",
+   "lat": -18.9137,
+   "lon": 47.5361,
+   "geonameId": 1070940,
+   "featureCode": "PPLC"
+  },
+  "mh": {
+   "name": "Majuro",
+   "lat": 7.0897,
+   "lon": 171.3803,
+   "geonameId": 2113779,
+   "featureCode": "PPLC"
+  },
+  "mk": {
+   "name": "Skopje",
+   "lat": 41.9965,
+   "lon": 21.4314,
+   "geonameId": 785842,
+   "featureCode": "PPLC"
+  },
+  "ml": {
+   "name": "Bamako",
+   "lat": 12.6091,
+   "lon": -7.9752,
+   "geonameId": 2460596,
+   "featureCode": "PPLC"
+  },
+  "mm": {
+   "name": "Nay Pyi Taw",
+   "lat": 19.745,
+   "lon": 96.1297,
+   "geonameId": 6611854,
+   "featureCode": "PPLC"
+  },
+  "mn": {
+   "name": "Ulan Bator",
+   "lat": 47.9077,
+   "lon": 106.8832,
+   "geonameId": 2028462,
+   "featureCode": "PPLC"
+  },
+  "mo": {
+   "name": "Macau",
+   "lat": 22.2006,
+   "lon": 113.5461,
+   "geonameId": 1821274,
+   "featureCode": "PPLC"
+  },
+  "mp": {
+   "name": "Saipan",
+   "lat": 15.2123,
+   "lon": 145.7545,
+   "geonameId": 7828758,
+   "featureCode": "PPLC"
+  },
+  "mq": {
+   "name": "Fort-de-France",
+   "lat": 14.6037,
+   "lon": -61.0742,
+   "geonameId": 3570675,
+   "featureCode": "PPLC"
+  },
+  "mr": {
+   "name": "Nouakchott",
+   "lat": 18.0858,
+   "lon": -15.9785,
+   "geonameId": 2377450,
+   "featureCode": "PPLC"
+  },
+  "ms": {
+   "name": "Plymouth",
+   "lat": 16.7055,
+   "lon": -62.2129,
+   "geonameId": 3578069,
+   "featureCode": "PPLC"
+  },
+  "mt": {
+   "name": "Valletta",
+   "lat": 35.8997,
+   "lon": 14.5148,
+   "geonameId": 2562305,
+   "featureCode": "PPLC"
+  },
+  "mu": {
+   "name": "Port Louis",
+   "lat": -20.1619,
+   "lon": 57.4989,
+   "geonameId": 934154,
+   "featureCode": "PPLC"
+  },
+  "mv": {
+   "name": "Male",
+   "lat": 4.1752,
+   "lon": 73.5092,
+   "geonameId": 1282027,
+   "featureCode": "PPLC"
+  },
+  "mw": {
+   "name": "Lilongwe",
+   "lat": -13.9669,
+   "lon": 33.7873,
+   "geonameId": 927967,
+   "featureCode": "PPLC"
+  },
+  "mx": {
+   "name": "Mexico City",
+   "lat": 19.4285,
+   "lon": -99.1277,
+   "geonameId": 3530597,
+   "featureCode": "PPLC"
+  },
+  "my": {
+   "name": "Kuala Lumpur",
+   "lat": 3.1412,
+   "lon": 101.6865,
+   "geonameId": 1735161,
+   "featureCode": "PPLC"
+  },
+  "mz": {
+   "name": "Maputo",
+   "lat": -25.9655,
+   "lon": 32.5832,
+   "geonameId": 1040652,
+   "featureCode": "PPLC"
+  },
+  "na": {
+   "name": "Windhoek",
+   "lat": -22.5594,
+   "lon": 17.0832,
+   "geonameId": 3352136,
+   "featureCode": "PPLC"
+  },
+  "nc": {
+   "name": "Nouméa",
+   "lat": -22.2741,
+   "lon": 166.4488,
+   "geonameId": 2139521,
+   "featureCode": "PPLC"
+  },
+  "ne": {
+   "name": "Niamey",
+   "lat": 13.5137,
+   "lon": 2.1098,
+   "geonameId": 2440485,
+   "featureCode": "PPLC"
+  },
+  "nf": {
+   "name": "Kingston",
+   "lat": -29.0546,
+   "lon": 167.9663,
+   "geonameId": 2161314,
+   "featureCode": "PPLC"
+  },
+  "ng": {
+   "name": "Abuja",
+   "lat": 9.0579,
+   "lon": 7.4951,
+   "geonameId": 2352778,
+   "featureCode": "PPLC"
+  },
+  "ni": {
+   "name": "Managua",
+   "lat": 12.1328,
+   "lon": -86.2504,
+   "geonameId": 3617763,
+   "featureCode": "PPLC"
+  },
+  "nl": {
+   "name": "Amsterdam",
+   "lat": 52.374,
+   "lon": 4.8897,
+   "geonameId": 2759794,
+   "featureCode": "PPLC"
+  },
+  "no": {
+   "name": "Oslo",
+   "lat": 59.9127,
+   "lon": 10.7461,
+   "geonameId": 3143244,
+   "featureCode": "PPLC"
+  },
+  "np": {
+   "name": "Kathmandu",
+   "lat": 27.7017,
+   "lon": 85.3206,
+   "geonameId": 1283240,
+   "featureCode": "PPLC"
+  },
+  "nr": {
+   "name": "Yaren",
+   "lat": -0.5508,
+   "lon": 166.9252,
+   "geonameId": 7626461,
+   "featureCode": "PPLC"
+  },
+  "nu": {
+   "name": "Alofi",
+   "lat": -19.0529,
+   "lon": -169.9196,
+   "geonameId": 4036284,
+   "featureCode": "PPLC"
+  },
+  "nz": {
+   "name": "Wellington",
+   "lat": -41.2866,
+   "lon": 174.7756,
+   "geonameId": 2179537,
+   "featureCode": "PPLC"
+  },
+  "om": {
+   "name": "Muscat",
+   "lat": 23.5841,
+   "lon": 58.4078,
+   "geonameId": 287286,
+   "featureCode": "PPLC"
+  },
+  "pa": {
+   "name": "Panama City",
+   "lat": 8.9936,
+   "lon": -79.5197,
+   "geonameId": 3703443,
+   "featureCode": "PPLC"
+  },
+  "pe": {
+   "name": "Lima",
+   "lat": -12.0432,
+   "lon": -77.0282,
+   "geonameId": 3936456,
+   "featureCode": "PPLC"
+  },
+  "pf": {
+   "name": "Papeete",
+   "lat": -17.5347,
+   "lon": -149.5684,
+   "geonameId": 4033936,
+   "featureCode": "PPLC"
+  },
+  "pg": {
+   "name": "Port Moresby",
+   "lat": -9.4772,
+   "lon": 147.1509,
+   "geonameId": 2088122,
+   "featureCode": "PPLC"
+  },
+  "ph": {
+   "name": "Manila",
+   "lat": 14.6042,
+   "lon": 120.9822,
+   "geonameId": 1701668,
+   "featureCode": "PPLC"
+  },
+  "pk": {
+   "name": "Islamabad",
+   "lat": 33.7215,
+   "lon": 73.0433,
+   "geonameId": 1176615,
+   "featureCode": "PPLC"
+  },
+  "pl": {
+   "name": "Warsaw",
+   "lat": 52.2298,
+   "lon": 21.0118,
+   "geonameId": 756135,
+   "featureCode": "PPLC"
+  },
+  "pm": {
+   "name": "Saint-Pierre",
+   "lat": 46.7791,
+   "lon": -56.1773,
+   "geonameId": 3424934,
+   "featureCode": "PPLC"
+  },
+  "pn": {
+   "name": "Adamstown",
+   "lat": -25.066,
+   "lon": -130.1015,
+   "geonameId": 4030723,
+   "featureCode": "PPLC"
+  },
+  "pr": {
+   "name": "San Juan",
+   "lat": 18.4663,
+   "lon": -66.1057,
+   "geonameId": 4568127,
+   "featureCode": "PPLC"
+  },
+  "pt": {
+   "name": "Lisbon",
+   "lat": 38.7251,
+   "lon": -9.1498,
+   "geonameId": 2267057,
+   "featureCode": "PPLC"
+  },
+  "pw": {
+   "name": "Ngerulmud",
+   "lat": 7.5008,
+   "lon": 134.6238,
+   "geonameId": 8063361,
+   "featureCode": "PPLC"
+  },
+  "py": {
+   "name": "Asunción",
+   "lat": -25.2865,
+   "lon": -57.647,
+   "geonameId": 3439389,
+   "featureCode": "PPLC"
+  },
+  "qa": {
+   "name": "Doha",
+   "lat": 25.2855,
+   "lon": 51.531,
+   "geonameId": 290030,
+   "featureCode": "PPLC"
+  },
+  "re": {
+   "name": "Saint-Denis",
+   "lat": -20.8823,
+   "lon": 55.4504,
+   "geonameId": 935264,
+   "featureCode": "PPLC"
+  },
+  "ro": {
+   "name": "Bucharest",
+   "lat": 44.4323,
+   "lon": 26.1063,
+   "geonameId": 683506,
+   "featureCode": "PPLC"
+  },
+  "rs": {
+   "name": "Belgrade",
+   "lat": 44.804,
+   "lon": 20.4651,
+   "geonameId": 792680,
+   "featureCode": "PPLC"
+  },
+  "ru": {
+   "name": "Moscow",
+   "lat": 55.752,
+   "lon": 37.6178,
+   "geonameId": 524901,
+   "featureCode": "PPLC"
+  },
+  "rw": {
+   "name": "Kigali",
+   "lat": -1.95,
+   "lon": 30.0588,
+   "geonameId": 202061,
+   "featureCode": "PPLC"
+  },
+  "sa": {
+   "name": "Riyadh",
+   "lat": 24.6877,
+   "lon": 46.7219,
+   "geonameId": 108410,
+   "featureCode": "PPLC"
+  },
+  "sb": {
+   "name": "Honiara",
+   "lat": -9.4333,
+   "lon": 159.95,
+   "geonameId": 2108502,
+   "featureCode": "PPLC"
+  },
+  "sc": {
+   "name": "Victoria",
+   "lat": -4.62,
+   "lon": 55.455,
+   "geonameId": 241131,
+   "featureCode": "PPLC"
+  },
+  "sd": {
+   "name": "Khartoum",
+   "lat": 15.5518,
+   "lon": 32.5324,
+   "geonameId": 379252,
+   "featureCode": "PPLC"
+  },
+  "se": {
+   "name": "Stockholm",
+   "lat": 59.3294,
+   "lon": 18.0687,
+   "geonameId": 2673730,
+   "featureCode": "PPLC"
+  },
+  "sg": {
+   "name": "Singapore",
+   "lat": 1.2897,
+   "lon": 103.8501,
+   "geonameId": 1880252,
+   "featureCode": "PPLC"
+  },
+  "sh": {
+   "name": "Jamestown",
+   "lat": -15.9249,
+   "lon": -5.7182,
+   "geonameId": 3370903,
+   "featureCode": "PPLC"
+  },
+  "si": {
+   "name": "Ljubljana",
+   "lat": 46.0511,
+   "lon": 14.5051,
+   "geonameId": 3196359,
+   "featureCode": "PPLC"
+  },
+  "sj": {
+   "name": "Longyearbyen",
+   "lat": 78.2233,
+   "lon": 15.6469,
+   "geonameId": 2729907,
+   "featureCode": "PPLC"
+  },
+  "sk": {
+   "name": "Bratislava",
+   "lat": 48.1482,
+   "lon": 17.1067,
+   "geonameId": 3060972,
+   "featureCode": "PPLC"
+  },
+  "sl": {
+   "name": "Freetown",
+   "lat": 8.4871,
+   "lon": -13.2356,
+   "geonameId": 2409306,
+   "featureCode": "PPLC"
+  },
+  "sm": {
+   "name": "San Marino",
+   "lat": 43.9367,
+   "lon": 12.4464,
+   "geonameId": 3168070,
+   "featureCode": "PPLC"
+  },
+  "sn": {
+   "name": "Dakar",
+   "lat": 14.6937,
+   "lon": -17.4441,
+   "geonameId": 2253354,
+   "featureCode": "PPLC"
+  },
+  "so": {
+   "name": "Mogadishu",
+   "lat": 2.0371,
+   "lon": 45.3438,
+   "geonameId": 53654,
+   "featureCode": "PPLC"
+  },
+  "sr": {
+   "name": "Paramaribo",
+   "lat": 5.8664,
+   "lon": -55.1668,
+   "geonameId": 3383330,
+   "featureCode": "PPLC"
+  },
+  "ss": {
+   "name": "Juba",
+   "lat": 4.8517,
+   "lon": 31.5825,
+   "geonameId": 373303,
+   "featureCode": "PPLC"
+  },
+  "st": {
+   "name": "São Tomé",
+   "lat": 0.3376,
+   "lon": 6.7299,
+   "geonameId": 2410763,
+   "featureCode": "PPLC"
+  },
+  "sv": {
+   "name": "San Salvador",
+   "lat": 13.6893,
+   "lon": -89.1872,
+   "geonameId": 3583361,
+   "featureCode": "PPLC"
+  },
+  "sx": {
+   "name": "Philipsburg",
+   "lat": 18.026,
+   "lon": -63.0458,
+   "geonameId": 3513392,
+   "featureCode": "PPLC"
+  },
+  "sy": {
+   "name": "Damascus",
+   "lat": 33.5102,
+   "lon": 36.2913,
+   "geonameId": 170654,
+   "featureCode": "PPLC"
+  },
+  "sz": {
+   "name": "Lobamba",
+   "lat": -26.4667,
+   "lon": 31.2,
+   "geonameId": 935048,
+   "featureCode": "PPLG"
+  },
+  "tc": {
+   "name": "Cockburn Town",
+   "lat": 21.4612,
+   "lon": -71.1419,
+   "geonameId": 3576994,
+   "featureCode": "PPLC"
+  },
+  "td": {
+   "name": "N'Djamena",
+   "lat": 12.1067,
+   "lon": 15.0444,
+   "geonameId": 2427123,
+   "featureCode": "PPLC"
+  },
+  "tg": {
+   "name": "Lomé",
+   "lat": 6.1287,
+   "lon": 1.2215,
+   "geonameId": 2365267,
+   "featureCode": "PPLC"
+  },
+  "th": {
+   "name": "Bangkok",
+   "lat": 13.754,
+   "lon": 100.5014,
+   "geonameId": 1609350,
+   "featureCode": "PPLC"
+  },
+  "tj": {
+   "name": "Dushanbe",
+   "lat": 38.5358,
+   "lon": 68.779,
+   "geonameId": 1221874,
+   "featureCode": "PPLC"
+  },
+  "tl": {
+   "name": "Dili",
+   "lat": -8.5586,
+   "lon": 125.5736,
+   "geonameId": 1645457,
+   "featureCode": "PPLC"
+  },
+  "tm": {
+   "name": "Ashgabat",
+   "lat": 37.95,
+   "lon": 58.3833,
+   "geonameId": 162183,
+   "featureCode": "PPLC"
+  },
+  "tn": {
+   "name": "Tunis",
+   "lat": 36.819,
+   "lon": 10.1658,
+   "geonameId": 2464470,
+   "featureCode": "PPLC"
+  },
+  "to": {
+   "name": "Nuku‘alofa",
+   "lat": -21.1368,
+   "lon": -175.2011,
+   "geonameId": 4032402,
+   "featureCode": "PPLC"
+  },
+  "tr": {
+   "name": "Ankara",
+   "lat": 39.9199,
+   "lon": 32.8543,
+   "geonameId": 323786,
+   "featureCode": "PPLC"
+  },
+  "tt": {
+   "name": "Port of Spain",
+   "lat": 10.6667,
+   "lon": -61.5189,
+   "geonameId": 3573890,
+   "featureCode": "PPLC"
+  },
+  "tv": {
+   "name": "Funafuti",
+   "lat": -8.5243,
+   "lon": 179.1942,
+   "geonameId": 2110394,
+   "featureCode": "PPLC"
+  },
+  "tw": {
+   "name": "Taipei",
+   "lat": 25.0531,
+   "lon": 121.5264,
+   "geonameId": 1668341,
+   "featureCode": "PPLC"
+  },
+  "tz": {
+   "name": "Dodoma",
+   "lat": -6.1722,
+   "lon": 35.7395,
+   "geonameId": 160196,
+   "featureCode": "PPLC"
+  },
+  "ua": {
+   "name": "Kyiv",
+   "lat": 50.4547,
+   "lon": 30.5238,
+   "geonameId": 703448,
+   "featureCode": "PPLC"
+  },
+  "ug": {
+   "name": "Kampala",
+   "lat": 0.3163,
+   "lon": 32.5822,
+   "geonameId": 232422,
+   "featureCode": "PPLC"
+  },
+  "us": {
+   "name": "Washington",
+   "lat": 38.8951,
+   "lon": -77.0364,
+   "geonameId": 4140963,
+   "featureCode": "PPLC"
+  },
+  "uy": {
+   "name": "Montevideo",
+   "lat": -34.9033,
+   "lon": -56.1882,
+   "geonameId": 3441575,
+   "featureCode": "PPLC"
+  },
+  "uz": {
+   "name": "Tashkent",
+   "lat": 41.2647,
+   "lon": 69.2163,
+   "geonameId": 1512569,
+   "featureCode": "PPLC"
+  },
+  "va": {
+   "name": "Vatican City",
+   "lat": 41.9027,
+   "lon": 12.4541,
+   "geonameId": 6691831,
+   "featureCode": "PPLC"
+  },
+  "vc": {
+   "name": "Kingstown",
+   "lat": 13.1553,
+   "lon": -61.2274,
+   "geonameId": 3577887,
+   "featureCode": "PPLC"
+  },
+  "ve": {
+   "name": "Caracas",
+   "lat": 10.488,
+   "lon": -66.8792,
+   "geonameId": 3646738,
+   "featureCode": "PPLC"
+  },
+  "vg": {
+   "name": "Road Town",
+   "lat": 18.4269,
+   "lon": -64.6208,
+   "geonameId": 3577430,
+   "featureCode": "PPLC"
+  },
+  "vi": {
+   "name": "Charlotte Amalie",
+   "lat": 18.3419,
+   "lon": -64.9307,
+   "geonameId": 4795467,
+   "featureCode": "PPLC"
+  },
+  "vn": {
+   "name": "Hanoi",
+   "lat": 21.0245,
+   "lon": 105.8412,
+   "geonameId": 1581130,
+   "featureCode": "PPLC"
+  },
+  "vu": {
+   "name": "Port-Vila",
+   "lat": -17.7365,
+   "lon": 168.3137,
+   "geonameId": 2135171,
+   "featureCode": "PPLC"
+  },
+  "wf": {
+   "name": "Mata-Utu",
+   "lat": -13.2816,
+   "lon": -176.1745,
+   "geonameId": 4034821,
+   "featureCode": "PPLC"
+  },
+  "ws": {
+   "name": "Apia",
+   "lat": -13.8333,
+   "lon": -171.7667,
+   "geonameId": 4035413,
+   "featureCode": "PPLC"
+  },
+  "xk": {
+   "name": "Pristina",
+   "lat": 42.6727,
+   "lon": 21.1669,
+   "geonameId": 786714,
+   "featureCode": "PPLC"
+  },
+  "ye": {
+   "name": "Sanaa",
+   "lat": 15.3545,
+   "lon": 44.2065,
+   "geonameId": 71137,
+   "featureCode": "PPLC"
+  },
+  "yt": {
+   "name": "Mamoudzou",
+   "lat": -12.7823,
+   "lon": 45.2288,
+   "geonameId": 921815,
+   "featureCode": "PPLC"
+  },
+  "za": {
+   "name": "Pretoria",
+   "lat": -25.7449,
+   "lon": 28.1878,
+   "geonameId": 964137,
+   "featureCode": "PPLC"
+  },
+  "zm": {
+   "name": "Lusaka",
+   "lat": -15.4067,
+   "lon": 28.2871,
+   "geonameId": 909137,
+   "featureCode": "PPLC"
+  },
+  "zw": {
+   "name": "Harare",
+   "lat": -17.8277,
+   "lon": 31.0534,
+   "geonameId": 890299,
+   "featureCode": "PPLC"
+  }
+ }
+}

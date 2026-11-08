@@ -1,0 +1,17 @@
+{
+  "$comment": "German exonyms for capitals whose German name differs from English. Applied to every capital in the list by exact English match.",
+  "Lisbon": "Lissabon", "Tokyo": "Tokio", "Rome": "Rom", "Mexico City": "Mexiko-Stadt", "New Delhi": "Neu-Delhi",
+  "Cairo": "Kairo", "Moscow": "Moskau", "Warsaw": "Warschau", "Prague": "Prag", "Vienna": "Wien", "Brussels": "Brüssel",
+  "Copenhagen": "Kopenhagen", "Athens": "Athen", "Bucharest": "Bukarest", "Belgrade": "Belgrad", "Kyiv": "Kyjiw",
+  "Beijing": "Peking", "Nicosia": "Nikosia", "Luxembourg": "Luxemburg", "Tbilisi": "Tiflis", "Yerevan": "Jerewan",
+  "Tehran": "Teheran", "Baghdad": "Bagdad", "Damascus": "Damaskus", "Riyadh": "Riad", "Kuwait City": "Kuwait-Stadt",
+  "Muscat": "Maskat", "Sana'a": "Sanaa", "Ulan Bator": "Ulan Bator", "Ulaanbaatar": "Ulan Bator", "Pyongyang": "Pjöngjang",
+  "Singapore": "Singapur", "Algiers": "Algier", "Tripoli": "Tripolis", "Khartoum": "Khartum", "Addis Ababa": "Addis Abeba",
+  "Mogadishu": "Mogadischu", "Djibouti": "Dschibuti", "Yaoundé": "Jaunde", "Havana": "Havanna", "Guatemala City": "Guatemala-Stadt",
+  "Panama City": "Panama-Stadt", "Vatican City": "Vatikanstadt", "Chișinău": "Chișinău", "Vilnius": "Vilnius", "Bern": "Bern",
+  "Kathmandu": "Kathmandu", "Tashkent": "Taschkent", "Dushanbe": "Duschanbe", "Ashgabat": "Aschgabat", "Bishkek": "Bischkek",
+  "Astana": "Astana", "Kingston": "Kingston", "Port of Spain": "Port of Spain", "Saint John's": "Saint John’s",
+  "Brasília": "Brasília", "Bogotá": "Bogotá", "Asunción": "Asunción", "Reykjavik": "Reykjavík", "Cape Town": "Kapstadt",
+  "Washington D.C.": "Washington, D.C.", "Jerusalem": "Jerusalem", "Nur-Sultan": "Astana", "Taipei": "Taipeh",
+  "Bangkok": "Bangkok", "Hanoi": "Hanoi", "Seoul": "Seoul", "Phnom Penh": "Phnom Penh", "Kabul": "Kabul"
+}

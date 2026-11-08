@@ -1,0 +1,55 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "options": {
+    "typeAware": true
+  },
+  "plugins": ["typescript", "unicorn", "oxc", "import", "vue", "vitest", "promise", "node"],
+  "categories": {
+    "correctness": "error",
+    "suspicious": "warn",
+    "perf": "warn"
+  },
+  "env": {
+    "browser": true,
+    "node": true,
+    "es2024": true
+  },
+  "rules": {
+    "typescript/no-floating-promises": "error",
+    "typescript/no-misused-promises": "error",
+    "typescript/await-thenable": "error",
+    "typescript/consistent-type-imports": "warn",
+    "import/no-cycle": "error",
+    "no-console": [
+      "warn",
+      {
+        "allow": ["warn", "error", "info"]
+      }
+    ],
+    "typescript/no-unsafe-type-assertion": "off",
+    "no-await-in-loop": "off",
+    "unicorn/no-array-sort": "off"
+  },
+  "overrides": [
+    {
+      "files": ["**/test/**", "**/*.test.ts", "tests/**"],
+      "rules": {
+        "no-console": "off"
+      }
+    },
+    {
+      "files": ["tools/**", "apps/api/src/db/migrate.ts", "apps/api/build.mjs"],
+      "rules": {
+        "no-console": "off"
+      }
+    }
+  ],
+  "ignorePatterns": [
+    "data/**",
+    "**/dist/**",
+    "**/.output/**",
+    "**/.nuxt/**",
+    "**/generated/**",
+    "apps/web/public/catalog/**"
+  ]
+}

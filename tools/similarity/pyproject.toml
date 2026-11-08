@@ -1,0 +1,27 @@
+[project]
+name = "countrybox-similarity"
+version = "0.1.0"
+description = "Offline flag image embeddings for CountryBox look-alike distractors (see EMBEDDINGS.md)"
+requires-python = ">=3.12,<3.13"
+dependencies = [
+  "torch==2.15.0",
+  "torchvision==0.29.2",
+  "transformers==5.22.2",
+  "open-clip-torch==4.2.1",
+  "numpy==2.5.4",
+  "pillow==13.0.0",
+]
+
+[tool.uv]
+# Scripts only, not an installable package.
+package = false
+
+# CPU-only PyTorch: ~245 images embed in seconds; avoids the multi-GB CUDA wheels.
+[tool.uv.sources]
+torch = { index = "pytorch-cpu" }
+torchvision = { index = "pytorch-cpu" }
+
+[[tool.uv.index]]
+name = "pytorch-cpu"
+url = "https://download.pytorch.org/whl/cpu"
+explicit = true

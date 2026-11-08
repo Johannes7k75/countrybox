@@ -1,0 +1,255 @@
+{
+  "method": "lab-grid-v1",
+  "packVersion": "c06d797fe4131edb",
+  "catalogVersion": "dda13848b02afb12",
+  "lookalike": [
+    {
+      "a": "ro",
+      "b": "td",
+      "rank": 1,
+      "required": true,
+      "pass": true
+    },
+    {
+      "a": "id",
+      "b": "mc",
+      "rank": 1,
+      "required": true,
+      "pass": true
+    },
+    {
+      "a": "ie",
+      "b": "ci",
+      "rank": 1,
+      "required": true,
+      "pass": true
+    },
+    {
+      "a": "nl",
+      "b": "lu",
+      "rank": 2,
+      "required": true,
+      "pass": true
+    },
+    {
+      "a": "au",
+      "b": "nz",
+      "rank": 2,
+      "required": true,
+      "pass": true
+    },
+    {
+      "a": "gn",
+      "b": "ml",
+      "rank": 1,
+      "required": true,
+      "pass": true
+    },
+    {
+      "a": "pl",
+      "b": "id",
+      "rank": 2,
+      "required": true,
+      "pass": true
+    },
+    {
+      "a": "sn",
+      "b": "ml",
+      "rank": 1,
+      "required": true,
+      "pass": true
+    },
+    {
+      "a": "co",
+      "b": "ec",
+      "rank": 1,
+      "required": true,
+      "pass": true
+    },
+    {
+      "a": "sk",
+      "b": "si",
+      "rank": 2,
+      "required": false,
+      "pass": true
+    },
+    {
+      "a": "qa",
+      "b": "bh",
+      "rank": 1,
+      "required": false,
+      "pass": true
+    },
+    {
+      "a": "jo",
+      "b": "ps",
+      "rank": 1,
+      "required": false,
+      "pass": true
+    },
+    {
+      "a": "ht",
+      "b": "li",
+      "rank": 1,
+      "required": false,
+      "pass": true
+    },
+    {
+      "a": "ve",
+      "b": "ec",
+      "rank": 5,
+      "required": false,
+      "pass": true
+    },
+    {
+      "a": "no",
+      "b": "is",
+      "rank": null,
+      "required": false,
+      "pass": false
+    },
+    {
+      "a": "eg",
+      "b": "iq",
+      "rank": 1,
+      "required": false,
+      "pass": true
+    },
+    {
+      "a": "de",
+      "b": "be",
+      "rank": null,
+      "required": false,
+      "pass": false
+    },
+    {
+      "a": "gr",
+      "b": "uy",
+      "rank": 6,
+      "required": false,
+      "pass": true
+    },
+    {
+      "a": "it",
+      "b": "mx",
+      "rank": 1,
+      "required": false,
+      "pass": true
+    },
+    {
+      "a": "cm",
+      "b": "gn",
+      "rank": null,
+      "required": false,
+      "pass": false
+    },
+    {
+      "a": "ru",
+      "b": "si",
+      "rank": 1,
+      "required": false,
+      "pass": true
+    },
+    {
+      "a": "bo",
+      "b": "gh",
+      "rank": 1,
+      "required": false,
+      "pass": true
+    },
+    {
+      "a": "at",
+      "b": "lv",
+      "rank": 1,
+      "required": false,
+      "pass": true
+    },
+    {
+      "a": "pe",
+      "b": "ca",
+      "rank": 1,
+      "required": false,
+      "pass": true
+    },
+    {
+      "a": "ch",
+      "b": "dk",
+      "rank": 12,
+      "required": false,
+      "pass": false
+    }
+  ],
+  "distinct": [
+    {
+      "a": "jp",
+      "b": "br",
+      "rank": null,
+      "required": true,
+      "pass": true
+    },
+    {
+      "a": "np",
+      "b": "us",
+      "rank": 12,
+      "required": true,
+      "pass": true
+    },
+    {
+      "a": "ca",
+      "b": "bt",
+      "rank": null,
+      "required": true,
+      "pass": true
+    },
+    {
+      "a": "kr",
+      "b": "za",
+      "rank": null,
+      "required": true,
+      "pass": true
+    },
+    {
+      "a": "gb",
+      "b": "ar",
+      "rank": null,
+      "required": true,
+      "pass": true
+    },
+    {
+      "a": "in",
+      "b": "gb",
+      "rank": null,
+      "required": true,
+      "pass": true
+    },
+    {
+      "a": "br",
+      "b": "ch",
+      "rank": null,
+      "required": true,
+      "pass": true
+    },
+    {
+      "a": "za",
+      "b": "no",
+      "rank": null,
+      "required": true,
+      "pass": true
+    },
+    {
+      "a": "kr",
+      "b": "mx",
+      "rank": null,
+      "required": true,
+      "pass": true
+    },
+    {
+      "a": "us",
+      "b": "sa",
+      "rank": null,
+      "required": true,
+      "pass": true
+    }
+  ],
+  "recallAtNear": 0.84
+}

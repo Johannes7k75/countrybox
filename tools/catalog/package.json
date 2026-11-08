@@ -1,0 +1,19 @@
+{
+  "name": "@countrybox/catalog-tool",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "tsx src/build.ts",
+    "typecheck": "tsc --noEmit -p ."
+  },
+  "dependencies": {
+    "@countrybox/catalog": "workspace:*",
+    "@countrybox/similarity-tool": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "flag-icons": "7.6.0",
+    "tsx": "^4.23.15",
+    "typescript": "~5.9.3"
+  }
+}

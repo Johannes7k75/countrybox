@@ -1,6 +1,32 @@
 {
-  "name": "country-box",
-  "lockfileVersion": 3,
-  "requires": true,
-  "packages": {}
+  "name": "countrybox",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "catalog": "pnpm --filter @countrybox/catalog-tool build && pnpm --filter @countrybox/similarity-tool build",
+    "dev:web": "pnpm --filter @countrybox/web dev",
+    "dev:api": "pnpm --filter @countrybox/api dev",
+    "build": "pnpm catalog && pnpm -r --filter ./packages/** build && pnpm --filter @countrybox/api build && pnpm --filter @countrybox/web generate",
+    "typecheck": "pnpm -r --parallel typecheck",
+    "typecheck:web": "pnpm --filter @countrybox/web typecheck:fast",
+    "test": "pnpm -r --if-present test",
+    "db:up": "docker compose -f ops/compose.dev.yml up -d db",
+    "db:down": "docker compose -f ops/compose.dev.yml down",
+    "lint": "oxlint",
+    "lint:fix": "oxlint --fix",
+    "format": "oxfmt",
+    "format:check": "oxfmt --check"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "oxfmt": "^0.77.0",
+    "oxlint": "^1.92.0",
+    "oxlint-tsgolint": "^7.0.2006",
+    "typescript": "~5.9.3",
+    "vitest": "^5.1.0"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "packageManager": "pnpm@11.8.0"
 }

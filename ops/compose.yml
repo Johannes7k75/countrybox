@@ -1,0 +1,53 @@
+# Production-style stack. Copy ops/.env.example to ops/.env, then:
+# Project name is countrybox-v2 on purpose: "countrybox" is used by the legacy MySQL stack on this machine.
+#   docker compose -f ops/compose.yml --env-file ops/.env up -d --build
+name: countrybox-v2
+services:
+  db:
+    image: postgres:18
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: countrybox
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD}
+      POSTGRES_DB: countrybox
+    volumes: ['pgdata:/var/lib/postgresql']
+    networks: [private]
+    healthcheck: { test: ['CMD-SHELL', 'pg_isready -U countrybox'], interval: 3s, retries: 30 }
+
+  migrate:
+    build: { context: .., dockerfile: ops/Dockerfile, target: api }
+    command: ['node', 'dist/db/migrate.mjs']
+    environment: &apienv
+      DATABASE_URL: postgres://countrybox:${POSTGRES_PASSWORD}@db:5432/countrybox
+      BETTER_AUTH_SECRET: ${BETTER_AUTH_SECRET:?set BETTER_AUTH_SECRET}
+      PUBLIC_ORIGIN: ${PUBLIC_ORIGIN:?set PUBLIC_ORIGIN}
+      TRUST_PROXY: '1'
+      NODE_ENV: production
+    depends_on: { db: { condition: service_healthy } }
+    networks: [private]
+    restart: 'no'
+
+  api:
+    build: { context: .., dockerfile: ops/Dockerfile, target: api }
+    restart: unless-stopped
+    environment: *apienv
+    depends_on:
+      db: { condition: service_healthy }
+      migrate: { condition: service_completed_successfully }
+    networks: [private]
+
+  web:
+    build: { context: .., dockerfile: ops/Dockerfile, target: web }
+    restart: unless-stopped
+    environment:
+      SITE_ADDRESS: ${SITE_ADDRESS:-:80}
+    ports: ['${HTTP_PORT:-8088}:80', '${HTTPS_PORT:-8448}:443']
+    volumes: ['caddy_data:/data']
+    depends_on: [api]
+    networks: [private]
+
+networks:
+  private: {}
+volumes:
+  pgdata: {}
+  caddy_data: {}

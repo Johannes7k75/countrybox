@@ -1,0 +1,212 @@
+{
+  "$comment": "Human-reviewed flag pairs for evaluating similarity methods. 'lookalike' pairs should rank in each other's near band; 'distinct' pairs must stay out of the near band (ranks 1..nearBand), which hard mode samples first. 'required' look-alikes gate the build (tests); the rest are reported only. Pairs tagged set=heldout-2026-11-07 were added after the first embedding run to check the method choice; tags note pairs the reviewer had already seen in contact sheets.",
+  "nearBand": 8,
+  "lookalike": [
+    {
+      "a": "ro",
+      "b": "td",
+      "required": true,
+      "why": "Blue-yellow-red vertical tricolour, nearly identical shades"
+    },
+    {
+      "a": "id",
+      "b": "mc",
+      "required": true,
+      "why": "Red over white, different proportions only"
+    },
+    {
+      "a": "ie",
+      "b": "ci",
+      "required": true,
+      "why": "Green-white-orange vs orange-white-green (mirrored)"
+    },
+    {
+      "a": "nl",
+      "b": "lu",
+      "required": true,
+      "why": "Red-white-blue horizontal, Luxembourg lighter blue"
+    },
+    {
+      "a": "au",
+      "b": "nz",
+      "required": true,
+      "why": "Blue ensign with Union Jack and stars"
+    },
+    {
+      "a": "gn",
+      "b": "ml",
+      "required": true,
+      "why": "Red-yellow-green vs green-yellow-red (mirrored)"
+    },
+    {
+      "a": "pl",
+      "b": "id",
+      "required": true,
+      "why": "White over red vs red over white (vertically mirrored)"
+    },
+    {
+      "a": "sn",
+      "b": "ml",
+      "required": true,
+      "why": "Pan-African vertical tricolour, Senegal adds a star"
+    },
+    {
+      "a": "co",
+      "b": "ec",
+      "required": true,
+      "why": "Yellow-blue-red horizontal, Ecuador adds emblem"
+    },
+    {
+      "a": "sk",
+      "b": "si",
+      "required": false,
+      "why": "White-blue-red horizontal with different coats of arms"
+    },
+    {
+      "a": "qa",
+      "b": "bh",
+      "required": false,
+      "why": "Serrated white band with maroon/red field"
+    },
+    {
+      "a": "jo",
+      "b": "ps",
+      "required": false,
+      "why": "Pan-Arab colours with red chevron, Jordan adds star"
+    },
+    {
+      "a": "ht",
+      "b": "li",
+      "required": false,
+      "why": "Blue over red with emblem"
+    },
+    {
+      "a": "ve",
+      "b": "ec",
+      "required": false,
+      "why": "Gran Colombia yellow-blue-red"
+    },
+    {
+      "a": "no",
+      "b": "is",
+      "required": false,
+      "why": "Nordic cross with inverted colours"
+    },
+    {
+      "a": "eg",
+      "b": "iq",
+      "required": false,
+      "why": "Red-white-black horizontal with central emblem"
+    },
+    {
+      "a": "de",
+      "b": "be",
+      "required": false,
+      "why": "Black-yellow-red, horizontal vs vertical \u2014 classic confusion",
+      "set": "heldout-2026-11-07 (seen in review sheet)"
+    },
+    {
+      "a": "gr",
+      "b": "uy",
+      "required": false,
+      "why": "Blue-white stripes with canton",
+      "set": "heldout-2026-11-07 (seen in review sheet)"
+    },
+    {
+      "a": "it",
+      "b": "mx",
+      "required": false,
+      "why": "Green-white-red vertical, Mexico adds emblem",
+      "set": "heldout-2026-11-07"
+    },
+    {
+      "a": "cm",
+      "b": "gn",
+      "required": false,
+      "why": "Green-red-yellow vertical, Cameroon adds star",
+      "set": "heldout-2026-11-07"
+    },
+    {
+      "a": "ru",
+      "b": "si",
+      "required": false,
+      "why": "White-blue-red horizontal, Slovenia adds arms",
+      "set": "heldout-2026-11-07"
+    },
+    {
+      "a": "bo",
+      "b": "gh",
+      "required": false,
+      "why": "Red-yellow-green horizontal, Ghana adds star",
+      "set": "heldout-2026-11-07"
+    },
+    {
+      "a": "at",
+      "b": "lv",
+      "required": false,
+      "why": "Red-white-red horizontal, Latvia darker and narrower stripe",
+      "set": "heldout-2026-11-07"
+    },
+    {
+      "a": "pe",
+      "b": "ca",
+      "required": false,
+      "why": "Red-white-red vertical, Canada adds maple leaf",
+      "set": "heldout-2026-11-07"
+    },
+    {
+      "a": "ch",
+      "b": "dk",
+      "required": false,
+      "why": "Red field with white cross",
+      "set": "heldout-2026-11-07 (seen in review sheet)"
+    }
+  ],
+  "distinct": [
+    {
+      "a": "jp",
+      "b": "br"
+    },
+    {
+      "a": "np",
+      "b": "us"
+    },
+    {
+      "a": "ca",
+      "b": "bt"
+    },
+    {
+      "a": "kr",
+      "b": "za"
+    },
+    {
+      "a": "gb",
+      "b": "ar"
+    },
+    {
+      "a": "in",
+      "b": "gb",
+      "set": "heldout-2026-11-07 (seen in review sheet)"
+    },
+    {
+      "a": "br",
+      "b": "ch",
+      "set": "heldout-2026-11-07"
+    },
+    {
+      "a": "za",
+      "b": "no",
+      "set": "heldout-2026-11-07"
+    },
+    {
+      "a": "kr",
+      "b": "mx",
+      "set": "heldout-2026-11-07"
+    },
+    {
+      "a": "us",
+      "b": "sa",
+      "set": "heldout-2026-11-07"
+    }
+  ]
+}

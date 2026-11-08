@@ -1,0 +1,14 @@
+{
+  "$schema": "./node_modules/oxfmt/configuration_schema.json",
+  "printWidth": 120,
+  "semi": false,
+  "singleQuote": true,
+  "trailingComma": "all",
+  "experimentalSortImports": {},
+  "ignorePatterns": [
+    "pnpm-lock.yaml",
+    "data/**",
+    "apps/api/src/db/migrations/**",
+    "**/*.svg"
+  ]
+}

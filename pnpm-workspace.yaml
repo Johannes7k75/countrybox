@@ -1,0 +1,10 @@
+packages:
+  - apps/*
+  - packages/*
+  - tools/*
+  - tests/*
+allowBuilds:
+  esbuild: true
+  '@parcel/watcher': true
+  vue-demi: true
+  better-sqlite3: false

@@ -1,1 +1,8 @@
-frontend
+**/node_modules
+**/.nuxt
+**/.output
+**/dist
+**/.env
+apps/web/public/catalog
+packages/catalog/generated
+.git

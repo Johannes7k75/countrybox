@@ -1,0 +1,19 @@
+{
+  "name": "@countrybox/api-client",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit -p ."
+  },
+  "dependencies": {
+    "hono": "^4.13.16"
+  },
+  "devDependencies": {
+    "@countrybox/api": "workspace:*",
+    "@types/node": "^22.10.0",
+    "typescript": "~5.9.3"
+  }
+}

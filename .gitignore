@@ -1,38 +1,40 @@
-# Binaries for programs and plugins
-*.exe
-*.exe~
-*.dll
-*.so
-*.dylib
+# Dependencies
+node_modules/
+tools/similarity/.venv/
 
-# Test binary, built with "go test -c"
-*.test
+# Build and runtime outputs
+dist/
+dist
+.output/
+.nuxt/
+.data/
+coverage/
+playwright-report/
+test-results/
 
-# Output of the go coverage tool, specifically when used with LiteIDE
-*.out
+# Logs and caches
+*.log
+*.tsbuildinfo
+.eslintcache
+__pycache__/
+*.py[cod]
 
-# Dependency directories (remove the comment below to include it)
-# vendor/
-
-# Go workspace file
-go.work
-tmp/
-temp/
-
-# IDE specific files
-.vscode
-.idea
-
-# .env file
-.env
-
-# Project build
-main
-*templ.go
-
-# OS X generated file
+# OS and editor files
 .DS_Store
+Thumbs.db
+.vscode/
+.idea/
+.zed/
+.claude/
+.agents/
 
-node_modules
-android
-.cache
+# Environment files
+.env
+.env.*
+!.env.example
+
+# Generated catalog and similarity outputs
+apps/web/public/catalog/
+packages/catalog/generated/
+data/similarity/renders/
+data/similarity/review/

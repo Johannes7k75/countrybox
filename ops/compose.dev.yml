@@ -1,0 +1,18 @@
+# Local development database. Start with: pnpm db:up
+name: countrybox-dev
+services:
+  db:
+    image: postgres:18
+    restart: unless-stopped
+    ports: ['127.0.0.1:5433:5432']
+    environment:
+      POSTGRES_USER: countrybox
+      POSTGRES_PASSWORD: countrybox-dev
+      POSTGRES_DB: countrybox
+    volumes: ['pgdata:/var/lib/postgresql']
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U countrybox']
+      interval: 2s
+      retries: 30
+volumes:
+  pgdata:

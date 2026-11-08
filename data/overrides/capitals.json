@@ -1,0 +1,7 @@
+{
+  "$comment": "Reviewed capital corrections. 'en' replaces the legacy English list; 'de' gives German exonyms where they differ. Every entry needs a reason.",
+  "ZA": { "en": ["Pretoria", "Cape Town", "Bloemfontein"], "de": ["Pretoria", "Kapstadt", "Bloemfontein"], "reason": "Executive, legislative and judicial capitals (South African government)." },
+  "BO": { "en": ["Sucre", "La Paz"], "reason": "Constitutional capital and seat of government." },
+  "MO": { "en": ["Macau"], "de": ["Macau"], "reason": "Legacy data had no capital for this city territory." },
+  "US": { "en": ["Washington, D.C."], "de": ["Washington, D.C."], "reason": "Normalized spelling." }
+}

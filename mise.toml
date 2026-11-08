@@ -1,0 +1,12 @@
+# mise.toml — Project tool dependencies for CountryBox
+# https://mise.jdx.dev
+
+[tools]
+node = "22"
+pnpm = "11.8.0"
+python = "3.12"
+uv = "latest"
+
+[env]
+# Prevents Corepack from hanging or failing on strict network verification
+COREPACK_ENABLE_STRICT = "0"

@@ -1,0 +1,4 @@
+{
+  "$comment": "Reviewed field corrections applied after legacy import. Every entry needs a reason.",
+  "VA": { "un": false, "reason": "Holy See is a UN non-member observer state, not a member (legacy data marked it as member)." }
+}

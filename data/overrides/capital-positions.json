@@ -1,0 +1,9 @@
+{
+  "$comment": "Reviewed capital coordinates [lat, lon] that override or fill gaps in data/sources/geonames/capitals.json. Each entry needs a reason. The pin must match the catalog's first capital.",
+  "gq": { "pos": [3.7523, 8.7741], "reason": "Catalog capital is Malabo; GeoNames already lists the planned Ciudad de la Paz as PPLC." },
+  "eh": { "pos": [27.1536, -13.2033], "reason": "El Aaiún (Laayoune); no PPLC row for EH in GeoNames." },
+  "il": { "pos": [31.7690, 35.2163], "reason": "Catalog capital Jerusalem; GeoNames has no PPLC row for IL (status disputed — shown as catalog states)." },
+  "io": { "pos": [-7.3133, 72.4111], "reason": "Diego Garcia; no PPLC row for IO." },
+  "ps": { "pos": [31.9038, 35.2034], "reason": "Catalog capital Ramallah (administrative seat); no PPLC row for PS." },
+  "tk": { "pos": [-9.3800, -171.2190], "reason": "Fakaofo (rotating administrative centre); no PPLC row for TK." }
+}
