@@ -1,9 +1,9 @@
 import { fileURLToPath } from 'node:url'
 
-// Applies reviewed SQL migrations. Run as a one-off deployment job, never at API boot.
-import { migrate } from 'drizzle-orm/node-postgres/migrator'
+// Applies migrations without starting the API (the server also runs them on boot).
+import { pool } from './index'
+import { runMigrations } from './run-migrations'
 
-import { db, pool } from './index'
-await migrate(db, { migrationsFolder: fileURLToPath(new URL('./migrations', import.meta.url)) })
+await runMigrations(fileURLToPath(new URL('./migrations', import.meta.url)))
 await pool.end()
 console.log('migrations applied')

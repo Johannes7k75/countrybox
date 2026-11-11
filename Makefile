@@ -66,7 +66,7 @@ db-psql: ## Open psql on the dev database
 db-generate: ## Generate a SQL migration from schema changes (review it before committing!)
 	pnpm --filter @countrybox/api db:generate
 
-migrate: ## Apply migrations to the dev database
+migrate: ## Apply migrations to the dev database (dev:api also does this on start)
 	pnpm --filter @countrybox/api db:migrate
 
 ## ── Quality ────────────────────────────────────────────

@@ -23,7 +23,7 @@ WORKDIR /app
 COPY --from=build /out/api /app
 USER node
 EXPOSE 8787
-HEALTHCHECK --interval=15s --timeout=3s CMD curl -fsS -o /dev/null http://127.0.0.1:8787/api/health || exit 1
+HEALTHCHECK --interval=15s --timeout=3s --start-period=30s --start-interval=2s CMD curl -fsS -o /dev/null http://127.0.0.1:8787/api/health || exit 1
 CMD ["node", "dist/server.mjs"]
 
 FROM caddy:2 AS web

@@ -1,25 +1,11 @@
 # Production stack.
-#   cp .env.example .env          # then set PUBLIC_ORIGIN, POSTGRES_PASSWORD, BETTER_AUTH_SECRET
-#   docker compose pull && docker compose up -d     # run the published images (COUNTRYBOX_VERSION, default: latest)
-#   docker compose up -d --build                    # or build them from this checkout
+#   cp .env.example .env                           # set PUBLIC_ORIGIN, POSTGRES_PASSWORD, BETTER_AUTH_SECRET
+#   docker compose pull && docker compose up -d    # published images (pin with COUNTRYBOX_VERSION)
+#   docker compose up -d --build                   # or build from this checkout
 #
-# Only `web` is reachable from outside. It serves the static app and proxies /api/* to `api`.
-# The project name stays "countrybox-v2" so it never touches the legacy "countrybox" stack or its volumes.
-name: countrybox-v2
-
-x-api: &api
-  image: ghcr.io/johannes7k75/countrybox-api:${COUNTRYBOX_VERSION:-latest}
-  build:
-    context: .
-    target: api
-  environment:
-    DATABASE_URL: postgres://countrybox:${POSTGRES_PASSWORD}@db:5432/countrybox
-    BETTER_AUTH_SECRET: ${BETTER_AUTH_SECRET:?set BETTER_AUTH_SECRET}
-    PUBLIC_ORIGIN: ${PUBLIC_ORIGIN:?set PUBLIC_ORIGIN}
-    TRUST_PROXY: "1"
-    NODE_ENV: production
-  networks:
-    - private
+# Only `web` is exposed: it serves the static app and proxies /api/* to `api`.
+# The API applies pending database migrations on startup.
+name: countrybox-v2 # not "countrybox": that belongs to the legacy stack and its volumes
 
 services:
   db:
@@ -31,33 +17,27 @@ services:
       POSTGRES_DB: countrybox
     volumes:
       - pgdata:/var/lib/postgresql
-    networks:
-      - private
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U countrybox"]
+      test: ['CMD-SHELL', 'pg_isready -U countrybox']
       interval: 3s
       retries: 30
 
-  # One-off job: applies database migrations, then exits. `api` waits for it to succeed.
-  migrate:
-    <<: *api
-    command: ["node", "dist/db/migrate.mjs"]
-    restart: "no"
-    depends_on:
-      db:
-        condition: service_healthy
-
-  # Hono server on Node: auth, sessions, and all /api/* routes. Internal only (port 8787).
   api:
-    <<: *api
+    image: ghcr.io/johannes7k75/countrybox-api:${COUNTRYBOX_VERSION:-latest}
+    build:
+      context: .
+      target: api
     restart: unless-stopped
+    environment:
+      DATABASE_URL: postgres://countrybox:${POSTGRES_PASSWORD}@db:5432/countrybox
+      BETTER_AUTH_SECRET: ${BETTER_AUTH_SECRET:?set BETTER_AUTH_SECRET}
+      PUBLIC_ORIGIN: ${PUBLIC_ORIGIN:?set PUBLIC_ORIGIN}
+      TRUST_PROXY: '1'
+      NODE_ENV: production
     depends_on:
       db:
         condition: service_healthy
-      migrate:
-        condition: service_completed_successfully
 
-  # Caddy: serves the generated Nuxt app and reverse-proxies /api/* to `api`. The only public entry point.
   web:
     image: ghcr.io/johannes7k75/countrybox-web:${COUNTRYBOX_VERSION:-latest}
     build:
@@ -76,11 +56,6 @@ services:
     depends_on:
       api:
         condition: service_healthy
-    networks:
-      - private
-
-networks:
-  private:
 
 volumes:
   pgdata:

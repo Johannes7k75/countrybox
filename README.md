@@ -47,7 +47,7 @@ docker compose pull && docker compose up -d   # published images from GHCR (pin 
 docker compose up -d --build            # or build from this checkout
 ```
 
-The stack runs `web` (Caddy: serves the static app and proxies `/api` — the only public service), `api` (the Hono server), PostgreSQL, and a one-off `migrate` job that runs before the API starts. The compose project is called `countrybox-v2` so it never touches the legacy `countrybox` containers on the same host.
+The stack runs `web` (Caddy: serves the static app and proxies `/api` — the only public service), `api` (the Hono server, which applies pending migrations on startup), and PostgreSQL. The compose project is called `countrybox-v2` so it never touches the legacy `countrybox` containers on the same host.
 
 ## License
 
