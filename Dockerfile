@@ -24,5 +24,5 @@ HEALTHCHECK --interval=15s --timeout=3s CMD node -e "fetch('http://127.0.0.1:878
 CMD ["node", "dist/server.mjs"]
 
 FROM caddy:2 AS web
-COPY ops/Caddyfile /etc/caddy/Caddyfile
+COPY Caddyfile /etc/caddy/Caddyfile
 COPY --from=build /repo/apps/web/.output/public /srv

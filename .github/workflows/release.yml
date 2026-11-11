@@ -53,7 +53,7 @@ jobs:
       - uses: docker/build-push-action@v6
         with:
           context: .
-          file: ops/Dockerfile
+          file: Dockerfile
           target: ${{ matrix.target }}
           push: true
           tags: ${{ steps.meta.outputs.tags }}

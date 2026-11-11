@@ -42,11 +42,12 @@ cd tests/e2e && BASE_URL=http://localhost:3000 npx playwright test   # browser j
 ## Deploy
 
 ```sh
-cp ops/.env.example ops/.env              # set PUBLIC_ORIGIN, POSTGRES_PASSWORD, BETTER_AUTH_SECRET
-docker compose -f ops/compose.yml --env-file ops/.env up -d --build
+cp .env.example .env                    # set PUBLIC_ORIGIN, POSTGRES_PASSWORD, BETTER_AUTH_SECRET
+docker compose pull && docker compose up -d   # published images from GHCR (pin with COUNTRYBOX_VERSION)
+docker compose up -d --build            # or build from this checkout
 ```
 
-The stack runs Caddy (web and `/api` proxy), the API, PostgreSQL, and a one-off `migrate` job that runs before the API starts. The compose project is called `countrybox-v2` so it never touches the legacy `countrybox` containers on the same host.
+The stack runs `web` (Caddy: serves the static app and proxies `/api` — the only public service), `api` (the Hono server), PostgreSQL, and a one-off `migrate` job that runs before the API starts. The compose project is called `countrybox-v2` so it never touches the legacy `countrybox` containers on the same host.
 
 ## License
 

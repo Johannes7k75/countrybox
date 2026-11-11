@@ -4,8 +4,8 @@
 SHELL := /bin/bash
 .DEFAULT_GOAL := help
 
-PROD_COMPOSE := docker compose -f ops/compose.yml --env-file ops/.env
-DEV_COMPOSE  := docker compose -f ops/compose.dev.yml
+PROD_COMPOSE := docker compose
+DEV_COMPOSE  := docker compose -f compose.dev.yml
 BASE_URL     ?= http://localhost:3000
 CHROMIUM     ?= $(shell command -v chromium 2>/dev/null)
 
@@ -106,17 +106,17 @@ e2e: ## Browser journeys (BASE_URL=http://localhost:3000 by default; needs runni
 check: format-check lint typecheck test ## Everything that runs without a browser
 
 ## ── Build & production stack ───────────────────────────
-.PHONY: build ops/.env prod-up prod-down prod-logs prod-ps prod-e2e
+.PHONY: build .env prod-up prod-down prod-logs prod-ps prod-e2e
 build: catalog ## Build API bundle and static web app locally
 	pnpm --filter @countrybox/api build
 	pnpm --filter @countrybox/web generate
 
-ops/.env:
-	@test -f ops/.env || { cp ops/.env.example ops/.env; \
-	  sed -i "s/^POSTGRES_PASSWORD=.*/POSTGRES_PASSWORD=$$(openssl rand -hex 12)/; s/^BETTER_AUTH_SECRET=.*/BETTER_AUTH_SECRET=$$(openssl rand -hex 32)/" ops/.env; \
-	  echo "created ops/.env — review PUBLIC_ORIGIN/SITE_ADDRESS"; }
+.env:
+	@test -f .env || { cp .env.example .env; \
+	  sed -i "s/^POSTGRES_PASSWORD=.*/POSTGRES_PASSWORD=$$(openssl rand -hex 12)/; s/^BETTER_AUTH_SECRET=.*/BETTER_AUTH_SECRET=$$(openssl rand -hex 32)/" .env; \
+	  echo "created .env — review PUBLIC_ORIGIN/SITE_ADDRESS"; }
 
-prod-up: ops/.env ## Build and start the production stack (http://localhost:8088)
+prod-up: .env ## Build and start the production stack (http://localhost:8088)
 	$(PROD_COMPOSE) up -d --build
 
 prod-down: ## Stop the production stack (volumes are kept)
