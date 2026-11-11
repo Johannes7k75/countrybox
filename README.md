@@ -4,15 +4,15 @@ A field atlas for learning flags, country names, capitals, internet domains, and
 
 ## Stack
 
-| Part    | Tech                                                                                            |
-| ------- | ----------------------------------------------------------------------------------------------- |
-| Web     | Nuxt 4 / Vue, statically generated (`apps/web`)                                                 |
-| API     | Hono on Node, typed RPC client (`apps/api`, `packages/api-client`)                              |
-| Data    | PostgreSQL 18, Drizzle ORM + SQL migrations                                                     |
-| Auth    | Better Auth: generated account ID + password, or email + password                               |
-| Rules   | Pure TypeScript domain package: questions, sessions, scheduler (`packages/domain`)              |
-| Catalog | Built from `data/` by `tools/catalog`: 245 countries, CLDR names (EN/DE), flag-icons, world map |
-| Edge    | Caddy: one origin, `/api/*` goes to Hono                                                        |
+| Part    | Tech                                                                                              |
+| ------- | ------------------------------------------------------------------------------------------------- |
+| Web     | Nuxt 4 / Vue, statically generated (`apps/web`)                                                   |
+| API     | Hono on Node, typed RPC client (`apps/api`, `packages/api-client`)                                |
+| Data    | PostgreSQL 18, Drizzle ORM + SQL migrations                                                       |
+| Auth    | Better Auth: generated account ID + password, or email + password                                 |
+| Rules   | Pure TypeScript domain package: questions, sessions, scheduler (`packages/domain`)                |
+| Catalog | Built from `data/` by `tools/catalog`: 245 countries, CLDR names (EN/DE), flag-icons, world map   |
+| Edge    | One container: Hono serves `/api/*` and the static app; TLS via your reverse proxy (e.g. Traefik) |
 
 ## Develop
 
@@ -47,7 +47,7 @@ docker compose pull && docker compose up -d   # published images from GHCR (pin 
 docker compose up -d --build            # or build from this checkout
 ```
 
-The stack runs `web` (Caddy: serves the static app and proxies `/api` — the only public service), `api` (the Hono server, which applies pending migrations on startup), and PostgreSQL. The compose project is called `countrybox-v2` so it never touches the legacy `countrybox` containers on the same host.
+The stack runs `app` (the Hono server: serves `/api` and the static web app, and applies pending migrations on startup) and PostgreSQL. Put it behind a reverse proxy such as Traefik for TLS; `compose.yml` has an example of the labels. The compose project is called `countrybox-v2` so it never touches the legacy `countrybox` containers on the same host.
 
 ## License
 

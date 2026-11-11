@@ -1,10 +1,10 @@
 # Production stack.
 #   cp .env.example .env                           # set PUBLIC_ORIGIN, POSTGRES_PASSWORD, BETTER_AUTH_SECRET
-#   docker compose pull && docker compose up -d    # published images (pin with COUNTRYBOX_VERSION)
+#   docker compose pull && docker compose up -d    # published image (pin with COUNTRYBOX_VERSION)
 #   docker compose up -d --build                   # or build from this checkout
 #
-# Only `web` is exposed: it serves the static app and proxies /api/* to `api`.
-# The API applies pending database migrations on startup.
+# `app` serves both /api/* and the static web app, and applies pending database migrations on startup.
+# Run it behind a reverse proxy (e.g. Traefik) for TLS; see the labels example below.
 name: countrybox-v2 # not "countrybox": that belongs to the legacy stack and its volumes
 
 services:
@@ -22,42 +22,34 @@ services:
       interval: 3s
       retries: 30
 
-  api:
-    image: ghcr.io/johannes7k75/countrybox-api:${COUNTRYBOX_VERSION:-latest}
-    build:
-      context: .
-      target: api
+  app:
+    image: ghcr.io/johannes7k75/countrybox:${COUNTRYBOX_VERSION:-latest}
+    build: .
     restart: unless-stopped
     environment:
       DATABASE_URL: postgres://countrybox:${POSTGRES_PASSWORD}@db:5432/countrybox
       BETTER_AUTH_SECRET: ${BETTER_AUTH_SECRET:?set BETTER_AUTH_SECRET}
       PUBLIC_ORIGIN: ${PUBLIC_ORIGIN:?set PUBLIC_ORIGIN}
-      TRUST_PROXY: '1'
+      TRUST_PROXY: '1' # read the client IP from X-Forwarded-For; only safe behind a proxy that sets it
       NODE_ENV: production
+    ports:
+      - 127.0.0.1:${HTTP_PORT:-8088}:8787 # local access only; Traefik reaches the container over its network
     depends_on:
       db:
         condition: service_healthy
+    # Behind Traefik: remove `ports`, join Traefik's network, and add labels like these:
+    # networks: [default, traefik]
+    # labels:
+    #   traefik.enable: 'true'
+    #   traefik.docker.network: traefik
+    #   traefik.http.routers.countrybox.rule: Host(`countrybox.example.com`)
+    #   traefik.http.routers.countrybox.entrypoints: websecure
+    #   traefik.http.routers.countrybox.tls.certresolver: letsencrypt
+    #   traefik.http.services.countrybox.loadbalancer.server.port: '8787'
 
-  web:
-    image: ghcr.io/johannes7k75/countrybox-web:${COUNTRYBOX_VERSION:-latest}
-    build:
-      context: .
-      target: web
-    restart: unless-stopped
-    environment:
-      SITE_ADDRESS: ${SITE_ADDRESS:-:80}
-    ports:
-      - ${HTTP_PORT:-8088}:80
-      - ${HTTPS_PORT:-8448}:443
-      - ${HTTPS_PORT:-8448}:443/udp # HTTP/3
-    volumes:
-      - caddy_data:/data
-      - caddy_config:/config
-    depends_on:
-      api:
-        condition: service_healthy
+# networks:
+#   traefik:
+#     external: true
 
 volumes:
   pgdata:
-  caddy_data:
-  caddy_config:

@@ -1,4 +1,4 @@
-// Static client app: `nuxt generate` emits files that Caddy serves; Hono owns every /api route.
+// Static client app: `nuxt generate` emits files that the API serves in production; Hono owns every /api route.
 export default defineNuxtConfig({
   compatibilityDate: '2026-11-01',
   ssr: false,

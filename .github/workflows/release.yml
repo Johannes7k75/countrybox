@@ -18,15 +18,11 @@ env:
 
 jobs:
   build:
-    name: Build ${{ matrix.target }} image
+    name: Build image
     runs-on: ubuntu-latest
     permissions:
       contents: read
       packages: write
-    strategy:
-      fail-fast: true
-      matrix:
-        target: [api, web]
     steps:
       - uses: actions/checkout@v4
 
@@ -41,7 +37,7 @@ jobs:
       - id: meta
         uses: docker/metadata-action@v5
         with:
-          images: ${{ env.REGISTRY }}/${{ github.repository }}-${{ matrix.target }}
+          images: ${{ env.REGISTRY }}/${{ github.repository }}
           flavor: latest=false
           tags: |
             type=semver,pattern={{version}}
@@ -54,12 +50,11 @@ jobs:
         with:
           context: .
           file: Dockerfile
-          target: ${{ matrix.target }}
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-          cache-from: type=gha,scope=${{ matrix.target }}
-          cache-to: type=gha,mode=max,scope=${{ matrix.target }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
 
   release:
     name: Create GitHub release
@@ -81,11 +76,10 @@ jobs:
           image="${REGISTRY}/${GITHUB_REPOSITORY,,}"
           version="${TAG#v}"
           {
-            echo "## Docker images"
+            echo "## Docker image"
             echo
             echo '```sh'
-            echo "docker pull ${image}-api:${version}"
-            echo "docker pull ${image}-web:${version}"
+            echo "docker pull ${image}:${version}"
             echo '```'
           } > notes.md
 

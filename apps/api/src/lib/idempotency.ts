@@ -40,7 +40,5 @@ export async function storeIdempotency(
   status: number,
   response: unknown,
 ) {
-  await tx
-    .insert(schema.idempotencyRecord)
-    .values({ userId, endpoint, key, requestHash, status, response: response })
+  await tx.insert(schema.idempotencyRecord).values({ userId, endpoint, key, requestHash, status, response: response })
 }

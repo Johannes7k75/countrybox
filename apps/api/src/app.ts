@@ -1,11 +1,14 @@
 import { Hono } from 'hono'
 import { bodyLimit } from 'hono/body-limit'
+import { compress } from 'hono/compress'
 import { secureHeaders } from 'hono/secure-headers'
 
 import { auth } from './auth'
 import { pool } from './db'
+import { env } from './env'
 import { catalog } from './lib/catalog'
 import { fail, loadSession, noStore, requestId, type AppEnv } from './lib/http'
+import { mountStatic } from './lib/static'
 import { accounts } from './routes/accounts'
 import { me } from './routes/me'
 import { review } from './routes/review'
@@ -27,7 +30,16 @@ export const routes = new Hono<AppEnv>()
   .route('/', review)
 
 export const app = new Hono<AppEnv>()
-app.use('*', requestId, secureHeaders())
+app.use(
+  '*',
+  requestId,
+  compress(),
+  secureHeaders({
+    // Not the default no-referrer: that makes browsers send `Origin: null` on same-origin POSTs, failing the CSRF check.
+    referrerPolicy: 'strict-origin-when-cross-origin',
+    permissionsPolicy: { camera: false, microphone: false, geolocation: false },
+  }),
+)
 app.use(
   '/api/*',
   bodyLimit({
@@ -41,6 +53,7 @@ app.all('/api/auth/sign-up/*', (c) => fail(c, 404, 'not_found', 'Not found'))
 app.on(['GET', 'POST'], '/api/auth/*', (c) => auth.handler(c.req.raw))
 app.use('/api/*', loadSession)
 app.route('/', routes)
+if (env.STATIC_DIR) mountStatic(app, env.STATIC_DIR)
 app.notFound((c) => fail(c, 404, 'not_found', 'Not found'))
 app.onError((err, c) => {
   console.error(

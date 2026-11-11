@@ -114,7 +114,7 @@ build: catalog ## Build API bundle and static web app locally
 .env:
 	@test -f .env || { cp .env.example .env; \
 	  sed -i "s/^POSTGRES_PASSWORD=.*/POSTGRES_PASSWORD=$$(openssl rand -hex 12)/; s/^BETTER_AUTH_SECRET=.*/BETTER_AUTH_SECRET=$$(openssl rand -hex 32)/" .env; \
-	  echo "created .env — review PUBLIC_ORIGIN/SITE_ADDRESS"; }
+	  echo "created .env — review PUBLIC_ORIGIN"; }
 
 prod-up: .env ## Build and start the production stack (http://localhost:8088)
 	$(PROD_COMPOSE) up -d --build
